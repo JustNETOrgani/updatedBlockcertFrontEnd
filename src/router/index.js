@@ -5,8 +5,8 @@ Vue.use(Router);
 
 // 懒加载
 const Home = () => import("@/pages/home");
-const Login = () => import("@/pages/login");
-const Sign = () => import("@/pages/sign");
+const Login = () => import("@/pages/Login.vue")
+const StudentSign = () => import("@/pages/students/Sign.vue");
 
 const router = {
   routes: [
@@ -27,7 +27,7 @@ const router = {
     {
       path: "/sign",
       name: "sign",
-      component: Sign
+      component: StudentSign
     }
   ],
   mode: "history"

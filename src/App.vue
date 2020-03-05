@@ -21,7 +21,8 @@ export default {
   bottom: 0;
   right: 0;
   font-size: 16px;
-	/*margin-top: 60px;*/
+	/* margin-top: 20px; */
+  background-color: #f5f6f7;
 }
 
 </style>

@@ -11,11 +11,13 @@
         </el-input>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
+import Footer from "@/components/Footer.vue";
 
 export default {
   name: "home",
@@ -35,7 +37,8 @@ export default {
     };
   },
   components: {
-    Head
+    Head,
+    Footer
   }
 };
 </script>
@@ -67,7 +70,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5rem 0;
+  padding: 2rem;
 }
 
 .title {

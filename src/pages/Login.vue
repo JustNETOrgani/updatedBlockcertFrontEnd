@@ -24,11 +24,13 @@
         </div>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
+import Footer from "@/components/Footer.vue";
 
 export default {
   name: "login",
@@ -44,7 +46,8 @@ export default {
     };
   },
   components: {
-    Head
+    Head,
+    Footer
   }
 };
 </script>
@@ -72,7 +75,8 @@ export default {
   width: 30rem;
   /* height: 15rem; */
   /* background: #fafafa; */
-  border: 2px solid #1d98ea;
+  background-color: #ffffff;
+  /* border: 2px solid #1d98ea; */
   padding: 2rem;
   border-radius: 4px;
 }
