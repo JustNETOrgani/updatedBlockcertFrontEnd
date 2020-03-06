@@ -12,7 +12,7 @@
           </p>
           <!--Form to be filled-->
           <el-row>
-            <el-col :span="8" :offset="8">
+            <el-col :span="20" :offset="2">
               <div class="grid-content bg-purple-light">
                 <el-form
                   :model="ruleForm"
@@ -255,7 +255,7 @@ export default {
 
 #middlePage {
   /* height: 72%; */
-  width: 100%;
+  width: 50%;
   background-color: #ffffff;
 }
 

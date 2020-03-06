@@ -74,7 +74,8 @@ export default {
 }
 
 .title {
-  font-weight: 100;
+  color: #477ea3;
+  font-size: 1.5rem;
 }
 
 .input-container {
