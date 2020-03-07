@@ -43,7 +43,7 @@ export default {
         console.log("未登录")
         return [
           {
-            name: "Login in",
+            name: "Login",
             path: "/login"
           },
           {

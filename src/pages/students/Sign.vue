@@ -30,7 +30,7 @@
                   <el-form-item label="Last name" prop="lname">
                     <el-input
                       v-model="ruleForm.lname"
-                      placeholder="Please, enter your first name here."
+                      placeholder="Please, enter your last name here."
                     ></el-input>
                   </el-form-item>
                   <el-form-item label="Email address" prop="email">
@@ -246,7 +246,6 @@ export default {
   /* justify-content: center; */
   padding: 2rem;
 }
-
 #msgArea {
   width: 100%;
   margin-bottom: 1rem;

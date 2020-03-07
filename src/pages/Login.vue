@@ -2,30 +2,51 @@
   <div class="login">
     <Head :menuList="menuList" />
     <div class="body">
-      <div class="form" :rules="rules">
-        <h1 class="title">Login In</h1>
-        <div class="container">
-          <div class="label">username:</div>
-          <el-input prop="username" v-model="username" />
+      <div class="formArea">
+        <h1 class="title">Login</h1>
+          <!--Form to be filled-->
+          <el-row>
+            <el-col :span="20" :offset="2">
+              <div class="grid-content bg-purple-light">
+                <el-form
+                  :model="ruleForm"
+                  :rules="rules"
+                  ref="ruleForm"
+                  label-width="90px"
+                >
+                  <el-form-item class="formSection" id="labelText" label="Username:" prop="username">
+                    <el-input
+                      v-model="ruleForm.username"
+                      placeholder="Please, input your username."
+                    ></el-input>
+                  </el-form-item>
+                  <el-form-item class="formSection" id="labelText" label="Password" prop="password">
+                    <el-input
+                      v-model="ruleForm.password"
+                      type="password"
+                      placeholder="Please, input your password."
+                    ></el-input>
+                  </el-form-item>
+                  <div id="loginType">
+                    <div class="label">Role:</div>
+                    <div>
+                      <el-radio v-model="role" label="school">School</el-radio>
+                      <el-radio v-model="role" label="student">Student</el-radio>
+                    </div>
+                  </div>
+                  <div class="btn-container">
+                    <el-form-item>
+                      <el-button type="primary" @click.prevent="login">Login</el-button>
+                    </el-form-item>
+                  </div>
+                </el-form>
+              </div>
+            </el-col>
+          </el-row>
         </div>
-        <div class="container">
-          <div class="label">password:</div>
-          <el-input prop="password" v-model="password" show-password />
-        </div>
-        <div class="container">
-          <div class="label">role:</div>
-          <div>
-            <el-radio v-model="role" label="school">school</el-radio>
-            <el-radio v-model="role" label="student">student</el-radio>
-          </div>
-        </div>
-        <div class="btn-container">
-          <el-button type="primary" @click.prevent="login">Login in</el-button>
-        </div>
-      </div>
     </div>
     <Footer></Footer>
-  </div>
+  </div> <!--class Login-->
 </template>
 
 <script>
@@ -41,13 +62,38 @@ export default {
         { name: "Home", path: "/home" },
         { name: "Sign up", path: "/sign" }
       ],
-      username: "",
-      password: "",
-      role: "student",
+      ruleForm:{
+                username: "",
+                password: ""
+              },
       rules:{
-        username: [{required: true, message: "Please input email address.", trigger: ["blur", "change"]}],
-        password: [{required: true, message: "Please input password.", trigger: ["blur", "change"]}]
-      }
+            username: [
+          {
+            required: true,
+            message: "Please input username.",
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            message: "Length should be at least two",
+            trigger: ["blur", "change"]
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: "Please input your password.",
+            trigger: "blur"
+          },
+          {
+            min: 6,
+            message: "Length should be at least six.",
+            trigger: ["blur", "change"]
+          }
+        ]
+      },
+      show: true,
+      role: "student",
     };
   },
   components: {
@@ -99,36 +145,42 @@ export default {
   /* justify-content: center; */
   padding: 2rem;
 }
-
+.formArea {
+  background-color: #ffffff;
+  border-radius: 4px;
+  margin: 2.5% auto;
+  width: 35%;
+  height: 70%;
+  padding: 1rem 1.5rem;
+  
+}
 .title {
   color: #477ea3;
   font-size: 1.5rem;
 }
-.form {
-  width: 30rem;
-  background-color: #ffffff;
-  padding: 2rem;
-  border-radius: 4px;
-  margin-top: 100px;
+.label {
+  padding: 0 0.1rem;
+  width: 5rem;
+  text-align: left;
+  color: #1989fa;
 }
-
-.container {
-  display: flex;
-  align-items: center;
-  padding: 1rem 0.5rem;
+#labelText{
+  color: #1989fa;
 }
-
+.formSection{
+  margin-bottom: 2.5rem;
+}
+#loginType {
+  color: #15415e;
+  font-weight: 90;
+}
 .btn-container {
+  width: 70%;
   display: flex;
   align-items: center;
-  padding: 1rem 0.5rem;
+  padding: 2rem 0.5rem;
   justify-content: center;
 }
 
-.label {
-  padding: 0 0.5rem;
-  width: 5rem;
-  text-align: right;
-  color: #1989fa;
-}
+
 </style>
