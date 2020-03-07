@@ -2,15 +2,15 @@
   <div class="login">
     <Head :menuList="menuList" />
     <div class="body">
-      <div class="form">
+      <div class="form" :rules="rules">
         <h1 class="title">Login In</h1>
         <div class="container">
           <div class="label">username:</div>
-          <el-input v-model="username" />
+          <el-input prop="username" v-model="username" />
         </div>
         <div class="container">
           <div class="label">password:</div>
-          <el-input v-model="password" show-password />
+          <el-input prop="password" v-model="password" show-password />
         </div>
         <div class="container">
           <div class="label">role:</div>
@@ -43,7 +43,11 @@ export default {
       ],
       username: "",
       password: "",
-      role: "student"
+      role: "student",
+      rules:{
+        username: [{required: true, message: "Please input email address.", trigger: ["blur", "change"]}],
+        password: [{required: true, message: "Please input password.", trigger: ["blur", "change"]}]
+      }
     };
   },
   components: {
