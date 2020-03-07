@@ -99,6 +99,7 @@
 <script>
 import Head from "@/components/header";
 import Footer from "@/components/Footer";
+import { register } from "@/network/students";
 
 export default {
   name: "signup",
@@ -201,7 +202,22 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert("submit!");
+          var data = {
+            first_name: this.ruleForm.fname,
+            last_name: this.ruleForm.lname,
+            email_address:this.ruleForm.email,
+            student_num: this.ruleForm.stdID,
+            chain_address: this.ruleForm.bAddress,
+            password: this.ruleForm.password
+          };
+          register(data)
+            .then(res => {
+              console.log(res);
+              this.$router.replace("/login");
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
         } else {
           console.log("error submit!!");
           return false;
@@ -222,7 +238,7 @@ export default {
   flex-direction: column;
 }
 
-.body{
+.body {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -233,8 +249,6 @@ export default {
 
 #msgArea {
   width: 100%;
-  /* height: 4%; */
-  /* margin-top: 1%; */
   margin-bottom: 1rem;
 }
 #welcomeMsg {
@@ -242,9 +256,6 @@ export default {
   font-size: 1.5rem;
   padding-top: 1rem;
 }
-/* #hrBar {
-  border: 1.1px solid #1d98ea;
-} */
 
 #instruction {
   color: #477ea3;
@@ -254,14 +265,9 @@ export default {
 }
 
 #middlePage {
-  /* height: 72%; */
   width: 50%;
   background-color: #ffffff;
 }
-
-/* #formArea {
-  height: 80%;
-} */
 
 #blockchainType {
   color: #15415e;
@@ -272,11 +278,4 @@ export default {
 .myBtn {
   margin-top: 1rem;
 }
-
-/* .el-footer {
-  background-color: rgb(214, 225, 240);
-  color: rgb(155, 137, 137);
-  text-align: center;
-  line-height: 60px;
-} */
 </style>

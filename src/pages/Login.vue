@@ -2,8 +2,8 @@
   <div class="login">
     <Head :menuList="menuList" />
     <div class="body">
-      <h1 class="title">Login In</h1>
       <div class="form">
+        <h1 class="title">Login In</h1>
         <div class="container">
           <div class="label">username:</div>
           <el-input v-model="username" />
@@ -20,7 +20,7 @@
           </div>
         </div>
         <div class="btn-container">
-          <el-button type="primary">Login in</el-button>
+          <el-button type="primary" @click.prevent="login">Login in</el-button>
         </div>
       </div>
     </div>
@@ -31,6 +31,7 @@
 <script>
 import Head from "@/components/header";
 import Footer from "@/components/Footer.vue";
+import { login } from "@/network/students";
 
 export default {
   name: "login",
@@ -48,6 +49,33 @@ export default {
   components: {
     Head,
     Footer
+  },
+  methods: {
+    login() {
+      if (this.role === "student") {
+        let data = {
+          email_address: this.username,
+          password: this.password
+        };
+        login(data)
+          .then(res => {
+            // console.log(res)
+            // this.$store.commit('set_token', res.token);
+            // console.log(this.$store.state.token)
+            // if (this.$store.state.token)
+            console.log("res.token", res.data.token);
+            // console.log("type", typeof(res))
+            // console.log("res.token", res["token"]);
+            // console.log("res", res);
+            this.$store.commit('set_token', res.data.token);
+            this.$store.commit('set_student_info', res.data.student)
+            this.$router.push("/certificates");
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    }
   }
 };
 </script>
@@ -74,12 +102,10 @@ export default {
 }
 .form {
   width: 30rem;
-  /* height: 15rem; */
-  /* background: #fafafa; */
   background-color: #ffffff;
-  /* border: 2px solid #1d98ea; */
   padding: 2rem;
   border-radius: 4px;
+  margin-top: 100px;
 }
 
 .container {
@@ -87,6 +113,7 @@ export default {
   align-items: center;
   padding: 1rem 0.5rem;
 }
+
 .btn-container {
   display: flex;
   align-items: center;

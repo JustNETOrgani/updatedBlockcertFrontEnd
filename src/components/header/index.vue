@@ -18,13 +18,13 @@ export default {
 
 <style scoped>
 .header {
-  height: 5rem;
+  height: 4rem;
   padding: 0.5rem 1rem;
   display: flex;
   background-color: #ffffff;
 }
 .logo {
-  height: 4rem;
+  height: 3rem;
 }
 
 .menu {
@@ -36,7 +36,7 @@ export default {
 
 .menu-item {
   text-decoration: none;
-  /* color: #60bdfa; */
+  color: #60bdfa;
   margin: 0 0.5rem;
 }
 
@@ -44,5 +44,9 @@ li {
   list-style: none;
   font-size: 20px;
   padding-top: 1.3rem;
+}
+.router-link-active{
+  color: #477ea3;
+  text-decoration:underline
 }
 </style>

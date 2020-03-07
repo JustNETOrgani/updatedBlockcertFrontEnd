@@ -23,22 +23,36 @@ export default {
   name: "home",
   data() {
     return {
-      input: "",
-      menuList: [
-        {
-          name: "Login in",
-          path: "/login"
-        },
-        {
-          name: "Sign up",
-          path: "/sign"
-        }
-      ]
+      input: ""
     };
   },
   components: {
     Head,
     Footer
+  },
+  computed: {
+    menuList: function() {
+      console.log("this.$store.token", sessionStorage.getItem('API-HTTP-AUTHORIZATION'))
+      if (sessionStorage.getItem('API-HTTP-AUTHORIZATION')) {
+        return [
+          {name: "Home", path: "/home"},
+          {name: "Certificates", path: "/certificates"},
+          { name: "Login out", path: "/loginOut" }
+          ];
+      } else {
+        console.log("未登录")
+        return [
+          {
+            name: "Login in",
+            path: "/login"
+          },
+          {
+            name: "Sign up",
+            path: "/sign"
+          }
+        ];
+      }
+    }
   }
 };
 </script>
