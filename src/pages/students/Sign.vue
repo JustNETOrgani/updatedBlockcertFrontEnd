@@ -205,7 +205,7 @@ export default {
           var data = {
             first_name: this.ruleForm.fname,
             last_name: this.ruleForm.lname,
-            email_address:this.ruleForm.email,
+            email_address: this.ruleForm.email,
             student_num: this.ruleForm.stdID,
             chain_address: this.ruleForm.bAddress,
             password: this.ruleForm.password
@@ -217,6 +217,10 @@ export default {
             })
             .catch(function(error) {
               console.log(error);
+              this.$message.error({
+                title: "错误",
+                message: "注册失败, 请稍后重试, 或联系管理员！！"
+              });
             });
         } else {
           console.log("error submit!!");

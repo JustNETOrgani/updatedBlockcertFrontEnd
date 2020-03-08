@@ -13,7 +13,7 @@ export function request(config) {
   instance.interceptors.request.use(
     config => {
       // TODO 设置请求头
-      config.headers["API-HTTP-AUTHORIZATION"] = sessionStorage.getItem('API-HTTP-AUTHORIZATION');
+      // config.headers["API-HTTP-AUTHORIZATION"] = sessionStorage.getItem('API-HTTP-AUTHORIZATION');
       return config;
     },
     err => {
@@ -24,10 +24,12 @@ export function request(config) {
   // 响应拦截器
   instance.interceptors.response.use(
     res => {
+      // console.log("拦截后需要将拦截下来处理成的结果返回res", res);
       // 拦截后需要将拦截下来处理成的结果返回
       return res.data;
     },
     err => {
+      // console.log("拦截后需要将拦截下来处理成的结果返回", err);
       console.log(err);
     }
   );
