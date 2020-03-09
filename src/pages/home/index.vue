@@ -5,19 +5,19 @@
         <el-button class="menu-item" type="primary" @click="LoginURL" round
           >Login</el-button
         >
-        <el-button class="menu-item" type="primary text" round @click="dialogVisible = true">Sign in</el-button>
+        <el-button class="menu-item" type="primary text" round @click="dialogVisible = true">Register</el-button>
         <el-dialog
           title="Select registered user type"
           :visible.sync="dialogVisible"
           width="30%"
         >
-          <el-radio-group v-model="signType">
+          <el-radio-group v-model="RegisterType">
             <el-radio label="student">Student</el-radio>
             <el-radio label="school">School</el-radio>
           </el-radio-group>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="signTypeChoose"
+            <el-button type="primary" @click="RegisterTypeChoose"
               >Confirm</el-button
             >
           </span>
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       input: "",
-      signType: "student",
+      RegisterType: "student",
       dialogVisible: false
     };
   },
@@ -86,13 +86,13 @@ export default {
     LoginURL() {
       this.$router.push("/login");
     },
-    signTypeChoose(){
+    RegisterTypeChoose(){
       this.dialogVisible = false;
-      if(this.signType === "student"){
-        this.$router.push("/studentSign");
+      if(this.RegisterType === "student"){
+        this.$router.push("/studentRegister");
       }
-      if(this.signType === "school"){
-        this.$router.push("/schoolSign");
+      if(this.RegisterType === "school"){
+        this.$router.push("/schoolRegister");
       }
     }
   }

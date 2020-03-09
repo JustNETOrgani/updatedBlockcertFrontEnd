@@ -6,9 +6,9 @@ Vue.use(Router);
 // 懒加载
 const Home = () => import("@/pages/home");
 const Login = () => import("@/pages/Login.vue");
-const StudentSign = () => import("@/pages/students/Sign.vue");
+const StudentRegister = () => import("@/pages/students/Register.vue");
 const certificate = () => import("@/pages/students/Certificate.vue");
-const SchoolSign = () => import("@/pages/schools/Sign.vue");
+const SchoolRegister = () => import("@/pages/schools/Register.vue");
 
 const router = new Router({
   routes: [
@@ -36,17 +36,17 @@ const router = new Router({
       }
     },
     {
-      path: "/studentSign",
-      name: "studentSign",
-      component: StudentSign,
+      path: "/studentRegister",
+      name: "studentRegister",
+      component: StudentRegister,
       meta: {
         requireAuth: false
       }
     },
     {
-      path: "/schoolSign",
-      name: "schoolSign",
-      component: SchoolSign,
+      path: "/schoolRegister",
+      name: "schoolRegister",
+      component: SchoolRegister,
       meta: {
         requireAuth: false
       }

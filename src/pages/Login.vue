@@ -7,20 +7,20 @@
           type="primary text"
           round
           @click="dialogVisible = true"
-          >Sign in</el-button
+          >Register</el-button
         >
         <el-dialog
           title="Select registered user type"
           :visible.sync="dialogVisible"
           width="30%"
         >
-          <el-radio-group v-model="signType">
+          <el-radio-group v-model="RegisterType">
             <el-radio label="student">Student</el-radio>
             <el-radio label="school">School</el-radio>
           </el-radio-group>
           <span slot="footer" class="dialog-footer">
             <el-button @click="dialogVisible = false">Cancel</el-button>
-            <el-button type="primary" @click="signTypeChoose"
+            <el-button type="primary" @click="RegisterTypeChoose"
               >Confirm</el-button
             >
           </span>
@@ -131,7 +131,7 @@ export default {
       },
       show: true,
       role: "student",
-      signType: "student",
+      RegisterType: "student",
       dialogVisible: false
     };
   },
@@ -177,12 +177,12 @@ export default {
         }
       });
     },
-    signTypeChoose() {
+    RegisterTypeChoose() {
       this.dialogVisible = false;
-      if (this.signType === "student") {
+      if (this.RegisterType === "student") {
         this.$router.push("/studentSign");
       }
-      if (this.signType === "school") {
+      if (this.RegisterType === "school") {
         this.$router.push("/schoolSign");
       }
     }
