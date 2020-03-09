@@ -180,10 +180,10 @@ export default {
     RegisterTypeChoose() {
       this.dialogVisible = false;
       if (this.RegisterType === "student") {
-        this.$router.push("/studentSign");
+        this.$router.push("/studentRegister");
       }
       if (this.RegisterType === "school") {
-        this.$router.push("/schoolSign");
+        this.$router.push("/schoolRegister");
       }
     }
   }
