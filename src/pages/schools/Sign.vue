@@ -8,7 +8,7 @@
     <div class="body">
       <div id="middlePage">
         <div id="msgArea">
-          <p id="welcomeMsg">Welcome to Student Registration</p>
+          <p id="welcomeMsg">Welcome to School Registration</p>
         </div>
         <div id="formArea">
           <p id="instruction">

@@ -5,6 +5,7 @@
       <li v-for="v in menuList" :key="v.name">
         <router-link class="menu-item" :to="v.path">{{ v.name }}</router-link>
       </li>
+      <slot></slot>
     </div>
   </div>
 </template>

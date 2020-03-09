@@ -1,6 +1,32 @@
 <template>
   <div class="container">
-    <Head :menuList="menuList" />
+    <Head :menuList="menuList">
+      <div v-if="needLogin">
+        <el-button class="menu-item" type="primary" @click="LoginURL" round
+          >Login</el-button
+        >
+        <el-button class="menu-item" type="primary text" round @click="dialogVisible = true">Sign in</el-button>
+        <el-dialog
+          title="Select registered user type"
+          :visible.sync="dialogVisible"
+          width="30%"
+        >
+          <el-radio-group v-model="signType">
+            <el-radio label="student">Student</el-radio>
+            <el-radio label="school">School</el-radio>
+          </el-radio-group>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="signTypeChoose"
+              >Confirm</el-button
+            >
+          </span>
+        </el-dialog>
+      </div>
+      <div v-else>
+        <el-button class="menu-item" type="primary" round>Login out</el-button>
+      </div>
+    </Head>
     <div class="body">
       <h1 class="title">Blockerts Universal View</h1>
       <div class="input-container">
@@ -23,7 +49,9 @@ export default {
   name: "home",
   data() {
     return {
-      input: ""
+      input: "",
+      signType: "student",
+      dialogVisible: false
     };
   },
   components: {
@@ -31,26 +59,40 @@ export default {
     Footer
   },
   computed: {
-    menuList: function() {
-      console.log("this.$store.token", sessionStorage.getItem('API-HTTP-AUTHORIZATION'))
-      if (sessionStorage.getItem('API-HTTP-AUTHORIZATION')) {
-        return [
-          {name: "Home", path: "/home"},
-          {name: "Certificates", path: "/certificates"},
-          { name: "Login out", path: "/loginOut" }
-          ];
+    needLogin: function() {
+      console.log(
+        "this.$store.token",
+        sessionStorage.getItem("API-HTTP-AUTHORIZATION")
+      );
+      if (sessionStorage.getItem("API-HTTP-AUTHORIZATION")) {
+        return false;
       } else {
-        console.log("未登录")
+        return true;
+      }
+    },
+    menuList: function() {
+      if (!this.needLogin) {
         return [
-          {
-            name: "Login",
-            path: "/login"
-          },
-          {
-            name: "Sign up",
-            path: "/sign"
-          }
+          { name: "Home", path: "/home" },
+          { name: "Certificates", path: "/certificates" }
         ];
+      } else {
+        console.log("未登录");
+        return [];
+      }
+    }
+  },
+  methods: {
+    LoginURL() {
+      this.$router.push("/login");
+    },
+    signTypeChoose(){
+      this.dialogVisible = false;
+      if(this.signType === "student"){
+        this.$router.push("/studentSign");
+      }
+      if(this.signType === "school"){
+        this.$router.push("/schoolSign");
       }
     }
   }
@@ -98,5 +140,11 @@ export default {
 
 .text {
   cursor: pointer;
+}
+
+.menu-item {
+  text-decoration: none;
+  color: #ffffff;
+  margin: 0.6rem 0.5rem;
 }
 </style>

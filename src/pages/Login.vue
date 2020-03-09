@@ -1,6 +1,32 @@
 <template>
   <div class="login">
-    <Head :menuList="menuList" />
+    <Head :menuList="menuList">
+      <div>
+        <el-button
+          class="menu-item"
+          type="primary text"
+          round
+          @click="dialogVisible = true"
+          >Sign in</el-button
+        >
+        <el-dialog
+          title="Select registered user type"
+          :visible.sync="dialogVisible"
+          width="30%"
+        >
+          <el-radio-group v-model="signType">
+            <el-radio label="student">Student</el-radio>
+            <el-radio label="school">School</el-radio>
+          </el-radio-group>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button type="primary" @click="signTypeChoose"
+              >Confirm</el-button
+            >
+          </span>
+        </el-dialog>
+      </div>
+    </Head>
     <div class="body">
       <div class="formArea">
         <h1 class="title">Login</h1>
@@ -72,10 +98,7 @@ export default {
   name: "login",
   data() {
     return {
-      menuList: [
-        { name: "Home", path: "/home" },
-        { name: "Sign up", path: "/sign" }
-      ],
+      menuList: [{ name: "Home", path: "/home" }],
       ruleForm: {
         username: "",
         password: ""
@@ -107,7 +130,9 @@ export default {
         ]
       },
       show: true,
-      role: "student"
+      role: "student",
+      signType: "student",
+      dialogVisible: false
     };
   },
   components: {
@@ -138,8 +163,8 @@ export default {
                 console.log(error);
                 // this.$message.error("账户或密码错误，请输入正确的账户和密码");
                 this.$message.error({
-                  title: "错误",
-                  message: "账户或密码错误，请输入正确的账户和密码"
+                  title: "error",
+                  message: "Account or password is wrong, please enter the correct account and password"
                 });
               });
           }
@@ -151,6 +176,15 @@ export default {
           return false;
         }
       });
+    },
+    signTypeChoose() {
+      this.dialogVisible = false;
+      if (this.signType === "student") {
+        this.$router.push("/studentSign");
+      }
+      if (this.signType === "school") {
+        this.$router.push("/schoolSign");
+      }
     }
   }
 };
@@ -205,5 +239,11 @@ export default {
   align-items: center;
   padding: 2rem 0.5rem;
   justify-content: center;
+}
+
+.menu-item {
+  text-decoration: none;
+  color: #ffffff;
+  margin: 0.6rem 0.5rem;
 }
 </style>
