@@ -103,7 +103,8 @@
 <script>
 import Head from "@/components/header";
 import Footer from "@/components/Footer";
-import { register } from "@/network/students";
+import { register } from "@/network/schools";
+
 
 export default {
   name: "signup",
