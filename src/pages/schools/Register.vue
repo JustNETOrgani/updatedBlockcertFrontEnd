@@ -25,28 +25,35 @@
                   label-width="160px"
                   class="demo-ruleForm"
                 >
-                  <el-form-item label="First name" prop="fname">
+                  <el-form-item label="School Name" prop="sname">
                     <el-input
-                      v-model="ruleForm.fname"
-                      placeholder="Please, enter your first name here."
+                      v-model="ruleForm.sname"
+                      placeholder="Please, enter your school name here."
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="Last name" prop="lname">
+                  <el-form-item label="School Address" prop="sAddress">
                     <el-input
-                      v-model="ruleForm.lname"
-                      placeholder="Please, enter your last name here."
+                      v-model="ruleForm.sAddress"
+                      placeholder="Please, enter school address here."
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="Email address" prop="email">
+                  <el-form-item label="Official Website" prop="school_URL">
+                    <el-input
+                      v-model="ruleForm.school_URL"
+                      type="website"
+                      placeholder="Please, enter your school website ."
+                    ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Blockchain Address" prop="bAddress">
+                    <el-input
+                      v-model="ruleForm.bAddress"
+                      placeholder="Please, enter your blockchain address."
+                    ></el-input>
+                  </el-form-item>
+                  <el-form-item label="Email Address" prop="email">
                     <el-input
                       v-model="ruleForm.email"
                       placeholder="Please, enter your email here."
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Student ID" prop="stdID">
-                    <el-input
-                      v-model="ruleForm.stdID"
-                      placeholder="Please, enter your student ID."
                     ></el-input>
                   </el-form-item>
                   <el-form-item label="Password" prop="password">
@@ -54,12 +61,6 @@
                       v-model="ruleForm.password"
                       type="password"
                       placeholder="Please, enter your password."
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Blockchain address" prop="bAddress">
-                    <el-input
-                      v-model="ruleForm.bAddress"
-                      placeholder="Please, enter your blockchain address."
                     ></el-input>
                   </el-form-item>
                   <div id="blockchainType">
@@ -103,8 +104,7 @@
 <script>
 import Head from "@/components/header";
 import Footer from "@/components/Footer";
-import { register } from "@/network/schools";
-
+import { register } from "@/network/students";
 
 export default {
   name: "signup",
@@ -112,29 +112,17 @@ export default {
     return {
       ruleForm: {
         fname: "",
-        lname: "",
         email: "",
-        stdID: "",
         password: "",
-        bAddress: ""
+        bAddress: "",
+        school_URL: "",
+        sAddress: "",
       },
       rules: {
-        fname: [
+        sname: [
           {
             required: true,
-            message: "Please input your first name.",
-            trigger: "blur"
-          },
-          {
-            min: 2,
-            message: "Length should be at least two",
-            trigger: ["blur", "change"]
-          }
-        ],
-        lname: [
-          {
-            required: true,
-            message: "Please input your last name.",
+            message: "Please input your school name.",
             trigger: "blur"
           },
           {
@@ -146,24 +134,12 @@ export default {
         email: [
           {
             required: true,
-            message: "Please input email address.",
+            message: "Please input a valid email address.",
             trigger: "blur"
           },
           {
             type: "email",
-            message: "Please input correct email address",
-            trigger: ["blur", "change"]
-          }
-        ],
-        stdID: [
-          {
-            required: true,
-            message: "Please input your student ID.",
-            trigger: "blur"
-          },
-          {
-            min: 2,
-            message: "Length should be at least two",
+            message: "Please input a valid email address",
             trigger: ["blur", "change"]
           }
         ],
@@ -190,8 +166,33 @@ export default {
             message: "Length should be at least twenty",
             trigger: ["blur", "change"]
           }
-        ]
-      },
+        ],
+        sAddress: [
+        { 
+          required: true,
+          message: "Please Enter your school address",
+          trigger: "blur"
+        },
+        {
+          min:2,
+          message: "Length should be at least five(5)",
+          trigger: ["blur", "change"]
+        }
+        ],
+      school_URL: [
+        { 
+          required: true,
+          message: "Please Enter your school Website",
+          trigger: "blur"
+        },
+        {
+          min:5,
+          message: "Length should be at least five(5)",
+          trigger: ["blur", "change"]
+        }
+
+      ]
+  },
       show: true,
       menuList: [
         { name: "Home", path: "/home" }
@@ -207,12 +208,11 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           var data = {
-            first_name: this.ruleForm.fname,
-            last_name: this.ruleForm.lname,
+            sname: this.ruleForm.sname,
             email_address: this.ruleForm.email,
-            student_num: this.ruleForm.stdID,
             chain_address: this.ruleForm.bAddress,
-            password: this.ruleForm.password
+            password: this.ruleForm.password,
+            school_URL: this.ruleForm.school_URL
           };
           register(data)
             .then(res => {
