@@ -17,5 +17,15 @@ export default {
   del_student_info(state){
     state.student_info = null;
     sessionStorage.removeItem("STUDENT-INFO");
+  },
+  set_school_info(state, school_info){
+    console.log("school_info", school_info)
+    console.log(typeof(school_info))
+    state.school_info = school_info
+    sessionStorage.setItem('SCHOOL-INFO', school_info);
+  },
+  del_school_info(state){
+    state.school_info = null;
+    sessionStorage.removeItem("SCHOOL-INFO");
   }
 };
