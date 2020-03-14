@@ -104,7 +104,7 @@
 <script>
 import Head from "@/components/header";
 import Footer from "@/components/Footer";
-import { register } from "@/network/students";
+import { register } from "@/network/schools";
 
 export default {
   name: "signup",
@@ -208,11 +208,12 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           var data = {
-            sname: this.ruleForm.sname,
+            school_name: this.ruleForm.sname,
+            address: this.ruleForm.sAddress,
             email_address: this.ruleForm.email,
-            chain_address: this.ruleForm.bAddress,
+            public_key: this.ruleForm.bAddress,
             password: this.ruleForm.password,
-            school_URL: this.ruleForm.school_URL
+            official_website: this.ruleForm.school_URL
           };
           register(data)
             .then(res => {
