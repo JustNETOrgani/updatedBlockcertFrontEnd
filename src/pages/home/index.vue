@@ -28,7 +28,7 @@
       </div>
     </Head>
     <div class="body">
-      <h1 class="title">Blockerts Universal View</h1>
+      <h1 class="title">Blockcerts Universal View</h1>
       <div class="input-container">
         <el-input placeholder="Input Student ID..." v-model="input">
           <template slot="append">

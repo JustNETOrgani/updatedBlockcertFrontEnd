@@ -8,7 +8,8 @@ Vue.use(Vuex);
 
 const state = {
 token: null,
-student_info: null
+student_info: null,
+school_info: null
 };
 
 export default new Vuex.Store({

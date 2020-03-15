@@ -93,6 +93,7 @@
 import Head from "@/components/header";
 import Footer from "@/components/Footer.vue";
 import { login } from "@/network/students";
+import { Schlogin } from "@/network/schools";
 
 export default {
   name: "login",
@@ -170,6 +171,28 @@ export default {
           }
           // eslint-disable-next-line no-empty
           else if (this.role === "school") {
+            let data = {
+              email_address: this.ruleForm.username,
+              password: this.ruleForm.password
+            };
+            Schlogin(data)
+              .then(res => {
+                this.$store.commit("set_token", res.data.token);
+                this.$store.commit("set_school_info", res.data.school);
+                //this.$router.push("/certificates");
+                this.$message({
+                  message: "Congratulations. Login successful",
+                  type: "success",
+                  center: true
+                });
+              })
+              .catch(error => {
+                console.log(error);
+                this.$message.error({
+                  title: "error",
+                  message: "Account or password is wrong, please enter the correct account and password"
+                });
+              });
           }
         } else {
           console.log("error submit!!");
