@@ -1,12 +1,12 @@
 <template>
-  <div class="certificate">
+  <div class="issue">
     <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" round @click="LoginOut"
         >Login out</el-button
       >
     </Head>
     <div class="body">
-      <h1 class="title">Certificates List</h1>
+      <h1 class="title">issue List</h1>
     </div>
     <Footer></Footer>
   </div>
@@ -16,12 +16,12 @@
 import Head from "@/components/header";
 
 export default {
-  name: "certificate",
+  name: "issue",
   data() {
     return {
       menuList: [
         { name: "Home", path: "/home" },
-        { name: "Certificates", path: "/certificates" }
+        { name: "issue", path: "/schools/issueList" }
       ]
     };
   },
@@ -35,7 +35,7 @@ export default {
           cancelButtonText: 'cancel',
           type: 'info'
         }).then(() => {
-          sessionStorage.removeItem("STUDENT-INFO");
+          sessionStorage.removeItem("SCHOOL-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
           this.$router.push("/home");
           this.$message({
@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style scoped>
-.certificate {
+.issue {
   height: 100%;
   display: flex;
   flex-direction: column;

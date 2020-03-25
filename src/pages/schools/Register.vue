@@ -116,7 +116,7 @@ export default {
         password: "",
         bAddress: "",
         school_URL: "",
-        sAddress: "",
+        sAddress: ""
       },
       rules: {
         sname: [
@@ -168,35 +168,32 @@ export default {
           }
         ],
         sAddress: [
-        { 
-          required: true,
-          message: "Please Enter your school address",
-          trigger: "blur"
-        },
-        {
-          min:2,
-          message: "Length should be at least five(5)",
-          trigger: ["blur", "change"]
-        }
+          {
+            required: true,
+            message: "Please Enter your school address",
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            message: "Length should be at least five(5)",
+            trigger: ["blur", "change"]
+          }
         ],
-      school_URL: [
-        { 
-          required: true,
-          message: "Please Enter your school Website",
-          trigger: "blur"
-        },
-        {
-          min:5,
-          message: "Length should be at least five(5)",
-          trigger: ["blur", "change"]
-        }
-
-      ]
-  },
+        school_URL: [
+          {
+            required: true,
+            message: "Please Enter your school Website",
+            trigger: "blur"
+          },
+          {
+            min: 5,
+            message: "Length should be at least five(5)",
+            trigger: ["blur", "change"]
+          }
+        ]
+      },
       show: true,
-      menuList: [
-        { name: "Home", path: "/home" }
-      ]
+      menuList: [{ name: "Home", path: "/home" }]
     };
   },
   components: {
@@ -218,13 +215,19 @@ export default {
           register(data)
             .then(res => {
               console.log(res);
+              this.$message({
+                message:
+                  "Congratulations. Registration successful, Please Login",
+                type: "success"
+              });
               this.$router.replace("/login");
             })
             .catch(function(error) {
               console.log(error);
               this.$message.error({
                 title: "error",
-                message: "Registration failed, please try again later, or contact the administrator! !!"
+                message:
+                  "Registration failed, please try again later, or contact the administrator! !!"
               });
             });
         } else {
@@ -238,7 +241,7 @@ export default {
     },
     LoginURL() {
       this.$router.push("/login");
-    },
+    }
   }
 };
 </script>

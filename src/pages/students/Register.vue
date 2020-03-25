@@ -192,9 +192,7 @@ export default {
         ]
       },
       show: true,
-      menuList: [
-        { name: "Home", path: "/home" }
-      ]
+      menuList: [{ name: "Home", path: "/home" }]
     };
   },
   components: {
@@ -216,13 +214,18 @@ export default {
           register(data)
             .then(res => {
               console.log(res);
+              this.$message({
+                message: "Congratulations. Registration successful, Please Login",
+                type: "success"
+              });
               this.$router.replace("/login");
             })
             .catch(function(error) {
               console.log(error);
               this.$message.error({
                 title: "error",
-                message: "Registration failed, please try again later, or contact the administrator! !!"
+                message:
+                  "Registration failed, please try again later, or contact the administrator! !!"
               });
             });
         } else {
@@ -236,7 +239,7 @@ export default {
     },
     LoginURL() {
       this.$router.push("/login");
-    },
+    }
   }
 };
 </script>
