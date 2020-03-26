@@ -1,9 +1,7 @@
 <template>
   <div class="pageContainer">
     <Head :menuList="menuList">
-      <el-button class="menu-item" type="primary" @click="LoginURL" round
-        >Login</el-button
-      >
+      <el-button class="menu-item" type="primary" @click="LoginURL" round>Login</el-button>
     </Head>
     <div class="body">
       <div id="middlePage">
@@ -11,12 +9,10 @@
           <p id="welcomeMsg">Welcome to School Registration</p>
         </div>
         <div id="formArea">
-          <p id="instruction">
-            Please, fill the form below.
-          </p>
+          <p id="instruction">Please, fill the form below.</p>
           <!--Form to be filled-->
           <el-row>
-            <el-col :span="20" :offset="2">
+            <el-col :span="18" :offset="1">
               <div class="grid-content bg-purple-light">
                 <el-form
                   :model="ruleForm"
@@ -25,58 +21,86 @@
                   label-width="160px"
                   class="demo-ruleForm"
                 >
-                  <el-form-item label="School Name" prop="sname">
-                    <el-input
-                      v-model="ruleForm.sname"
-                      placeholder="Please, enter your school name here."
-                    ></el-input>
+
+                <el-form-item label="School Name" prop="sname">
+                      <el-input
+                        v-model="ruleForm.sname"
+                        placeholder="Please, enter your school name here."
+                      ></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="Email Address" prop="schoolemail">
+                      <el-input
+                        v-model="ruleForm.schoolemail"
+                        placeholder="Please, enter your email here."
+                      ></el-input>
+                    </el-form-item>
+
+                     <el-form-item label="Password" prop="password">
+                      <el-input
+                        v-model="ruleForm.password" type="password"
+                        placeholder="Please, enter valid password."
+                      ></el-input>
+                    </el-form-item>
+
+
+                    <el-form-item label="Official Website" prop="school_URL">
+                      <el-input
+                        v-model="ruleForm.school_URL"
+                        type="website"
+                        placeholder="Please, enter your school website ."
+                      ></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="Blockchain Address" prop="bAddress">
+                      <el-input
+                        v-model="ruleForm.bAddress"
+                        placeholder="Please, enter your blockchain address."
+                      ></el-input>
+                    </el-form-item>
+
+                    <fieldset>
+                      <legend>Signature Lines</legend>
+
+                      <el-form-item label="Job Title" prop="jobTitle">
+                      <el-input
+                        v-model="ruleForm.jobTitle"
+                        type="text"
+                        placeholder="Please, enter job title"
+                      ></el-input>
+                    </el-form-item>
+
+                    <el-form-item label="Signature Name" prop="signatureName">
+                      <el-input
+                        v-model="ruleForm.signatureName"
+                        type="text"
+                        placeholder="Please, enter signature name"
+                      ></el-input>
+                    </el-form-item>
+
+                     <el-form-item label="Signature Image" prop="signatureImage">
+                    <el-upload class="upload-demo" ref="upload" action :auto-upload="false">
+                      <el-button slot="trigger" size="small" type="primary">select file</el-button>
+                    </el-upload>
                   </el-form-item>
-                  <el-form-item label="School Address" prop="sAddress">
-                    <el-input
-                      v-model="ruleForm.sAddress"
-                      placeholder="Please, enter school address here."
-                    ></el-input>
+                  <hr>
+
+                  <el-form-item label="School Logo" prop="school_logo">
+                    <el-upload class="upload-demo" ref="upload" action :auto-upload="false">
+                      <el-button slot="trigger" size="small" type="primary">select file</el-button>
+                    </el-upload>
                   </el-form-item>
-                  <el-form-item label="Official Website" prop="school_URL">
-                    <el-input
-                      v-model="ruleForm.school_URL"
-                      type="website"
-                      placeholder="Please, enter your school website ."
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Blockchain Address" prop="bAddress">
-                    <el-input
-                      v-model="ruleForm.bAddress"
-                      placeholder="Please, enter your blockchain address."
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Email Address" prop="email">
-                    <el-input
-                      v-model="ruleForm.email"
-                      placeholder="Please, enter your email here."
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="Password" prop="password">
-                    <el-input
-                      v-model="ruleForm.password"
-                      type="password"
-                      placeholder="Please, enter your password."
-                    ></el-input>
-                  </el-form-item>
-                  <div id="blockchainType">
-                    <p id="blockchainAddressTypeLink">
-                      *You can create Bitcoin address
-                      <a href="https://www.bitaddress.org/" target="_blank"
-                        >here. </a
-                      >Ethereum address<a
-                        href="https://www.myetherwallet.com/"
-                        target="_blank"
-                      >
-                        here</a
-                      >*
-                    </p>
-                  </div>
-                  <el-form-item>
+
+                </fieldset>
+                  
+                </el-form>
+              </div>
+            </el-col>
+           
+           </el-row>
+           <el-row>
+              <el-col :span="18" :offset="1" >
+      
                     <el-button
                       class="myBtn"
                       type="success"
@@ -89,11 +113,9 @@
                       @click="resetForm('ruleForm')"
                       >Reset</el-button
                     >
-                  </el-form-item>
-                </el-form>
-              </div>
-            </el-col>
-          </el-row>
+
+                   </el-col>
+            </el-row>
         </div>
       </div>
     </div>
@@ -111,27 +133,44 @@ export default {
   data() {
     return {
       ruleForm: {
-        fname: "",
-        email: "",
-        password: "",
-        bAddress: "",
+
+        sname: "",
+        schoolemail: "",
         school_URL: "",
-        sAddress: "",
+        schoolID:"",
+        revocationList:"",
+        bAddress: "",
+        jobTitle:"",
+        signatureName:"",
+        signatureImage:"",
+        school_logo: ""
       },
       rules: {
         sname: [
           {
             required: true,
-            message: "Please input your school name.",
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Length should be at least two",
+            message: "Please enter school name",
             trigger: ["blur", "change"]
           }
         ],
-        email: [
+
+        jobTitle: [
+          {
+            required: true,
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            message: "Please enter job title",
+            trigger: ["blur", "change"]
+          }
+        ],
+
+        schoolemail: [
           {
             required: true,
             message: "Please input a valid email address.",
@@ -168,35 +207,45 @@ export default {
           }
         ],
         sAddress: [
-        { 
-          required: true,
-          message: "Please Enter your school address",
-          trigger: "blur"
-        },
-        {
-          min:2,
-          message: "Length should be at least five(5)",
-          trigger: ["blur", "change"]
-        }
+          {
+            required: true,
+            message: "Please Enter your school address",
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            message: "Length should be at least five(5)",
+            trigger: ["blur", "change"]
+          }
         ],
-      school_URL: [
-        { 
-          required: true,
-          message: "Please Enter your school Website",
-          trigger: "blur"
-        },
-        {
-          min:5,
-          message: "Length should be at least five(5)",
-          trigger: ["blur", "change"]
-        }
-
-      ]
-  },
+        school_URL: [
+          {
+            required: true,
+            message: "Please Enter your school Website",
+            trigger: "blur"
+          },
+          {
+            min: 5,
+            message: "Length should be at least five(5)",
+            trigger: ["blur", "change"]
+          }
+        ], 
+        signatureName: [
+          {
+            required: true,
+            message: "Please Enter your signature name",
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            message: "Length should be at least two(2)",
+            trigger: ["blur", "change"]
+          }
+        ], 
+        
+      },
       show: true,
-      menuList: [
-        { name: "Home", path: "/home" }
-      ]
+      menuList: [{ name: "Home", path: "/home" }]
     };
   },
   components: {
@@ -208,13 +257,17 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           var data = {
-            school_name: this.ruleForm.sname,
-            address: this.ruleForm.sAddress,
-            email_address: this.ruleForm.email,
-            public_key: this.ruleForm.bAddress,
-            password: this.ruleForm.password,
-            official_website: this.ruleForm.school_URL
+          
+        // school_name: this.ruleForm.sname,
+        //     address: this.ruleForm.sAddress,
+        //     email_address: this.ruleForm.email,
+        //     public_key: this.ruleForm.bAddress,
+        //     password: this.ruleForm.password,
+        //     official_website: this.ruleForm.school_URL,
+        //     signature: this.ruleForm.signature,
+        //     school_logo: this.ruleForm.school_logo
           };
+
           register(data)
             .then(res => {
               console.log(res);
@@ -224,7 +277,8 @@ export default {
               console.log(error);
               this.$message.error({
                 title: "error",
-                message: "Registration failed, please try again later, or contact the administrator! !!"
+                message:
+                  "Registration failed, please try again later, or contact the administrator! !!"
               });
             });
         } else {
@@ -233,12 +287,15 @@ export default {
         }
       });
     },
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
     LoginURL() {
       this.$router.push("/login");
-    },
+    }
   }
 };
 </script>
@@ -248,6 +305,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  
 }
 
 .body {
@@ -257,9 +315,10 @@ export default {
   align-items: center;
   /* justify-content: center; */
   padding: 2rem;
+  
 }
 #msgArea {
-  width: 100%;
+  width: 98%;
   margin-bottom: 1rem;
 }
 #welcomeMsg {
@@ -284,14 +343,22 @@ export default {
   color: #15415e;
   font-style: italic;
   font-weight: 90;
+  margin: 0% auto;
 }
 .myBtn {
   margin-top: 1rem;
+  margin-right: 2rem;
+  
 }
 
 .menu-item {
   text-decoration: none;
   color: #ffffff;
   margin: 0.6rem 0.5rem;
+}
+
+.el-upload__tip {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 100%;
 }
 </style>
