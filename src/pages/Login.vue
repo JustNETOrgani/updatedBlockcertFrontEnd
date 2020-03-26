@@ -153,9 +153,9 @@ export default {
               .then(res => {
                 this.$store.commit("set_token", res.data.token);
                 this.$store.commit("set_student_info", res.data.student);
-                this.$router.push("/certificates");
+                this.$router.push("/students/certificates");
                 this.$message({
-                  message: "恭喜你，登录成功",
+                  message: "Congratulations. Login successful",
                   type: "success",
                   center: true
                 });
@@ -179,7 +179,7 @@ export default {
               .then(res => {
                 this.$store.commit("set_token", res.data.token);
                 this.$store.commit("set_school_info", res.data.school);
-                //this.$router.push("/certificates");
+                this.$router.push("/schools/IssueList");
                 this.$message({
                   message: "Congratulations. Login successful",
                   type: "success",
@@ -203,10 +203,10 @@ export default {
     RegisterTypeChoose() {
       this.dialogVisible = false;
       if (this.RegisterType === "student") {
-        this.$router.push("/studentSign");
+        this.$router.push("/students/Register");
       }
       if (this.RegisterType === "school") {
-        this.$router.push("/schoolSign");
+        this.$router.push("/schools/Register");
       }
     }
   }

@@ -89,10 +89,10 @@ export default {
     RegisterTypeChoose(){
       this.dialogVisible = false;
       if(this.RegisterType === "student"){
-        this.$router.push("/studentRegister");
+        this.$router.push("/students/Register");
       }
       if(this.RegisterType === "school"){
-        this.$router.push("/schoolRegister");
+        this.$router.push("/schools/Register");
       }
     }
   }

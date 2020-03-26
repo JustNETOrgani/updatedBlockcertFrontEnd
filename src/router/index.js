@@ -9,6 +9,7 @@ const Login = () => import("@/pages/Login.vue");
 const StudentRegister = () => import("@/pages/students/Register.vue");
 const certificate = () => import("@/pages/students/Certificate.vue");
 const SchoolRegister = () => import("@/pages/schools/Register.vue");
+const IssueList = () => import("@/pages/schools/IssueList.vue");
 
 const router = new Router({
   routes: [
@@ -36,7 +37,7 @@ const router = new Router({
       }
     },
     {
-      path: "/studentRegister",
+      path: "/students/Register",
       name: "studentRegister",
       component: StudentRegister,
       meta: {
@@ -44,7 +45,7 @@ const router = new Router({
       }
     },
     {
-      path: "/schoolRegister",
+      path: "/schools/Register",
       name: "schoolRegister",
       component: SchoolRegister,
       meta: {
@@ -52,9 +53,17 @@ const router = new Router({
       }
     },
     {
-      path: "/certificates",
+      path: "/students/certificates",
       name: "certificates",
       component: certificate,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: "/schools/IssueList",
+      name: "IssueList",
+      component: IssueList,
       meta: {
         requireAuth: true
       }
