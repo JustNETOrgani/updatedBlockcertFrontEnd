@@ -1,7 +1,9 @@
 <template>
   <div class="pageContainer">
     <Head :menuList="menuList">
-      <el-button class="menu-item" type="primary" @click="LoginURL" round>Login</el-button>
+      <el-button class="menu-item" type="primary" @click="LoginURL" round
+        >Login</el-button
+      >
     </Head>
     <div class="body">
       <div id="middlePage">
@@ -9,20 +11,21 @@
           <p id="welcomeMsg">Welcome to School Registration</p>
         </div>
         <div id="formArea">
-          <p id="instruction">Please, fill the form below.</p>
+          <p id="instruction">
+            Please, fill the form below.
+          </p>
           <!--Form to be filled-->
           <el-row>
-            <el-col :span="18" :offset="1">
+            <el-col :span="20" :offset="2">
               <div class="grid-content bg-purple-light">
-                <el-form
+                <el-form id="myForm"
                   :model="ruleForm"
                   :rules="rules"
                   ref="ruleForm"
                   label-width="160px"
                   class="demo-ruleForm"
                 >
-
-                <el-form-item label="School Name" prop="sname">
+                  <el-form-item label="School Name" prop="sname">
                       <el-input
                         v-model="ruleForm.sname"
                         placeholder="Please, enter your school name here."
@@ -58,7 +61,18 @@
                         placeholder="Please, enter your blockchain address."
                       ></el-input>
                     </el-form-item>
-
+                  <div id="blockchainType">
+                    <p id="blockchainAddressTypeLink">
+                      *You can create Bitcoin address
+                      <a href="https://www.bitaddress.org/" target="_blank"
+                        >here. </a
+                      >Ethereum address<a
+                        href="https://www.myetherwallet.com/"
+                        target="_blank"
+                      >
+                        here</a
+                      >*
+                    </p>
                     <fieldset>
                       <legend>Signature Lines</legend>
 
@@ -79,28 +93,20 @@
                     </el-form-item>
 
                      <el-form-item label="Signature Image" prop="signatureImage">
-                    <el-upload class="upload-demo" ref="upload" action :auto-upload="false">
-                      <el-button slot="trigger" size="small" type="primary">select file</el-button>
-                    </el-upload>
+                       <input 
+                        type="file" 
+                        v-on:change="onSigImgFileSelect()" class="uploadBtns" ref="sigImg" id="sigImg" name="sigImg" 
+                        accept=".jpeg,.png,.jpg">
                   </el-form-item>
-                  <hr>
-
                   <el-form-item label="School Logo" prop="school_logo">
-                    <el-upload class="upload-demo" ref="upload" action :auto-upload="false">
-                      <el-button slot="trigger" size="small" type="primary">select file</el-button>
-                    </el-upload>
+                    <input 
+                        type="file" 
+                        v-on:change="onSchLogoFileSelect()" class="uploadBtns" ref="schLogo" id="schLogo" name="schLogo" 
+                        accept=".jpeg,.png,.jpg">
                   </el-form-item>
-
                 </fieldset>
-                  
-                </el-form>
-              </div>
-            </el-col>
-           
-           </el-row>
-           <el-row>
-              <el-col :span="18" :offset="1" >
-      
+                  </div>
+                  <el-form-item>
                     <el-button
                       class="myBtn"
                       type="success"
@@ -108,14 +114,16 @@
                       >Register</el-button
                     >
                     <el-button
-                      class="myBtn"
+                      class="myBtn" id="myBtnRight"
                       type="danger"
                       @click="resetForm('ruleForm')"
                       >Reset</el-button
                     >
-
-                   </el-col>
-            </el-row>
+                  </el-form-item>
+                </el-form>
+              </div>
+            </el-col>
+          </el-row>
         </div>
       </div>
     </div>
@@ -127,13 +135,14 @@
 import Head from "@/components/header";
 import Footer from "@/components/Footer";
 import { register } from "@/network/schools";
+import { getSigImageDetails } from "@/network/schools";
+import { getSchLogoDetails } from "@/network/schools";
 
 export default {
   name: "signup",
   data() {
     return {
       ruleForm: {
-
         sname: "",
         schoolemail: "",
         school_URL: "",
@@ -143,8 +152,12 @@ export default {
         jobTitle:"",
         signatureName:"",
         signatureImage:"",
-        school_logo: ""
+        school_logo: "",
       },
+      sigImg:'',
+      schLogo:null,
+      sigformData:null,
+      logoformData:null,
       rules: {
         sname: [
           {
@@ -166,6 +179,17 @@ export default {
           {
             min: 2,
             message: "Please enter job title",
+            trigger: ["blur", "change"]
+          }
+        ],
+        signatureName: [
+          {
+            required: true,
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            message: "Please enter signature name",
             trigger: ["blur", "change"]
           }
         ],
@@ -229,20 +253,7 @@ export default {
             message: "Length should be at least five(5)",
             trigger: ["blur", "change"]
           }
-        ], 
-        signatureName: [
-          {
-            required: true,
-            message: "Please Enter your signature name",
-            trigger: "blur"
-          },
-          {
-            min: 2,
-            message: "Length should be at least two(2)",
-            trigger: ["blur", "change"]
-          }
-        ], 
-        
+        ]
       },
       show: true,
       menuList: [{ name: "Home", path: "/home" }]
@@ -257,20 +268,41 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           var data = {
-          
-        // school_name: this.ruleForm.sname,
-        //     address: this.ruleForm.sAddress,
-        //     email_address: this.ruleForm.email,
-        //     public_key: this.ruleForm.bAddress,
-        //     password: this.ruleForm.password,
-        //     official_website: this.ruleForm.school_URL,
-        //     signature: this.ruleForm.signature,
-        //     school_logo: this.ruleForm.school_logo
+            name: this.ruleForm.sname,
+            email: this.ruleForm.schoolemail,
+            official_website: this.ruleForm.school_URL,
+            // To be system generated begins.
+            //id_url:"",   
+            //revocation_list:"",
+            //introduction_url:"", 
+            // To be system generated ends.
+            public_key: this.ruleForm.bAddress,
+            job_title:this.ruleForm.jobTitle,
+            signature_name:this.ruleForm.signatureName,
+            signature_file_wsid:"", // To be derived from file upload interface.
+            logo_file_wsid:"",      // To be derived from file upload interface.
+            password: this.ruleForm.password
           };
-
-          register(data)
+          // Get signature wsid from file upload interface.
+           getSigImageDetails(this.sigformData).then(res1 =>{
+            Promise.resolve(res1)
+            var firstResponseValue = res1
+            console.log("Response for Signature File from File Upload Interface: ", firstResponseValue)
+            var sigData = firstResponseValue['data']
+            data.signature_file_wsid =  sigData['wsid']
+            console.log("Sig. File wsid is: ", data.signature_file_wsid)
+            // Get school logo wsid from file upload interface.
+            getSchLogoDetails(this.logoformData).then(res2 =>{
+            Promise.resolve(res2)
+            var secondResponseValue = res2
+            console.log("Response for School Logo file from File Upload Interface: ", secondResponseValue)
+            var logoData = secondResponseValue['data']
+            data.logo_file_wsid = logoData['wsid'] 
+            console.log("School logo File wsid is: ", data.logo_file_wsid)
+            // Send data to School registration interface.
+            register(data)
             .then(res => {
-              console.log(res);
+              console.log("Registration response from school register interface",res);
               this.$message({
                 message:
                   "Congratulations. Registration successful, Please Login",
@@ -286,14 +318,25 @@ export default {
                   "Registration failed, please try again later, or contact the administrator! !!"
               });
             });
+          })
+          });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
+    }, 
+    onSigImgFileSelect(){ 
+      this.sigImg = this.$refs.sigImg.files[0];
+      console.log("School signature file: ", this.sigImg)
+      this.sigformData = new FormData();
+      this.sigformData.append('file', this.sigImg);
     },
-    submitUpload() {
-      this.$refs.upload.submit();
+    onSchLogoFileSelect(){ 
+      this.schLogo = this.$refs.schLogo.files[0];
+      console.log("School logo file: ", this.schLogo)
+      this.logoformData = new FormData();
+      this.logoformData.append('file', this.schLogo);
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -310,7 +353,6 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-  
 }
 
 .body {
@@ -320,50 +362,53 @@ export default {
   align-items: center;
   /* justify-content: center; */
   padding: 2rem;
-  
 }
 #msgArea {
-  width: 98%;
-  margin-bottom: 1rem;
+  width: 100%;
+  margin-top: -2%;
+  margin-bottom: 0.5rem;
 }
 #welcomeMsg {
   color: #477ea3;
   font-size: 1.5rem;
+  margin-top: -2.5%;
   padding-top: 1rem;
 }
 
 #instruction {
   color: #477ea3;
   font-style: italic;
-  padding-top: 0.5rem;
+  margin-top: -2.4%;
   padding-bottom: 1rem;
 }
 
 #middlePage {
   width: 50%;
+  margin-top: -2%;
   background-color: #ffffff;
+}
+
+#myForm{
+  margin-top: -2.5%;
+   align-items: center;
 }
 
 #blockchainType {
   color: #15415e;
   font-style: italic;
   font-weight: 90;
-  margin: 0% auto;
 }
-.myBtn {
+#myBtnRight {
+  margin-right: 50%; 
+}
+
+.myBtn{
   margin-top: 1rem;
-  margin-right: 2rem;
-  
 }
 
 .menu-item {
   text-decoration: none;
   color: #ffffff;
   margin: 0.6rem 0.5rem;
-}
-
-.el-upload__tip {
-  font-family: "Times New Roman", Times, serif;
-  font-size: 100%;
 }
 </style>
