@@ -137,7 +137,6 @@ export default {
         sname: "",
         schoolemail: "",
         school_URL: "",
-<<<<<<< HEAD
         schoolID:"",
         revocationList:"",
         bAddress: "",
@@ -145,9 +144,6 @@ export default {
         signatureName:"",
         signatureImage:"",
         school_logo: ""
-=======
-        sAddress: ""
->>>>>>> 7f63b11fe7aab99630a63cdb0ef96ed86ca0a575
       },
       rules: {
         sname: [
@@ -233,7 +229,6 @@ export default {
             message: "Length should be at least five(5)",
             trigger: ["blur", "change"]
           }
-<<<<<<< HEAD
         ], 
         signatureName: [
           {
@@ -248,9 +243,6 @@ export default {
           }
         ], 
         
-=======
-        ]
->>>>>>> 7f63b11fe7aab99630a63cdb0ef96ed86ca0a575
       },
       show: true,
       menuList: [{ name: "Home", path: "/home" }]
