@@ -6,7 +6,7 @@
     <div class="body">
       <div id="middlePage">
         <div id="msgArea">
-          <p id="welcomeMsg">Welcome to School Registration</p>
+          <p id="welcomeMsg">Welcome to Certificate upload </p>
         </div>
         <div id="formArea">
           <p id="instruction">Please, fill the form below.</p>
@@ -22,76 +22,42 @@
                   class="demo-ruleForm"
                 >
 
-                <el-form-item label="School Name" prop="sname">
+                <el-form-item label="Certificate Title" prop="certTitle">
                       <el-input
-                        v-model="ruleForm.sname"
-                        placeholder="Please, enter your school name here."
+                        v-model="ruleForm.certTitle"
+                        placeholder="Please, enter your certificate title ."
                       ></el-input>
                     </el-form-item>
 
-                    <el-form-item label="Email Address" prop="schoolemail">
+                    <el-form-item label="Cert Description" prop="certDescription">
                       <el-input
-                        v-model="ruleForm.schoolemail"
-                        placeholder="Please, enter your email here."
+                        v-model="ruleForm.certDescription"
+                        placeholder="Please, enter your certificate description."
                       ></el-input>
                     </el-form-item>
 
-                     <el-form-item label="Password" prop="password">
+                     <el-form-item label="Criteria Narrative" prop="criteria_Narrative">
                       <el-input
-                        v-model="ruleForm.password" type="password"
-                        placeholder="Please, enter valid password."
+                        v-model="ruleForm.criteria_Narrative" type="text"
+                        placeholder="Please, enter criteria narrative here."
                       ></el-input>
                     </el-form-item>
 
 
-                    <el-form-item label="Official Website" prop="school_URL">
+                    <el-form-item label="Issuer Name" prop="issuer">
                       <el-input
-                        v-model="ruleForm.school_URL"
+                        v-model="ruleForm.issuer"
                         type="website"
-                        placeholder="Please, enter your school website ."
+                        placeholder="Please, enter your school name here ."
                       ></el-input>
                     </el-form-item>
 
-                    <el-form-item label="Blockchain Address" prop="bAddress">
-                      <el-input
-                        v-model="ruleForm.bAddress"
-                        placeholder="Please, enter your blockchain address."
-                      ></el-input>
-                    </el-form-item>
-
-                    <fieldset>
-                      <legend>Signature Lines</legend>
-
-                      <el-form-item label="Job Title" prop="jobTitle">
-                      <el-input
-                        v-model="ruleForm.jobTitle"
-                        type="text"
-                        placeholder="Please, enter job title"
-                      ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="Signature Name" prop="signatureName">
-                      <el-input
-                        v-model="ruleForm.signatureName"
-                        type="text"
-                        placeholder="Please, enter signature name"
-                      ></el-input>
-                    </el-form-item>
-
-                     <el-form-item label="Signature Image" prop="signatureImage">
+                    
+                     <el-form-item label="Cert File" prop="certFile">
                     <el-upload class="upload-demo" ref="upload" action :auto-upload="false">
                       <el-button slot="trigger" size="small" type="primary">select file</el-button>
                     </el-upload>
                   </el-form-item>
-                  <hr>
-
-                  <el-form-item label="School Logo" prop="school_logo">
-                    <el-upload class="upload-demo" ref="upload" action :auto-upload="false">
-                      <el-button slot="trigger" size="small" type="primary">select file</el-button>
-                    </el-upload>
-                  </el-form-item>
-
-                </fieldset>
                   
                 </el-form>
               </div>
@@ -105,13 +71,13 @@
                       class="myBtn"
                       type="success"
                       @click="submitForm('ruleForm')"
-                      >Register</el-button
+                      >Submit</el-button
                     >
                     <el-button
                       class="myBtn"
                       type="danger"
                       @click="resetForm('ruleForm')"
-                      >Reset</el-button
+                      >Cancel</el-button
                     >
 
                    </el-col>
@@ -133,56 +99,51 @@ export default {
   data() {
     return {
       ruleForm: {
-
-        sname: "",
-        schoolemail: "",
-        school_URL: "",
-        schoolID:"",
-        revocationList:"",
-        bAddress: "",
-        jobTitle:"",
-        signatureName:"",
-        signatureImage:"",
-        school_logo: ""
+        certTitle: "",
+        certDescription: "",
+        criteria_Narrative: "",
+        issuer:"",
+        certFile:"",
+       
       },
       rules: {
-        sname: [
+        certTitle: [
           {
             required: true,
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Please enter school name",
+            message: "Please enter certificate title",
             trigger: ["blur", "change"]
           }
         ],
 
-        jobTitle: [
+        certDescription: [
           {
             required: true,
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Please enter job title",
+            message: "Please enter certficate description",
             trigger: ["blur", "change"]
           }
         ],
 
-        schoolemail: [
+        criteria_Narrative: [
           {
             required: true,
-            message: "Please input a valid email address.",
+            message: "Please enter criteria narrative here.",
             trigger: "blur"
           },
           {
-            type: "email",
-            message: "Please input a valid email address",
+            type: "text",
+            message: "Please input criteria narrative here",
             trigger: ["blur", "change"]
           }
         ],
-        password: [
+        issuer: [
           {
             required: true,
             message: "Please input your password.",
@@ -194,30 +155,19 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        bAddress: [
+        certFile: [
           {
             required: true,
-            message: "Please input your blockchain address.",
+            message: "Please upload your cerficate here.",
             trigger: "blur"
           },
           {
-            min: 20,
-            message: "Length should be at least twenty",
+            
+            message: "File must be a PDF, PNG, JPG or JPEG",
             trigger: ["blur", "change"]
           }
         ],
-        sAddress: [
-          {
-            required: true,
-            message: "Please Enter your school address",
-            trigger: "blur"
-          },
-          {
-            min: 2,
-            message: "Length should be at least five(5)",
-            trigger: ["blur", "change"]
-          }
-        ],
+        
         school_URL: [
           {
             required: true,
@@ -312,6 +262,7 @@ export default {
 #msgArea {
   width: 98%;
   margin-bottom: 1rem;
+  margin-top: -5%;
 }
 #welcomeMsg {
   color: #477ea3;
@@ -324,6 +275,7 @@ export default {
   font-style: italic;
   padding-top: 0.5rem;
   padding-bottom: 1rem;
+  margin-top: -3%;
 }
 
 #middlePage {
@@ -339,7 +291,8 @@ export default {
 }
 .myBtn {
   margin-top: 1rem;
-  margin-right: 2rem;
+  margin-right: 4%;
+  margin-left: 16%;
   
 }
 
@@ -354,3 +307,4 @@ export default {
   font-size: 100%;
 }
 </style>
+       
