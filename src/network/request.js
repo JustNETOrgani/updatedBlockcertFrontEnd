@@ -26,7 +26,7 @@ export function request(config) {
     res => {
       // console.log("拦截后需要将拦截下来处理成的结果返回res", res);
       // 拦截后需要将拦截下来处理成的结果返回
-      return res.data;
+      return res;
     },
     err => {
       // console.log("拦截后需要将拦截下来处理成的结果返回", err);

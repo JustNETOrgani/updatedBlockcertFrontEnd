@@ -283,21 +283,26 @@ export default {
             logo_file_wsid:"",      // To be derived from file upload interface.
             password: this.ruleForm.password
           };
-          getSigImageDetails(this.sigformData).then(res =>{
-            console.log("Response for Signature File from File Upload Interface: ", res)
-            var sigData = res['data']
+          // Get signature wsid from file upload interface.
+           getSigImageDetails(this.sigformData).then(res1 =>{
+            Promise.resolve(res1)
+            var firstResponseValue = res1
+            console.log("Response for Signature File from File Upload Interface: ", firstResponseValue)
+            var sigData = firstResponseValue['data']
             data.signature_file_wsid =  sigData['wsid']
             console.log("Sig. File wsid is: ", data.signature_file_wsid)
-          });
-          getSchLogoDetails(this.logoformData).then(res =>{
-            console.log("Response for School Logo file from File Upload Interface: ", res)
-            var logoData = res['data']
+            // Get school logo wsid from file upload interface.
+            getSchLogoDetails(this.logoformData).then(res2 =>{
+            Promise.resolve(res2)
+            var secondResponseValue = res2
+            console.log("Response for School Logo file from File Upload Interface: ", secondResponseValue)
+            var logoData = secondResponseValue['data']
             data.logo_file_wsid = logoData['wsid'] 
             console.log("School logo File wsid is: ", data.logo_file_wsid)
-          })
-          register(data)
+            // Send data to School registration interface.
+            register(data)
             .then(res => {
-              console.log("Registration response from register interface",res);
+              console.log("Registration response from school register interface",res);
               this.$message({
                 message:
                   "Congratulations. Registration successful, Please Login",
@@ -313,6 +318,8 @@ export default {
                   "Registration failed, please try again later, or contact the administrator! !!"
               });
             });
+          })
+          });
         } else {
           console.log("error submit!!");
           return false;
