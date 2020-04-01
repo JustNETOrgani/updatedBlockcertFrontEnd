@@ -8,21 +8,6 @@ export function Schlogin(data) {
     data: data
   });
 }
-export function getSigImageDetails(data) {
-  return fileRequest({
-    url: '/v1/api/files/',
-    method: 'post',
-    data: data
-  });
-}
-
-export function getSchLogoDetails(data) {
-  return fileRequest({
-    url: '/v1/api/files/',
-    method: 'post',
-    data: data
-  });
-}
 
 export async function getSigImageDetails(data) {
   return fileRequest({
