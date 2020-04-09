@@ -1,7 +1,7 @@
 <template>
   <div class="pageContainer">
     <Head :menuList="menuList">
-      <el-button class="menu-item" type="primary" @click="LoginURL" round>Login</el-button>
+      <el-button class="menu-item" type="primary" @click="LoginURL" round>Logout</el-button>
     </Head>
     <div class="body">
       <div id="middlePage">
@@ -18,7 +18,7 @@
                   :model="ruleForm"
                   :rules="rules"
                   ref="ruleForm"
-                  label-width="160px"
+                  label-width="180px"
                   class="demo-ruleForm"
                 >
 
@@ -29,10 +29,10 @@
                       ></el-input>
                     </el-form-item>
 
-                    <el-form-item label="Cert Description" prop="certDescription">
+                    <el-form-item label="Certificate Description" prop="certDescription" >
                       <el-input
                         v-model="ruleForm.certDescription"
-                        placeholder="Please, enter your certificate description."
+                        placeholder="Please, enter your certificate description." 
                       ></el-input>
                     </el-form-item>
 
@@ -53,7 +53,7 @@
                     </el-form-item>
 
                     
-                     <el-form-item label="Cert File" prop="certFile">
+                     <el-form-item label="Certificate File" prop="certFile">
                     <el-upload class="upload-demo" ref="upload" action :auto-upload="false">
                       <el-button slot="trigger" size="small" type="primary">select file</el-button>
                     </el-upload>
@@ -64,6 +64,7 @@
             </el-col>
            
            </el-row>
+           <div id="btnrow">
            <el-row>
               <el-col :span="18" :offset="1" >
       
@@ -82,6 +83,7 @@
 
                    </el-col>
             </el-row>
+           </div>
         </div>
       </div>
     </div>
@@ -119,9 +121,23 @@ export default {
           }
         ],
 
-        certDescription: [
+        criteria_Narrative: [
           {
             required: true,
+            message: "Please enter criteria narrative here.",
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            message: "Please input criteria narrative here",
+            trigger: ["blur", "change"]
+          }
+        ],
+
+         certDescription: [
+          {
+            required: true,
+            message: "Please enter certficate description",
             trigger: "blur"
           },
           {
@@ -131,22 +147,11 @@ export default {
           }
         ],
 
-        criteria_Narrative: [
-          {
-            required: true,
-            message: "Please enter criteria narrative here.",
-            trigger: "blur"
-          },
-          {
-            type: "text",
-            message: "Please input criteria narrative here",
-            trigger: ["blur", "change"]
-          }
-        ],
+
         issuer: [
           {
             required: true,
-            message: "Please input your password.",
+            message: "Please enter name of school.",
             trigger: "blur"
           },
           {
@@ -280,7 +285,7 @@ export default {
 
 #middlePage {
   width: 50%;
-  background-color: #ffffff;
+   background-color: #ffffff;
 }
 
 #blockchainType {
@@ -290,9 +295,10 @@ export default {
   margin: 0% auto;
 }
 .myBtn {
-  margin-top: 1rem;
-  margin-right: 4%;
-  margin-left: 16%;
+  margin-top: 0.5rem;
+  margin-right: -10%;
+  margin-left: 18%;
+  
   
 }
 
@@ -300,6 +306,12 @@ export default {
   text-decoration: none;
   color: #ffffff;
   margin: 0.6rem 0.5rem;
+}
+
+#btnrow {
+  margin-bottom: 3%;
+  
+  
 }
 
 .el-upload__tip {
