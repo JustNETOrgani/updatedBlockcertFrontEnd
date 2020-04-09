@@ -12,7 +12,6 @@ const SchoolRegister = () => import("@/pages/schools/Register.vue");
 const IssueList = () => import("@/pages/schools/IssueList.vue");
 const cert_upload = () => import("@/pages/students/cert_upload.vue");
 
-
 const router = new Router({
   routes: [
     {
