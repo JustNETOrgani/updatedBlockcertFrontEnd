@@ -3,6 +3,7 @@ export default {
     state.token = token;
     // sessionStorage.token = token;
     sessionStorage.setItem('API-HTTP-AUTHORIZATION', token);
+    console.log("API-HTTP-AUTHORIZATION token: ",token)
   },
   del_token(state) {
     state.token = null;
@@ -27,5 +28,9 @@ export default {
   del_school_info(state){
     state.school_info = null;
     sessionStorage.removeItem("SCHOOL-INFO");
+  },
+  certViewData(state, certDetails){
+    state.certDetails = certDetails
+    sessionStorage.setItem('Cert_Details', JSON.stringify(certDetails));
   }
 };

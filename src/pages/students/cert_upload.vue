@@ -1,7 +1,7 @@
 <template>
   <div class="pageContainer">
     <Head :menuList="menuList">
-      <el-button class="menu-item" type="primary" @click="LoginURL" round>Logout</el-button>
+      <el-button class="menu-item" type="primary" @click="logout" round>Logout</el-button>
     </Head>
     <div class="body">
       <div id="middlePage">
@@ -54,9 +54,10 @@
 
                     
                      <el-form-item label="Certificate File" prop="certFile">
-                    <el-upload class="upload-demo" ref="upload" action :auto-upload="false">
-                      <el-button slot="trigger" size="small" type="primary">select file</el-button>
-                    </el-upload>
+                       <input 
+                        type="file" 
+                        v-on:change="certFileSelect()" class="uploadBtns" ref="certFile" id="certFile" name="certFile" 
+                        accept=".jpeg,.png,.jpg,.pdf">
                   </el-form-item>
                   
                 </el-form>
@@ -94,7 +95,8 @@
 <script>
 import Head from "@/components/header";
 import Footer from "@/components/Footer";
-import { register } from "@/network/schools";
+import { getCertFileDetails } from "@/network/students"; 
+import { studentCertCreateRequest } from "@/network/students";
 
 export default {
   name: "signup",
@@ -108,6 +110,7 @@ export default {
         certFile:"",
        
       },
+      certFileformData:null,
       rules: {
         certTitle: [
           {
@@ -160,19 +163,6 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        certFile: [
-          {
-            required: true,
-            message: "Please upload your cerficate here.",
-            trigger: "blur"
-          },
-          {
-            
-            message: "File must be a PDF, PNG, JPG or JPEG",
-            trigger: ["blur", "change"]
-          }
-        ],
-        
         school_URL: [
           {
             required: true,
@@ -199,35 +189,59 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           var data = {
-          
-        // school_name: this.ruleForm.sname,
-        //     address: this.ruleForm.sAddress,
-        //     email_address: this.ruleForm.email,
-        //     public_key: this.ruleForm.bAddress,
-        //     password: this.ruleForm.password,
-        //     official_website: this.ruleForm.school_URL,
-        //     signature: this.ruleForm.signature,
-        //     school_logo: this.ruleForm.school_logo
+              certificate_title: this.ruleForm.certTitle,
+              certificate_description: this.ruleForm.certDescription,
+              criteria_narrative: this.ruleForm.criteria_Narrative,
+              issuer_name: this.ruleForm.issuer,
+              // To be gotten from file upload interface. 
+              cert_image_wsid: '',
+              // Global required fields.
+              hash_emails: false,
+              display_html: {
+                  "@id": "schema:description"
+              },
+              additional_global_fields: [
+                  {
+                      "path": "$.displayHtml",
+                      "value": "<h1>Some html code</h1>"
+                  },
+                  {
+                      "path": "$.@context",
+                      "value": [
+                          "https://w3id.org/openbadges/v2",
+                          "https://w3id.org/blockcerts/v2",
+                          {
+                              "displayHtml": {
+                                  "@id": "schema:description"
+                              }
+                          }
+                      ]
+                  }
+              ],
+              additional_per_recipient_fields: false,
+              filename_format: "uuid"
           };
-
-          register(data)
-            .then(res => {
-              console.log(res);
+          getCertFileDetails(this.certFileformData).then(res1 =>{
+            Promise.resolve(res1)
+            var certFileResponse = res1
+            console.log("Response for Student certificate File from File Upload Interface: ", certFileResponse)
+            var certFileData = certFileResponse['data']
+            data.cert_image_wsid =  certFileData['wsid']
+            console.log("Cert. File wsid is: ", data.cert_image_wsid)
+          studentCertCreateRequest(data).then(res => {
+              console.log("Response from student certificate upload interface",res);
               this.$message({
-                message:
-                  "Congratulations. Registration successful, Please Login",
+                message:"Congratulations. Certificate uploaded and creation successful.",
                 type: "success"
               });
-              this.$router.replace("/login");
-            })
-            .catch(function(error) {
+            }).catch(function(error) {
               console.log(error);
               this.$message.error({
                 title: "error",
-                message:
-                  "Registration failed, please try again later, or contact the administrator! !!"
+                message:"Upload and certificate creation failed, please try again later, or contact the administrator! !!"
               });
             });
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -239,9 +253,28 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    }, 
+    certFileSelect(){ 
+      this.certFile = this.$refs.certFile.files[0];
+      console.log("Student certificate file: ", this.certFile)
+      this.certFileformData = new FormData();
+      this.certFileformData.append('file', this.certFile);
     },
-    LoginURL() {
-      this.$router.push("/login");
+    logout() {
+      this.$confirm("Are you sure you want to quit?", "Log Out", {
+          confirmButtonText: 'confirm',
+          cancelButtonText: 'cancel',
+          type: 'info'
+        }).then(() => {
+          sessionStorage.removeItem("STUDENT-INFO");
+          sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
+          this.$router.push("/login");
+          this.$message({
+            type: "info",
+            message: "You have Signed out successfully."
+          });
+        }).catch(() => {       
+        });
     }
   }
 };

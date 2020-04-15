@@ -151,8 +151,10 @@ export default {
             };
             login(data)
               .then(res => {
-                this.$store.commit("set_token", res.data.token);
-                this.$store.commit("set_student_info", res.data.student);
+                console.log("Login response: ", res.data)
+                console.log("Login response data data: ", res.data.data)
+                this.$store.commit("set_token", res.data.data.token);
+                this.$store.commit("set_student_info", res.data.data.student);
                 this.$router.push("/students/certificates");
                 this.$message({
                   message: "Congratulations. Login successful",
