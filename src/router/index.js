@@ -12,6 +12,7 @@ const SchoolRegister = () => import("@/pages/schools/Register.vue");
 const IssueList = () => import("@/pages/schools/IssueList.vue");
 const cert_upload = () => import("@/pages/students/cert_upload.vue");
 const certDetails = () => import("@/pages/students/certDetails.vue")
+const schoolCertDetails = () => import("@/pages/schools/schoolCertDetails.vue")
 
 const router = new Router({
   routes: [
@@ -75,13 +76,21 @@ const router = new Router({
       name: "cert_upload",
       component: cert_upload,
       meta: {
-        requireAuth: false
+        requireAuth: true
       }
     },
     {
       path: "/students/certDetails",
       name: "certDetails",
       component: certDetails,
+      meta: {
+        requireAuth: true
+      }
+    },
+    {
+      path: "/schools/schoolCertDetails",
+      name: "schoolCertDetails",
+      component: schoolCertDetails,
       meta: {
         requireAuth: true
       }

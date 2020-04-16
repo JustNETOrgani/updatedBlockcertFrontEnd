@@ -28,9 +28,21 @@ export default {
   del_school_info(state){
     state.school_info = null;
     sessionStorage.removeItem("SCHOOL-INFO");
-  },
+  }, 
   certViewData(state, certDetails){
     state.certDetails = certDetails
     sessionStorage.setItem('Cert_Details', JSON.stringify(certDetails));
+  },
+  del_certViewData(state){
+    state.certDetails = null;
+    sessionStorage.removeItem("Cert_Details");
+  },
+  set_certDispStatus(state, status){
+    state.certStatus = status
+    sessionStorage.setItem('Cert_Status', status);
+  },
+  del_certDispStatus(state){
+    state.certStatus = null;
+    sessionStorage.removeItem("Cert_Status");
   }
 };

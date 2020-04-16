@@ -1,12 +1,12 @@
 <template>
   <div class="certificate">
     <Head :menuList="menuList">
-      <el-button class="menu-item" type="primary" round @click="LoginOut"
+      <el-button class="menu-item" type="primary" round @click="logUserOut"
         >Logout</el-button
       >
     </Head>
     <div class="body">
-      <h1 class="title">Student Certificate's Information</h1>
+      <h1 class="title">School Certificate Details</h1>
       <!--Certificate display area-->
       <div  id="certDisplayArea" style="overflow-y:auto">
         <el-row>
@@ -58,11 +58,11 @@ export default {
       certDescription:'',
       stdName:'',
       issuedDate: '',
+      certStatus:'',
       jobTible: '',
       stdCertID: '',
-      certStatus:'',
       schPubKey: '',
-      certViewInfo: JSON.parse(sessionStorage.getItem('Cert_Details')),
+      certViewInfo: JSON.parse(sessionStorage.getItem('Cert_Details')), 
       certState: sessionStorage.getItem('Cert_Status')
     };
   },
@@ -72,9 +72,9 @@ export default {
             this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
             this.certDescription = this.certViewInfo.unsign_cert.badge.criteria['narrative']
             this.stdName = this.certViewInfo.unsign_cert.recipientProfile['name']
-            this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn'])
-            this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']
+            this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn']) 
             this.certStatus = this.certState
+            this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']  
             this.stdCertID = (this.certViewInfo['wsid']).substring(10) // cert_wsid_ --- First ten characters.
             this.schPubKey = (this.certViewInfo.unsign_cert.verification['publicKey']).substring(21) // Remove first 21 characters.
     },
@@ -84,20 +84,20 @@ export default {
     Footer
   },
   methods: {
-    LoginOut() {
+    logUserOut() {
       this.$confirm("Are you sure you want to quit?", "Log Out", {
           confirmButtonText: 'confirm',
           cancelButtonText: 'cancel',
           type: 'info'
         }).then(() => {
-          sessionStorage.removeItem("STUDENT-INFO");
+          sessionStorage.removeItem("SCHOOL-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
           sessionStorage.removeItem("Cert_Details");
           sessionStorage.removeItem("Cert_Status");
           this.$router.push("/home");
           this.$message({
             type: "info",
-            message: "Signed out successfully."
+            message: "You have successfully signed out."
           });
         }).catch(() => {       
         });
@@ -125,6 +125,7 @@ export default {
   color: #477ea3;
   font-size: 1.5rem;
   margin-bottom: 0.5rem;
+  margin-top: -1rem;
 }
 .menu-item {
   text-decoration: none;
@@ -141,7 +142,6 @@ align-items: left;
 #logoForSchool{
   width: 144px;
   height: 148px;
-  border-radius: 50%;
 }
 
 #statusOfCert{
@@ -151,6 +151,5 @@ align-items: left;
 .smallFontSz{
      font-size: 0.7rem;
 }
-
 
 </style>

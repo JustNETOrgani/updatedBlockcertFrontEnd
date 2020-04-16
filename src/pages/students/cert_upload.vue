@@ -234,6 +234,7 @@ export default {
                 message:"Congratulations. Certificate uploaded and creation successful.",
                 type: "success"
               });
+              this.$router.back(); // Redirect user back to previous page (certificate list page.)
             }).catch(function(error) {
               console.log(error);
               this.$message.error({

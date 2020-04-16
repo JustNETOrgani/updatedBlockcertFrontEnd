@@ -205,10 +205,13 @@ export default {
     },
      getCertDetails(index, row) {
         console.log("Getting details for index: ",index, row);
+        console.log("Cert status is: ", row['certStatus'])
         let certIDtoGetDetails = this.certImageWSID[index]
+        let certStatusToDisplay = row['certStatus']
         viewCertDetails(certIDtoGetDetails).then(res=>{
         console.log("View details of cert.: ", res)
         this.$store.commit("certViewData", res.data);
+        this.$store.commit("set_certDispStatus", certStatusToDisplay);
         this.$router.push("/students/certDetails");
         this.$message('Now viewing a certificate detail.'); 
         })

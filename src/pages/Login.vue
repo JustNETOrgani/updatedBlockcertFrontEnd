@@ -174,13 +174,15 @@ export default {
           // eslint-disable-next-line no-empty
           else if (this.role === "school") {
             let data = {
-              email_address: this.ruleForm.username,
+              email: this.ruleForm.username,
               password: this.ruleForm.password
             };
             Schlogin(data)
               .then(res => {
-                this.$store.commit("set_token", res.data.token);
-                this.$store.commit("set_school_info", res.data.school);
+                console.log("SchooolLogin response: ", res.data)
+                console.log("School Login response data data: ", res.data.data)
+                this.$store.commit("set_token", res.data.data.token);
+                this.$store.commit("set_school_info", res.data.data.school);
                 this.$router.push("/schools/IssueList");
                 this.$message({
                   message: "Congratulations. Login successful",
