@@ -13,7 +13,7 @@
             <el-col :span="18" :offset="2">
                 <h2>{{issuerName}}</h2>
                 <h3>Blockchain-based certificate</h3>
-                <img :src="schLogo" alt="School Logo"/>
+                <img :src="schLogo" id="logoForSchool" alt="School Logo"/>
                 <br>
                 <br>
                 <i><b>{{certDescription}}</b></i>
@@ -118,6 +118,11 @@ export default {
 width: 54%;
 background-color: #ffffff;
 align-items: left;
+}
+
+#logoForSchool{
+  width: 144px;
+  height: 148px;
 }
 
 </style>
