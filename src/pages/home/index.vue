@@ -67,14 +67,14 @@
                 <el-button
                   size="mini"
                   type="primary"
-                  @click="VerifyCert($event, scope.$index, scope.row)" :loading="dialogLoading === scope.$index">Verify</el-button>
+                  @click="VerifyCert($event, scope.$index, scope.row)">Verify</el-button>
                 <el-dialog
                   title="Verify result"
                   :visible.sync="dialogVisible">
                   <span>chain: {{ VerifyObj.chain }}</span>
                   <br />
                   <span>txid: {{ VerifyObj.txid }}</span>
-                  <el-steps direction="vertical" :active="step">
+                  <el-steps v-loading="dialogLoading" direction="vertical" :active="step">
                     <template v-for="(item, index) in VerifyResult">
                       <el-step
                         :key="index"
@@ -218,14 +218,14 @@ export default {
     VerifyCert(event, index, row) {
       event.srcElement.parentNode.disabled = true
       this.VerifyObj = row;
-      this.dialogLoading = index;
+      this.dialogVisible = true;
+      this.dialogLoading = true;
       let data = {
         cert_id: this.VerifyObj.cert_id
       };
       verifyCert(data)
         .then(res => {
           let isPassed = true;
-          this.dialogVisible = true;
           this.dialogLoading = false;
           this.VerifyResult = res.data.data;
           for (let i = 0; i < this.VerifyResult.length; i++) {
@@ -250,7 +250,7 @@ export default {
         })
         .catch(error => {
           console.log(error);
-          this.dialogLoading = false
+          this.dialogLoading = false;
           this.VerifyResult = [{step: "step 1", status: "error", name:"Verify cert fail. Please try it later"}]
           this.step = 0;
           event.srcElement.parentNode.style.backgroundColor = "#f56c6c"
