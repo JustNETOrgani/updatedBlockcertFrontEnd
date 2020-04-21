@@ -30,7 +30,7 @@
         </el-dialog>
       </div>
       <div v-else>
-        <el-button class="menu-item" type="primary" round>Login out</el-button>
+        <el-button class="menu-item" type="primary" round @click="logUserOut">Log out</el-button>
       </div>
     </Head>
     <div class="body">
@@ -135,9 +135,15 @@ export default {
         { label: "time", prop: "create_time" },
       ],
       VerifyResult: [],
-      VerifyObj: {}
+      VerifyObj: {},
+      prevRoute: null
     };
   },
+  beforeRouteEnter(to, from, next) {
+  next(vm => {
+    vm.prevRoute = from.fullPath
+  })
+},
   components: {
     Head,
     Footer
@@ -158,7 +164,7 @@ export default {
       if (!this.needLogin) {
         return [
           { name: "Home", path: "/home" },
-          { name: "Certificates", path: "/certificates" }
+          { name: "Certificates", path: this.prevRoute }
         ];
       } else {
         console.log("未登录");
@@ -257,6 +263,22 @@ export default {
           event.srcElement.innerText = "Failed"
         });
     }
+  },
+  logUserOut(){
+      this.$confirm("Are you sure you want to quit?", "Log Out", {
+          confirmButtonText: 'confirm',
+          cancelButtonText: 'cancel',
+          type: 'info'
+        }).then(() => {
+          sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
+          sessionStorage.removeItem("SCHOOL-INFO");
+          sessionStorage.removeItem("STUDENT-INFO");
+          this.$router.push("/home");
+          this.$message({
+            type: "info",
+            message: "Signed out successfully"
+          });
+        })
   }
 };
 </script>

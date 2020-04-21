@@ -40,8 +40,9 @@
       <div  id="certDisplayArea" style="overflow-y:auto">
         <!--Building table-->
         <el-table
+          v-loading="loading"
           :data="tableData"
-          style="width: 100%">
+          style="width: 100%; height:92%">
           <!--Building table body-->
           <el-table-column
             prop="certTitle"
@@ -67,7 +68,18 @@
           </template>
         </el-table-column>
         </el-table>
-
+        <!--Create pagination-->
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[10, 20, 30, 40, 50, 100]"
+          :page-size="limit"
+          layout=" sizes, prev, pager, next, jumper"
+          :total="total"
+        >
+        </el-pagination>
       </div>
     </div>
     <Footer></Footer>
@@ -92,6 +104,11 @@ export default {
       tableData: [],
       certImageWSID: [], // To be used to view details about the certificate.
       certData: [], // To hold the entire certificates.
+      loading: false,
+      total: 0,
+      currentPage: 1,
+      limit: 10,
+      filteredData: [],
     };
   },
   components: {
@@ -136,14 +153,26 @@ export default {
         this.tableData = filteredData
       }
     },
+    handleSizeChange(size) {
+      console.log(`${size} items per page`);
+      this.limit = size;
+      this.currentCertData()
+    },
+    handleCurrentChange(current) {
+      console.log(`current page: ${current}`);
+      this.currentPage = current;
+      this.currentCertData()
+    },
     onSelect(data){
       this.radio = data
       console.log("User has selected:", this.radio);
+      this.loading = true
       // Perform action based on student's selection.
       getCertificates().then(res=>{
         console.log("Certificates for this student: ", res.data)
         //this.certs = res.data
-        var allCerts = res.data
+        var allCerts = res.data.results
+        this.total = res.data.count;
         var totalCert = allCerts.length
         console.log("Total certs: ", totalCert)
         
@@ -166,13 +195,19 @@ export default {
           if(tbObj['certStatus']==3){
             tbObj['certStatus']='Failed Issue'
           }
+          if(tbObj['certStatus']==4){
+            tbObj['certStatus']='Revoked'
+          }
           this.certData[i] = tbObj
         }
 
         if(this.radio=='all'){
         console.log("Retrieving all certificates.")
         // Get all certificates.
-        this.tableData = this.certData
+        this.filteredData = this.certData
+        this.total = this.filteredData.length 
+        this.tableData = this.filteredData
+        this.loading = false
         return
         }
         if(this.radio=='chkPending'){
@@ -180,8 +215,11 @@ export default {
           console.log("Retrieving check pending certificates.")
           // Get check pending certificates.
           chkCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Failed Issue" && el.certStatus != "Issued" && el.certStatus != "Issuing") }); 
-          this.tableData = chkCertData
+            return (el.certStatus != "Failed Issue" && el.certStatus != "Revoked" && el.certStatus != "Issued" && el.certStatus != "Issuing") }); 
+          this.filteredData = chkCertData
+          this.total = this.filteredData.length 
+          this.tableData = this.filteredData
+          this.loading = false
           return
         }
         if(this.radio=='Issued'){
@@ -189,8 +227,11 @@ export default {
           let issuedCertData = null
           // Get Issued certificates.
           issuedCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Failed Issue" && el.certStatus != "Created" && el.certStatus != "Issuing") }); 
-          this.tableData = issuedCertData
+            return (el.certStatus != "Failed Issue" && el.certStatus != "Revoked" && el.certStatus != "Created" && el.certStatus != "Issuing") }); 
+          this.filteredData = issuedCertData
+          this.total = this.filteredData.length 
+          this.tableData = this.filteredData
+          this.loading = false
           return
         }
         else{
@@ -198,8 +239,10 @@ export default {
           // Get revoked certificates.
            let rvkCertData = null
           rvkCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Issued" && el.certStatus != "Created" && el.certStatus != "Issuing") }); 
-          this.tableData = rvkCertData
+            return (el.certStatus != "Issued" && el.certStatus != "Created" && el.certStatus != "Issuing" && el.certStatus != "Failed Issue") }); 
+          this.filteredData = rvkCertData
+          this.total = this.filteredData.length 
+          this.tableData = this.filteredData
       }
       })
     },
