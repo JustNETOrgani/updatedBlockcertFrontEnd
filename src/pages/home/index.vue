@@ -3,46 +3,46 @@
     <Head :menuList="menuList">
       <div v-if="needLogin">
         <el-button class="menu-item" type="primary" @click="LoginURL" round
-          >Login</el-button
+          >{{$t('common.login')}}</el-button
         >
         <el-button
           class="menu-item"
           type="primary text"
           round
           @click="dialogVisible = true"
-          >Register</el-button
+          >{{$t('common.register')}}</el-button
         >
         <el-dialog
-          title="Select registered user type"
+          :title="$t('home.index.dialogTitleUserType')"
           :visible.sync="dialogVisible"
           width="30%"
         >
           <el-radio-group v-model="RegisterType">
-            <el-radio label="student">Student</el-radio>
-            <el-radio label="school">School</el-radio>
+            <el-radio label="student">{{$t('common.student')}}</el-radio>
+            <el-radio label="school">{{$t('common.school')}}</el-radio>
           </el-radio-group>
           <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button @click="dialogVisible = false">{{$t('common.cancel')}}</el-button>
             <el-button type="primary" @click="RegisterTypeChoose"
-              >Confirm</el-button
+              >{{$t('common.confirm')}}</el-button
             >
           </span>
         </el-dialog>
       </div>
       <div v-else>
-        <el-button class="menu-item" type="primary" round>Login out</el-button>
+        <el-button class="menu-item" type="primary" round>{{$t('common.logout')}}</el-button>
       </div>
     </Head>
     <div class="body">
-      <h1 class="title">Blockcerts Universal View</h1>
+      <h1 class="title">{{$t('home.index.page')}}</h1>
       <div class="input-container" style="display:inline-block;">
         <el-input
-          placeholder="Input student email..."
+          :placeholder="$t('home.index.placeholder')"
           v-model="input"
           type="email"
         >
           <el-button slot="append" class="text" @click="seachCert()"
-            >View</el-button
+            >{{$t('common.view')}}</el-button
           >
         </el-input>
       </div>
@@ -54,26 +54,26 @@
             height="380"
             v-loading="tableLoading"
           >
-            <template v-for="(item, index) in tableLabel">
-              <el-table-column
-                :key="index"
-                :prop="item.prop"
-                :label="item.label"
-              >
-              </el-table-column>
+            <template>
+              <el-table-column prop= "certificate_title" :label="this.$t('common.title')"></el-table-column>
+              <el-table-column prop= "student_name" :label="this.$t('common.student')"></el-table-column>
+              <el-table-column prop= "email" :label="this.$t('common.email')"></el-table-column>
+              <el-table-column prop= "school_name" :label="this.$t('common.school')"></el-table-column>
+              <el-table-column prop= "chain" :label="this.$t('common.chain')"></el-table-column>
+              <el-table-column prop= "create_time" :label="this.$t('common.time')"></el-table-column>
             </template>
-            <el-table-column label="operation">
+            <el-table-column :label="$t('common.operation')">
               <template slot-scope="scope">
                 <el-button
                   size="mini"
                   type="primary"
-                  @click="VerifyCert($event, scope.$index, scope.row)">Verify</el-button>
+                  @click="VerifyCert($event, scope.$index, scope.row)">{{$t('home.index.verify')}}</el-button>
                 <el-dialog
-                  title="Verify result"
-                  :visible.sync="dialogVisible">
-                  <span>chain: {{ VerifyObj.chain }}</span>
+                  :title="$t('home.index.dialogTitleVerify')"
+                  :visible.sync="dialog2Visible">
+                  <span>{{$t('common.chain')}}: {{ VerifyObj.chain }}</span>
                   <br />
-                  <span>txid: {{ VerifyObj.txid }}</span>
+                  <span>{{$t('common.txid')}}: {{ VerifyObj.txid }}</span>
                   <el-steps v-loading="dialogLoading" direction="vertical" :active="step">
                     <template v-for="(item, index) in VerifyResult">
                       <el-step
@@ -115,25 +115,25 @@ export default {
   name: "home",
   data() {
     return {
+      // 输入的邮箱的值
       input: "",
       RegisterType: "student",
+      // 注册对话框是否可见
       dialogVisible: false,
+      // 验证对话框是否可见
+      dialog2Visible: false,
+      // 验证对话框验证结果是否加载
       dialogLoading: false,
       step: 1,
+      // 总共的数据
       total: 0,
+      // 当前页
       currentPage: 1,
+      // 一页显示多少条数据
       limit: 10,
       tableData: [],
       tableVisible: false,
       tableLoading: false,
-      tableLabel: [
-        { label: "title", prop: "certificate_title" },
-        { label: "student", prop: "student_name" },
-        { label: "email", prop: "email" },
-        { label: "school", prop: "school_name" },
-        { label: "chain", prop: "chain"},
-        { label: "time", prop: "create_time" },
-      ],
       VerifyResult: [],
       VerifyObj: {}
     };
@@ -164,8 +164,7 @@ export default {
         console.log("未登录");
         return [];
       }
-    }
-  },
+    }},
   methods: {
     LoginURL() {
       this.$router.push("/login");
@@ -179,10 +178,13 @@ export default {
         this.$router.push("/schools/Register");
       }
     },
+    // 获取证书列表
     seachCert() {
+      // 邮箱的正则表达式
       let regEmail= /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/
+      // 验证邮箱是否为正确的格式
       if (!regEmail.test(this.input)) {
-        this.$message.error('Please fill in the correct email format');
+        this.$message.error(this.$t('home.index.emailFormat'));
         return false;
         }
       console.log("get verify certs list");
@@ -192,19 +194,21 @@ export default {
         email: this.input,
         status: 1
       };
+      // 数据在请求前, 表格可见, 并且处于加载状态
       this.tableVisible = true;
       this.tableLoading = true;
       verifyCertList(params)
         .then(res => {
           this.tableData = res.data.results;
           this.total = res.data.count;
+          // 数据请求成功后, 表格不处于加载状态
           this.tableLoading = false;
         })
         .catch(error => {
           console.log(error);
           this.tableLoading = false;
           this.tableVisible = false;
-          this.$message.error("Get verify certs list fail. Please try it later");
+          this.$message.error(this.$t('home.index.getVerifyListFail'));
         });
     },
     handleSizeChange(size) {
@@ -216,9 +220,10 @@ export default {
       this.seachCert();
     },
     VerifyCert(event, index, row) {
+      // 点击按钮后，按钮禁用
       event.srcElement.parentNode.disabled = true
       this.VerifyObj = row;
-      this.dialogVisible = true;
+      this.dialog2Visible = true;
       this.dialogLoading = true;
       let data = {
         cert_id: this.VerifyObj.cert_id
@@ -229,7 +234,8 @@ export default {
           this.dialogLoading = false;
           this.VerifyResult = res.data.data;
           for (let i = 0; i < this.VerifyResult.length; i++) {
-            this.VerifyResult[i].step = "step " + (i + 1);
+            this.VerifyResult[i].step = this.$t('home.index.step', {num: i + 1});
+            this.VerifyResult[i].name = this.$t('home.index.step'+(i+1))
             if (this.VerifyResult[i].status === "passed") {
               this.VerifyResult[i].status = "success";
             }
@@ -240,21 +246,22 @@ export default {
             this.step = i;
           }
           if(isPassed){
+            // 验证通过, 更改按钮样式
             event.srcElement.parentNode.style.backgroundColor = "#67c23a"
-            event.srcElement.innerText = "Passed"
+            event.srcElement.innerText = this.$t('home.index.verifyPass')
           }
           else{
             event.srcElement.parentNode.style.backgroundColor = "#f56c6c"
-            event.srcElement.innerText = "Failed"
+            event.srcElement.innerText = this.$t('home.index.verifyFail')
           }
         })
         .catch(error => {
           console.log(error);
           this.dialogLoading = false;
-          this.VerifyResult = [{step: "step 1", status: "error", name:"Verify cert fail. Please try it later"}]
+          this.VerifyResult = [{step:this.$t('home.index.requestVerifyFail.step'), status: "error", name:this.$i18n.t('home.index.requestVerifyFail.name')}]
           this.step = 0;
           event.srcElement.parentNode.style.backgroundColor = "#f56c6c"
-          event.srcElement.innerText = "Failed"
+          event.srcElement.innerText = this.$t('home.index.verifyFail')
         });
     }
   }

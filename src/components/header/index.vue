@@ -6,6 +6,15 @@
         <router-link class="menu-item" :to="v.path">{{ v.name }}</router-link>
       </li>
       <slot></slot>
+      <el-dropdown class="menu-item" trigger="click" style="top: 20px">
+          <span class="el-dropdown-link">
+            {{$i18n.locale == 'zh' ? '中文': 'English'}}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item @click.native="toggleLang('zh')" :disabled="$i18n.locale == 'zh'">中文</el-dropdown-item>
+        <el-dropdown-item @click.native="toggleLang('en')" :disabled="$i18n.locale == 'en'">English</el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
     </div>
   </div>
 </template>
@@ -13,8 +22,26 @@
 <script>
 export default {
   name: "Head",
-  props: ["menuList"]
-};
+  props: ["menuList"],
+  methods: {
+    toggleLang(lang) {
+      if(lang == 'zh'){
+        localStorage.setItem('locale', 'zh')
+        this.$i18n.locale = localStorage.getItem('locale')
+        this.$message({
+          message: '切换为中文！',
+          type: 'success'
+        })
+      } else if (lang == 'en') {
+        localStorage.setItem('locale', 'en')
+        this.$i18n.locale = localStorage.getItem('locale')
+        this.$message({
+          message: 'Switch to English!',
+          type: 'success'
+      })
+}
+  }
+}}
 </script>
 
 <style scoped>
