@@ -34,19 +34,23 @@
           </div>
         </div>
         <div id="topNavRight">
-          <el-button type="primary" @click="toCertCreatePage">Create new Cert.<i class="el-icon-upload el-icon-right"></i></el-button>
+          <el-button type="primary" disabled @click="toCertCreatePage">Create new Cert.<i class="el-icon-upload el-icon-right"></i></el-button>
         </div>
       </div>
       <!--Certificate display area-->
       <div  id="certDisplayArea" style="overflow-y:auto">
         <!--Building table-->
         <el-table
+          v-loading="loading"
+          element-loading-text="Loading Certificates..."
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="#E6F1F9"
           :data="schTableData"
-          style="width: 100%">
+          style="width: 100%; height:92%">
           <!--Building table body-->
           <el-table-column
             prop="certTitle"
-            label= "Certificate Title"
+            label= "Certificate's Title"
             >
           </el-table-column>
           <el-table-column
@@ -56,7 +60,7 @@
           </el-table-column>
           <el-table-column
             prop="stdName"
-            label= "Student Name"
+            label= "Student's Name"
             >
           </el-table-column>
           <el-table-column
@@ -66,25 +70,70 @@
           </el-table-column>
           <el-table-column
             prop="certStatus"
-            label= "Certificate Status"
+            label= "Certificate's Status"
            >
           </el-table-column>
           <el-table-column
+          width="350"
           align="right"
-          label="Certificate tasks">
+          label="Certificate's tasks">
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="getSchCertDetails(scope.$index, scope.row)">View Details</el-button>
+              type="info"
+              @click="getSchCertDetails(scope.$index, scope.row)">Details</el-button>
               <el-button
               size="mini"
-              @click="certIssue(scope.$index, scope.row)">Issue Cert.</el-button>
+              type="primary"
+              @click="certIssue(scope.$index, scope.row)">Issue</el-button>
+              <el-button
+              size="mini"
+              type="danger"
+              @click="revokeCert(scope.$index, scope.row)">Revoke</el-button>
           </template>
         </el-table-column>
         </el-table>
-
+        <!--Create pagination-->
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[10, 20, 30, 40, 50, 100]"
+          :page-size="limit"
+          layout=" sizes, prev, pager, next, jumper"
+          :total="total"
+        >
+        </el-pagination>
       </div>
 
+      <el-dialog title="Issuer information" :visible.sync="dialogFormVisible" width="35%">
+        <el-form 
+          :model="ruleForm" 
+          class="demo-ruleForm" 
+          :rules="rules" 
+          ref="ruleForm"
+        >
+          <el-form-item class="dialogLabels" label="Blockchain type" :label-width="formLabelWidth" prop="blockType">
+            <el-select v-model="ruleForm.blockType" placeholder="Please select the blockchain type.">
+              <el-option label="Bitcoin Testnet" value="bitcoin_testnet"></el-option>
+              <el-option label="Ethereum Testnet" value="ethereum_ropsten"></el-option>
+              <el-option label="Bitcoin Mainnet" value="bitcoin_mainnet"></el-option>
+              <el-option label="Ethereum Mainnet" value="ethereum_mainnet"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Blockchain address" :label-width="formLabelWidth" prop="issuing_address">
+            <el-input v-model="ruleForm.issuing_address" placeholder="Please, enter your blockchain address."></el-input>
+          </el-form-item>
+          <el-form-item label="Private Key" prop="secret_key">
+            <el-input v-model="ruleForm.secret_key" type="password" placeholder="Please, enter your private key."></el-input>
+          </el-form-item>
+        </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">Confirm</el-button>
+      </span>
+    </el-dialog>
 
     </div>
     <Footer></Footer>
@@ -95,7 +144,9 @@
 import Head from "@/components/header";
 import Footer from "@/components/Footer";
 import { getSchCertificates } from "@/network/schools";
-import { viewCertDetails } from "@/network/schools";
+import { viewCertDetails } from "@/network/schools"; 
+import { createCertInterface } from "@/network/schools"; 
+import { revokeCertificate } from "@/network/schools";
 
 export default {
   name: "issue",
@@ -108,8 +159,52 @@ export default {
       radio: null,
       searchInput:{schSearchItem:''},
       schTableData: [],
+      dialogFormVisible: false,
+      formLabelWidth: '160px',
+      loading: false,
+      total: 0,
+      currentPage: 1,
+      limit: 10,
       certImageWSID: [], // To be used to view details about the certificate.
       certData: [], // To hold the entire certificates.
+      filteredData: [],
+      certDataResponse: [],
+      schInfo: sessionStorage.getItem('SCHOOL-INFO'),
+       ruleForm: {
+        blockType: "",
+        issuing_address: "",
+        secret_key: "",
+      },
+      requiredCertDataForIssue: null,
+       rules: {
+        blockType: [
+            { required: true, message: 'Please select Blockchain type', trigger: 'change' }
+          ],
+        issuing_address: [
+          {
+            required: true,
+            message: "Please input blockchain address.",
+            trigger: "blur"
+          },
+          {
+            min: 20,
+            message: "Length must be at least 20.",
+            trigger: ["blur", "change"]
+          }
+        ],
+        secret_key: [
+          {
+            required: true,
+            message: "Please input school's private key.",
+            trigger: "blur"
+          },
+          {
+            min: 20,
+            message: "Length should be at least 20.",
+            trigger: ["blur", "change"]
+          }
+        ]
+       },
     };
   },
   components: {
@@ -133,19 +228,35 @@ export default {
         }).catch(() => {       
         });
     },
+    handleSizeChange(size) {
+      console.log(`${size} items per page`);
+      this.limit = size;
+      this.currentCertData()
+    },
+    handleCurrentChange(current) {
+      console.log(`current page: ${current}`);
+      this.currentPage = current;
+      this.currentCertData()
+    },
+    currentCertData(){
+     this.schTableData = this.filteredData
+    },
     onSelectRadio(data){
       this.radio = data
       console.log("User has selected:", this.radio);
       // Perform action based on student's selection.
+      this.loading = true
       getSchCertificates().then(res=>{
         console.log("Certificates for this School: ", res.data)
-        //this.certs = res.data
-        var allCerts = res.data
+        this.certDataResponse = res.data.results
+        this.total = res.data.count;
+        var allCerts = res.data.results
         var totalCert = allCerts.length
         console.log("Total certs: ", totalCert)
         
         for(let i=0; i < totalCert; i++){
           let tbObj = {}
+          // Build needed fields for table display. Only five(5) for now. More can be added anytime.
           tbObj.certTitle = allCerts[i]["certificate_title"]
           tbObj.critNarrative = allCerts[i]["criteria_narrative"]    
           tbObj.stdName = allCerts[i]["student_name"]
@@ -165,13 +276,20 @@ export default {
           if(tbObj['certStatus']==3){
             tbObj['certStatus']='Failed Issue'
           }
+          if(tbObj['certStatus']==4){
+            tbObj['certStatus']='Revoked'
+          }
           this.certData[i] = tbObj
         }
 
         if(this.radio=='all'){
         console.log("Retrieving all certificates.")
         // Get all certificates.
-        this.schTableData = this.certData
+        this.loading = false
+        this.total = res.data.count;
+        console.log("CertData is: ", this.certData)
+        this.filteredData = this.certData
+        this.schTableData = this.filteredData
         return
         }
         if(this.radio=='chkPending'){
@@ -179,8 +297,11 @@ export default {
           console.log("Retrieving check pending certificates.")
           // Get check pending certificates.
           chkCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Failed Issue" && el.certStatus != "Issued" && el.certStatus != "Issuing") }); 
-          this.schTableData = chkCertData
+            return (el.certStatus != "Failed Issue" && el.certStatus != "Revoked" && el.certStatus != "Issued" && el.certStatus != "Issuing") });
+          this.total = chkCertData.length
+          this.filteredData = chkCertData
+          this.loading = false
+          this.schTableData = this.filteredData
           return
         }
         if(this.radio=='Issued'){
@@ -188,8 +309,11 @@ export default {
           let issuedCertData = null
           // Get Issued certificates.
           issuedCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Failed Issue" && el.certStatus != "Created" && el.certStatus != "Issuing") }); 
-          this.schTableData = issuedCertData
+            return (el.certStatus != "Failed Issue" && el.certStatus != "Revoked" && el.certStatus != "Created" && el.certStatus != "Issuing") }); 
+          this.total = issuedCertData.length
+          this.filteredData = issuedCertData
+          this.loading = false
+          this.schTableData = this.filteredData
           return
         }
         else{
@@ -197,8 +321,11 @@ export default {
           // Get revoked certificates.
            let rvkCertData = null
           rvkCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Issued" && el.certStatus != "Created" && el.certStatus != "Issuing") }); 
-          this.schTableData = rvkCertData
+            return (el.certStatus != "Issued" && el.certStatus != "Created" && el.certStatus != "Issuing" && el.certStatus != "Failed Issue") }); 
+          this.total = rvkCertData.length
+          this.filteredData = rvkCertData
+          this.loading = false
+          this.schTableData = this.filteredData
       }
       })
     },
@@ -210,6 +337,7 @@ export default {
             type: "warning",
             message: "Search criteria cannot be empty."
           });
+        return
       }
       else{
         console.log("School Certificate search initiated using: ", itemToSearch)
@@ -218,6 +346,7 @@ export default {
         filteredData = this.certData.filter(function(el) { 
             return (el.certTitle == itemToSearch || el.stdName == itemToSearch || el.stdEmail == itemToSearch) });
         this.schTableData = filteredData
+        return
       }
     },
     getSchCertDetails(index, row) {
@@ -233,12 +362,139 @@ export default {
         this.$message('Showing details of a certificate.'); 
         })
     },
-    toCertCreatePage(){
-      this.$router.push("/schools/certCreate"); // TODO 
+    revokeCert(index, row){
+      console.log("Getting details for index: ",index, row);
+      console.log("Current cert status is: ", row['certStatus'])
+      if(row['certStatus']=='Issued'){
+        let reasonForRevocation = ''
+        console.log("Initiating certificate revocation.")
+        this.$prompt('Please input revocation reason', 'Revocation reason', {
+          confirmButtonText: 'OK',
+          cancelButtonText: 'Cancel', 
+          inputPattern: /[A-Za-z]/,
+          inputErrorMessage: 'Please, only letters are required.'
+        }).then(({ value }) => {
+          reasonForRevocation = value
+          console.log("Revocation reason entered: ", reasonForRevocation)
+          let certRevokeData = {} 
+          let certWSID = this.certImageWSID[index]
+          let schoolInfoFromRes = this.certDataResponse[0]
+          console.log("Public key for this school:", schoolInfoFromRes['school_pubkey'])
+          let schoolPubKey = (schoolInfoFromRes['school_pubkey']).substring(21)
+          console.log("Schol's Public key: ", schoolPubKey)
+          //console.log("CertData: ", this.certData)
+          //let schoolPubKey = this.certData
+          console.log("CertWSID: ", certWSID)
+          certRevokeData['cert_id'] = certWSID
+          certRevokeData['revocationReason'] = reasonForRevocation
+          revokeCertificate(certRevokeData,schoolPubKey).then(res=>{
+            console.log("Response data from cert revocation interface: ", res.data)
+            this.$message({
+              message: "Certificate revocation successful.",
+                type: "success"
+              });
+          }).catch(function(error) {
+              console.log(error);
+              this.$message.error({
+                title: "Revocation error",
+                message:"Certificate revocation failed. Please try again later, or contact the administrator!!!"
+              });
+            }); 
+        })       
+      }
+      else{
+            this.$message.error('Sorry! Only issued certificates can be revoked.');
+            return
+      }
+
     },
-    certIssue(){
-      console.log("Cert issuance initiated.")
-      // TODO.
+    toCertCreatePage(){
+      console.log("School name: ", this.schInfo)
+      this.$router.push("/schools/certCreate"); // TODO
+    },
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          // Clear the page overlay and continue with processing. 
+          this.dialogFormVisible = false
+          // Create issuer config.
+          //Include blockchain details as config before sending to cert issue interface begin.  
+          let api_token = null
+          let batch_size = 10
+          let bitcoind = false
+          let blockcypher_api_token = null
+          let chain = this.ruleForm.blockType
+          let dust_threshold = 0.0000275
+          let gas_limit = 2500
+          let gas_price = 20000000
+          let issuing_address = this.ruleForm.issuing_address
+          let secret_key = this.ruleForm.secret_key
+          let max_retry = 10
+          let my_config = null
+          let safe_mode = false
+          let satoshi_per_byte = 250
+          let tx_fee = 0.0006
+          //Include blockchain details as config before sending to cert issue interface ends.
+          
+          // Include config in certData Object to be sent to cert issue interface begins. 
+          this.requiredCertDataForIssue['api_token'] = api_token
+          this.requiredCertDataForIssue['batch_size'] = batch_size
+          this.requiredCertDataForIssue['bitcoind'] = bitcoind
+          this.requiredCertDataForIssue['blockcypher_api_token'] = blockcypher_api_token
+          this.requiredCertDataForIssue['chain'] = chain
+          this.requiredCertDataForIssue['dust_threshold'] = dust_threshold
+          this.requiredCertDataForIssue['gas_limit'] = gas_limit
+          this.requiredCertDataForIssue['gas_price'] = gas_price
+          this.requiredCertDataForIssue['issuing_address'] = issuing_address
+          this.requiredCertDataForIssue['secret_key'] = secret_key
+          this.requiredCertDataForIssue['max_retry'] = max_retry
+          this.requiredCertDataForIssue['my_config'] = my_config
+          this.requiredCertDataForIssue['safe_mode'] = safe_mode
+          this.requiredCertDataForIssue['satoshi_per_byte'] = satoshi_per_byte
+          this.requiredCertDataForIssue['tx_fee'] = tx_fee
+          
+          // Include config in certData Object to be sent to cert issue interface ends. 
+          let certDatObj = Object.assign({},this.requiredCertDataForIssue) // Convert to object.
+          console.log("Cert data Obj to be used: ", certDatObj)
+          let CertWSID = this.requiredCertDataForIssue['cert_id']
+          console.log("Retrieved CertWSID: ", CertWSID)
+          createCertInterface(certDatObj,CertWSID).then(res=>{
+            console.log("Response from Cert create interface: ", res)
+            this.$message({
+              message: "Certificate creation successful.",
+              type: "success",
+              center: true
+            }); 
+          }) // ends here
+          .catch(function(error) {
+              console.log(error);
+              this.$message.error({
+                title: "error",
+                message:
+                  "Certificate creation failed, please try again later, or contact the administrator!!!"
+              });
+            });
+        }
+        else {
+          console.log("Error submiting required cert issue form!!");
+          return false;
+        }
+      })
+    },
+    certIssue(index, row){
+      if(row['certStatus']!='Issued'){
+        // Open the dialog box to get user inputs. 
+        this.dialogFormVisible = true
+        console.log("Cert issuance initiated.")
+        console.log("Cert issuance for index: ",index, row);
+        console.log("CertWSID: ", this.certImageWSID[index])
+        let certDataToUse = this.certDataResponse[index]
+        this.requiredCertDataForIssue = certDataToUse
+      }
+      else{
+            this.$message.error('Sorry! Certificate already issued on Blockchain.');
+            return
+      }
     }
   }
 };
@@ -323,6 +579,10 @@ label{
   width: 18%;
   float: left;
   align-items: left;
+}
+
+.myBtn{
+  margin-top: 1rem;
 }
 
 </style>

@@ -30,6 +30,7 @@ export default {
     sessionStorage.removeItem("SCHOOL-INFO");
   }, 
   certViewData(state, certDetails){
+    console.log(typeof(certDetails))
     state.certDetails = certDetails
     sessionStorage.setItem('Cert_Details', JSON.stringify(certDetails));
   },
@@ -44,5 +45,13 @@ export default {
   del_certDispStatus(state){
     state.certStatus = null;
     sessionStorage.removeItem("Cert_Status");
-  }
+  },
+  set_school_Name(state, name){
+    state.schName = name
+    sessionStorage.setItem('school_Name', name);
+  },
+  del_school_Names(state){
+    state.schName = null;
+    sessionStorage.removeItem("school_Name");
+  },
 };
