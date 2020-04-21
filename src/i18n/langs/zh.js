@@ -14,7 +14,9 @@ const zh = {
     chain: "区块链",
     time: "时间",
     operation: "操作",
-    txid: "交易哈希"
+    txid: "交易哈希",
+    home: "首页",
+    certificates: "证书"
   },
   home: {
     index: {
@@ -38,6 +40,17 @@ const zh = {
         name: "验证是否通过"
       }
     }
+  },
+  login: {
+    usernamePlaceHolder: "请填写您的用户名",
+    passwordPlaceHolder: "请填写您的密码",
+    username: "用户名",
+    password: "密码",
+    role: "角色: ",
+    usernameMessage: "请输入用户名",
+    usernameFormat: "长度不能小于2",
+    passwordMessage: "请输入密码",
+    passwordFormat: "长度不能小于6"
   },
   ...zhLocale
 };

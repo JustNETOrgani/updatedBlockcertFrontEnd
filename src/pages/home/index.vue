@@ -54,13 +54,12 @@
             height="380"
             v-loading="tableLoading"
           >
-            <template>
-              <el-table-column prop= "certificate_title" :label="this.$t('common.title')"></el-table-column>
-              <el-table-column prop= "student_name" :label="this.$t('common.student')"></el-table-column>
-              <el-table-column prop= "email" :label="this.$t('common.email')"></el-table-column>
-              <el-table-column prop= "school_name" :label="this.$t('common.school')"></el-table-column>
-              <el-table-column prop= "chain" :label="this.$t('common.chain')"></el-table-column>
-              <el-table-column prop= "create_time" :label="this.$t('common.time')"></el-table-column>
+            <template v-for="(item, index) in tableLabel">
+              <el-table-column
+                :key="index"
+                :prop="item.prop"
+                :label="item.label">
+              </el-table-column>
             </template>
             <el-table-column :label="$t('common.operation')">
               <template slot-scope="scope">
@@ -135,7 +134,15 @@ export default {
       tableVisible: false,
       tableLoading: false,
       VerifyResult: [],
-      VerifyObj: {}
+      VerifyObj: {},
+      tableLabel: [
+        { label: this.$t('common.title'), prop: "certificate_title" },
+        { label: this.$t('common.student'), prop: "student_name" },
+        { label: this.$t('common.email'), prop: "email" },
+        { label: this.$t('common.school'), prop: "school_name" },
+        { label: this.$t('common.chain'), prop: "chain"},
+        { label: this.$t('common.time'), prop: "create_time" },
+      ]
     };
   },
   components: {
@@ -157,8 +164,8 @@ export default {
     menuList: function() {
       if (!this.needLogin) {
         return [
-          { name: "Home", path: "/home" },
-          { name: "Certificates", path: "/certificates" }
+          { name: this.$t('common.home'), path: "/home" },
+          { name: this.$t('common.certificates'), path: "/certificates" }
         ];
       } else {
         console.log("未登录");

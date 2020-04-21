@@ -14,7 +14,9 @@ const en = {
         chain: "Chain",
         time: "Time",
         operation: "Operation",
-        txid: "Transaction ID"
+        txid: "Transaction ID",
+        home: "Home",
+        certificates: "Certificates"
       },
     home: {
         index: {
@@ -38,6 +40,17 @@ const en = {
             name: "Validation"
           }
         }
+      },
+      login: {
+        usernamePlaceHolder: "Please, input your username.",
+        passwordPlaceHolder: "Please, input your password.",
+        username: "Username: ",
+        password: "Password: ",
+        role: "Role: ",
+        usernameMessage: "Please input username.",
+        usernameFormat: "Length should be at least two",
+        passwordMessage: "Please input your password.",
+        passwordFormat: "Length should be at least six."
       },
     ...enLocale
 }

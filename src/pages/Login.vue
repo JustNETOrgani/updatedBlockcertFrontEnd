@@ -7,21 +7,21 @@
           type="primary text"
           round
           @click="dialogVisible = true"
-          >Register</el-button
+          >{{$t('common.register')}}</el-button
         >
         <el-dialog
-          title="Select registered user type"
+          :title="$t('home.index.dialogTitleUserType')"
           :visible.sync="dialogVisible"
           width="30%"
         >
           <el-radio-group v-model="RegisterType">
-            <el-radio label="student">Student</el-radio>
-            <el-radio label="school">School</el-radio>
+            <el-radio label="student">{{$t('common.student')}}</el-radio>
+            <el-radio label="school">{{$t('common.school')}}</el-radio>
           </el-radio-group>
           <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">Cancel</el-button>
+            <el-button @click="dialogVisible = false">{{$t('common.cancel')}}</el-button>
             <el-button type="primary" @click="RegisterTypeChoose"
-              >Confirm</el-button
+              >{{$t('common.confirm')}}</el-button
             >
           </span>
         </el-dialog>
@@ -29,7 +29,7 @@
     </Head>
     <div class="body">
       <div class="formArea">
-        <h1 class="title">Login</h1>
+        <h1 class="title">{{$t('common.login')}}</h1>
         <!--Form to be filled-->
         <el-row>
           <el-col :span="20" :offset="2">
@@ -43,30 +43,30 @@
                 <el-form-item
                   class="formSection"
                   id="labelText"
-                  label="Username:"
+                  :label="$t('login.username')"
                   prop="username"
                 >
                   <el-input
                     v-model="ruleForm.username"
-                    placeholder="Please, input your username."
+                    :placeholder="$t('login.usernamePlaceHolder')"
                   ></el-input>
                 </el-form-item>
                 <el-form-item
                   class="formSection"
                   id="labelText"
-                  label="Password:"
+                  :label="$t('login.password')"
                   prop="password"
                 >
                   <el-input
                     v-model="ruleForm.password"
                     type="password"
-                    placeholder="Please, input your password."
+                    :placeholder="$t('login.passwordPlaceHolder')"
                   ></el-input>
                 </el-form-item>
-                <el-form-item label="Role:">
+                <el-form-item :label="$t('login.role')">
                   <el-radio-group v-model="role">
-                    <el-radio label="school">School</el-radio>
-                    <el-radio label="student">Student</el-radio>
+                    <el-radio label="school">{{$t('common.school')}}</el-radio>
+                    <el-radio label="student">{{$t('common.student')}}</el-radio>
                   </el-radio-group>
                 </el-form-item>
                 <!-- <div class="btn-container"> -->
@@ -74,7 +74,7 @@
                   <el-button
                     type="primary"
                     @click.prevent="submitForm('ruleForm')"
-                    >Login</el-button
+                    >{{$t('common.login')}}</el-button
                   >
                 </el-form-item>
                 <!-- </div> -->
@@ -99,7 +99,7 @@ export default {
   name: "login",
   data() {
     return {
-      menuList: [{ name: "Home", path: "/home" }],
+      menuList: [{ name: this.$t('common.home'), path: "/home" }],
       ruleForm: {
         username: "",
         password: ""

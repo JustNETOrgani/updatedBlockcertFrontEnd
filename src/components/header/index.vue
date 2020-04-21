@@ -7,14 +7,23 @@
       </li>
       <slot></slot>
       <el-dropdown class="menu-item" trigger="click" style="top: 20px">
-          <span class="el-dropdown-link">
-            {{$i18n.locale == 'zh' ? '中文': 'English'}}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-      <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item @click.native="toggleLang('zh')" :disabled="$i18n.locale == 'zh'">中文</el-dropdown-item>
-        <el-dropdown-item @click.native="toggleLang('en')" :disabled="$i18n.locale == 'en'">English</el-dropdown-item>
-      </el-dropdown-menu>
-    </el-dropdown>
+        <span class="el-dropdown-link">
+          {{ $i18n.locale == "zh" ? "中文" : "English"
+          }}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item
+            @click.native="toggleLang('zh')"
+            :disabled="$i18n.locale == 'zh'"
+            >中文</el-dropdown-item
+          >
+          <el-dropdown-item
+            @click.native="toggleLang('en')"
+            :disabled="$i18n.locale == 'en'"
+            >English</el-dropdown-item
+          >
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
   </div>
 </template>
@@ -23,25 +32,29 @@
 export default {
   name: "Head",
   props: ["menuList"],
+  // 刷新页面, 不用一下子白屏 https://juejin.im/entry/5c8e40fa6fb9a071082f436a
+  inject: ["reload"],
   methods: {
     toggleLang(lang) {
-      if(lang == 'zh'){
-        localStorage.setItem('locale', 'zh')
-        this.$i18n.locale = localStorage.getItem('locale')
+      if (lang == "zh") {
+        localStorage.setItem("locale", "zh");
+        this.$i18n.locale = localStorage.getItem("locale");
         this.$message({
-          message: '切换为中文！',
-          type: 'success'
-        })
-      } else if (lang == 'en') {
-        localStorage.setItem('locale', 'en')
-        this.$i18n.locale = localStorage.getItem('locale')
+          message: "切换为中文！",
+          type: "success"
+        });
+      } else if (lang == "en") {
+        localStorage.setItem("locale", "en");
+        this.$i18n.locale = localStorage.getItem("locale");
         this.$message({
-          message: 'Switch to English!',
-          type: 'success'
-      })
-}
+          message: "Switch to English!",
+          type: "success"
+        });
+      }
+      this.reload();
+    }
   }
-}}
+};
 </script>
 
 <style scoped>
@@ -73,8 +86,8 @@ li {
   font-size: 20px;
   padding-top: 1.3rem;
 }
-.router-link-active{
+.router-link-active {
   color: #477ea3;
-  text-decoration:underline
+  text-decoration: underline;
 }
 </style>
