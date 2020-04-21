@@ -2,7 +2,7 @@
   <div class="issue">
     <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" round @click="LoginOut"
-        >Logout</el-button
+        >Log out</el-button
       >
     </Head>
     <div class="body">
@@ -154,7 +154,7 @@ export default {
     return {
       menuList: [
         { name: "Home", path: "/home" },
-        //{ name: "issue", path: "/schools/issueList" }
+        { name: this.$t('common.issueList'), path: "/schools/issueList" }
       ],
       radio: null,
       searchInput:{schSearchItem:''},

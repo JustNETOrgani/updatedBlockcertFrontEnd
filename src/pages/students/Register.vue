@@ -78,7 +78,7 @@
                   <el-form-item>
                     <el-button
                       class="myBtn"
-                      type="success"
+                      type="primary"
                       @click="submitForm('ruleForm')"
                       >Register</el-button
                     >

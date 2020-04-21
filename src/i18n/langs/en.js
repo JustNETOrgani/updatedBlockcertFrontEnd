@@ -7,7 +7,9 @@ const en = {
         school: "School",
         confirm: "Confirm",
         cancel: "Cancel",
-        logout: "Login out",
+        logout: "Log out",
+        logOutDialogMessage: "Are you sure you want to quit?",
+        logOutSuccess: "Signed out successfully",
         view: "View",
         title: "Title",
         email: "Email",
@@ -16,7 +18,8 @@ const en = {
         operation: "Operation",
         txid: "Transaction ID",
         home: "Home",
-        certificates: "Certificates"
+        certificates: "Certificates",
+        issueList: "Issue certificate"
       },
     home: {
         index: {

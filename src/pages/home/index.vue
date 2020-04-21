@@ -114,6 +114,7 @@ export default {
   name: "home",
   data() {
     return {
+      inject: ["reload"],
       // 输入的邮箱的值
       input: "",
       RegisterType: "student",
@@ -169,12 +170,20 @@ export default {
     },
     menuList: function() {
       if (!this.needLogin) {
-        return [
-          { name: this.$t('common.home'), path: "/home" },
-          { name: this.$t('common.certificates'), path: "/certificates" }
-          // { name: "Home", path: "/home" },
-          // { name: "Certificates", path: this.prevRoute }
-        ];
+        if(sessionStorage.getItem('SCHOOL-INFO')){
+          return [
+            { name: this.$t('common.home'), path: "/home" },
+            { name: this.$t('common.issueList'), path: "/schools/issueList"}
+          ]
+        }else if(sessionStorage.getItem('STUDENT-INFO')){
+          return [
+            { name: this.$t('common.home'), path: "/home" },
+            { name: this.$t('common.certificates'), path: "/students/certificates"}
+          ]
+        }
+        else{
+          return []
+        }
       } else {
         console.log("未登录");
         return [];
@@ -280,18 +289,18 @@ export default {
         });
     },
     logUserOut(){
-      this.$confirm("Are you sure you want to quit?", "Log Out", {
-          confirmButtonText: 'confirm',
-          cancelButtonText: 'cancel',
+      this.$confirm(this.$t('common.logOutDialogMessage'), this.$t('common.logout'), {
+          confirmButtonText: this.$t('common.confirm'),
+          cancelButtonText: this.$t('common.cancel'),
           type: 'info'
         }).then(() => {
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
           sessionStorage.removeItem("SCHOOL-INFO");
           sessionStorage.removeItem("STUDENT-INFO");
-          this.$router.push("/home");
+          location.reload();
           this.$message({
             type: "info",
-            message: "Signed out successfully"
+            message: this.$t('common.logOutSuccess')
           });
         })
   }

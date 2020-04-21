@@ -8,6 +8,8 @@ const zh = {
     confirm: "确定",
     cancel: "取消",
     logout: "退出",
+    logOutDialogMessage: "您确定要退出吗？",
+    logOutSuccess: "退出成功",
     view: "查看",
     title: "标题",
     email: "邮箱",
@@ -16,7 +18,7 @@ const zh = {
     operation: "操作",
     txid: "交易哈希",
     home: "首页",
-    certificates: "证书"
+    certificates: "我的证书"
   },
   home: {
     index: {

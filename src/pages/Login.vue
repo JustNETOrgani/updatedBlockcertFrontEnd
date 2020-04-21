@@ -188,7 +188,7 @@ export default {
                 console.log("School Login response data data: ", res.data.data)
                 this.$store.commit("set_token", res.data.data.token);
                 this.$store.commit("set_school_info", res.data.data.school);
-                this.$router.push("/schools/IssueList");
+                this.$router.push("/schools/issueList");
                 this.$message({
                   message: this.$t('login.loginSuccess'),
                   type: "success",

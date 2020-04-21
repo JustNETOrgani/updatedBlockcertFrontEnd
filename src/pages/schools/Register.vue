@@ -109,16 +109,12 @@
                   <el-form-item>
                     <el-button
                       class="myBtn"
-                      type="success"
-                      @click="submitForm('ruleForm')"
-                      >Register</el-button
-                    >
+                      type="primary"
+                      @click="submitForm('ruleForm')">Register</el-button>
                     <el-button
                       class="myBtn" id="myBtnRight"
                       type="danger"
-                      @click="resetForm('ruleForm')"
-                      >Reset</el-button
-                    >
+                      @click="resetForm('ruleForm')">Reset</el-button>
                   </el-form-item>
                 </el-form>
               </div>
@@ -127,13 +123,13 @@
         </div>
       </div>
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import { register } from "@/network/schools";
 import { getSigImageDetails } from "@/network/schools";
 import { getSchLogoDetails } from "@/network/schools";
@@ -261,7 +257,7 @@ export default {
   },
   components: {
     Head,
-    Footer
+    // Footer
   },
   methods: {
     submitForm(formName) {
@@ -365,7 +361,7 @@ export default {
 }
 #msgArea {
   width: 100%;
-  margin-top: -2%;
+  margin-top: 1.5%;
   margin-bottom: 0.5rem;
 }
 #welcomeMsg {
@@ -384,7 +380,7 @@ export default {
 
 #middlePage {
   width: 50%;
-  margin-top: -2%;
+  /* margin-top: 0.5%; */
   background-color: #ffffff;
 }
 

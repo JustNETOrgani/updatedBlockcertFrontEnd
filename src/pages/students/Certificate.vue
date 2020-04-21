@@ -98,6 +98,7 @@ export default {
     return {
       menuList: [
         { name: "Home", path: "/home" },
+        { name: this.$t('common.certificates'), path: "/students/certificates"}
       ],
       radio: null,
       searchInput:{stdSearchItem:''},
