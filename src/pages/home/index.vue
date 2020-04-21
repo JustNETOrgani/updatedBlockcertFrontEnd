@@ -262,9 +262,8 @@ export default {
           event.srcElement.parentNode.style.backgroundColor = "#f56c6c"
           event.srcElement.innerText = "Failed"
         });
-    }
-  },
-  logUserOut(){
+    },
+    logUserOut(){
       this.$confirm("Are you sure you want to quit?", "Log Out", {
           confirmButtonText: 'confirm',
           cancelButtonText: 'cancel',
@@ -279,6 +278,7 @@ export default {
             message: "Signed out successfully"
           });
         })
+  }
   }
 };
 </script>
