@@ -73,6 +73,7 @@
                 <el-form-item>
                   <el-button
                     type="primary"
+                    :loading="LoginButtonLoading"
                     @click.prevent="submitForm('ruleForm')"
                     >{{$t('common.login')}}</el-button
                   >
@@ -84,14 +85,14 @@
         </el-row>
       </div>
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
   <!--class Login-->
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer.vue";
+// import Footer from "@/components/Footer.vue";
 import { login } from "@/network/students";
 import { Schlogin } from "@/network/schools";
 
@@ -108,24 +109,24 @@ export default {
         username: [
           {
             required: true,
-            message: "Please input username.",
+            message: this.$t('login.usernameMessage'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Length should be at least two",
+            message: this.$t('login.usernameFormat'),
             trigger: ["blur", "change"]
           }
         ],
         password: [
           {
             required: true,
-            message: "Please input your password.",
+            message: this.$t('login.passwordMessage'),
             trigger: "blur"
           },
           {
             min: 6,
-            message: "Length should be at least six.",
+            message: this.$t('login.passwordFormat'),
             trigger: ["blur", "change"]
           }
         ]
@@ -133,15 +134,17 @@ export default {
       show: true,
       role: "student",
       RegisterType: "student",
-      dialogVisible: false
+      dialogVisible: false,
+      LoginButtonLoading: false,
     };
   },
   components: {
     Head,
-    Footer
+    // Footer
   },
   methods: {
     submitForm(formName) {
+      this.LoginButtonLoading = true;
       this.$refs[formName].validate(valid => {
         if (valid) {
           if (this.role === "student") {
@@ -156,8 +159,9 @@ export default {
                 this.$store.commit("set_token", res.data.data.token);
                 this.$store.commit("set_student_info", res.data.data.student);
                 this.$router.push("/students/certificates");
+                this.LoginButtonLoading = false;
                 this.$message({
-                  message: "Congratulations. Login successful",
+                  message: this.$t('login.loginSuccess'),
                   type: "success",
                   center: true
                 });
@@ -165,9 +169,10 @@ export default {
               .catch(error => {
                 console.log(error);
                 // this.$message.error("账户或密码错误，请输入正确的账户和密码");
+                this.LoginButtonLoading = false;
                 this.$message.error({
                   title: "error",
-                  message: "Account or password is wrong, please enter the correct account and password"
+                  message: this.$t('login.loginFail')
                 });
               });
           }
@@ -185,7 +190,7 @@ export default {
                 this.$store.commit("set_school_info", res.data.data.school);
                 this.$router.push("/schools/IssueList");
                 this.$message({
-                  message: "Congratulations. Login successful",
+                  message: this.$t('login.loginSuccess'),
                   type: "success",
                   center: true
                 });
@@ -194,7 +199,7 @@ export default {
                 console.log(error);
                 this.$message.error({
                   title: "error",
-                  message: "Account or password is wrong, please enter the correct account and password"
+                  message: this.$t('login.loginFail')
                 });
               });
           }

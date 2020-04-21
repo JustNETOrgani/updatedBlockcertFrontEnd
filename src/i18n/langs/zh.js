@@ -50,7 +50,9 @@ const zh = {
     usernameMessage: "请输入用户名",
     usernameFormat: "长度不能小于2",
     passwordMessage: "请输入密码",
-    passwordFormat: "长度不能小于6"
+    passwordFormat: "长度不能小于6",
+    loginSuccess: "恭喜您, 登录成功",
+    loginFail: "账号或密码错误, 请输入正确的账号和密码"
   },
   ...zhLocale
 };

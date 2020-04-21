@@ -30,7 +30,7 @@
         </el-dialog>
       </div>
       <div v-else>
-        <el-button class="menu-item" type="primary" round>{{$t('common.logout')}}</el-button>
+        <el-button class="menu-item" type="primary" round @click="logUserOut">{{$t('common.logout')}}</el-button>
       </div>
     </Head>
     <div class="body">
@@ -142,9 +142,15 @@ export default {
         { label: this.$t('common.school'), prop: "school_name" },
         { label: this.$t('common.chain'), prop: "chain"},
         { label: this.$t('common.time'), prop: "create_time" },
-      ]
+      ],
+      prevRoute: null
     };
   },
+  beforeRouteEnter(to, from, next) {
+  next(vm => {
+    vm.prevRoute = from.fullPath
+  })
+},
   components: {
     Head,
     Footer
@@ -166,6 +172,8 @@ export default {
         return [
           { name: this.$t('common.home'), path: "/home" },
           { name: this.$t('common.certificates'), path: "/certificates" }
+          // { name: "Home", path: "/home" },
+          // { name: "Certificates", path: this.prevRoute }
         ];
       } else {
         console.log("未登录");
@@ -270,7 +278,23 @@ export default {
           event.srcElement.parentNode.style.backgroundColor = "#f56c6c"
           event.srcElement.innerText = this.$t('home.index.verifyFail')
         });
-    }
+    },
+    logUserOut(){
+      this.$confirm("Are you sure you want to quit?", "Log Out", {
+          confirmButtonText: 'confirm',
+          cancelButtonText: 'cancel',
+          type: 'info'
+        }).then(() => {
+          sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
+          sessionStorage.removeItem("SCHOOL-INFO");
+          sessionStorage.removeItem("STUDENT-INFO");
+          this.$router.push("/home");
+          this.$message({
+            type: "info",
+            message: "Signed out successfully"
+          });
+        })
+  }
   }
 };
 </script>

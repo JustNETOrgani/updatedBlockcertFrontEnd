@@ -50,7 +50,9 @@ const en = {
         usernameMessage: "Please input username.",
         usernameFormat: "Length should be at least two",
         passwordMessage: "Please input your password.",
-        passwordFormat: "Length should be at least six."
+        passwordFormat: "Length should be at least six.",
+        loginSuccess: "Congratulations. Login successful",
+        loginFail: "Account or password is wrong, please enter the correct account and password"
       },
     ...enLocale
 }
