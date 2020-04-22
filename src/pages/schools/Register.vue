@@ -2,7 +2,7 @@
   <div class="pageContainer">
     <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" @click="LoginURL" round
-        >Login</el-button
+        >{{$t('common.login')}}</el-button
       >
     </Head>
     <div class="body">
@@ -274,7 +274,7 @@ export default {
         ]
       },
       show: true,
-      menuList: [{ name: "Home", path: "/home" }]
+      menuList: [{ name:  this.$t('common.home'), path: "/home" }]
     };
   },
   components: {
