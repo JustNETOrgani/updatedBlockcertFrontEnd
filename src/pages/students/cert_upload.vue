@@ -1,15 +1,15 @@
 <template>
   <div class="pageContainer">
     <Head :menuList="menuList">
-      <el-button class="menu-item" type="primary" @click="logout" round>Logout</el-button>
+      <el-button class="menu-item" type="primary" @click="logout" round>{{$t('common.logout')}}</el-button>
     </Head>
     <div class="body">
       <div id="middlePage">
         <div id="msgArea">
-          <p id="welcomeMsg">Welcome to Certificate upload </p>
+          <p id="welcomeMsg">{{$t('CertUpload.welcomeMsg')}}</p>
         </div>
         <div id="formArea">
-          <p id="instruction">Please, fill the form below.</p>
+          <p id="instruction">{{$t('CertUpload.instruction')}}</p>
           <!--Form to be filled-->
           <el-row>
             <el-col :span="18" :offset="1">
@@ -22,38 +22,38 @@
                   class="demo-ruleForm"
                 >
 
-                <el-form-item label="Certificate Title" prop="certTitle">
+                <el-form-item :label="$t('CertUpload.certTitleLabel')" prop="certTitle">
                       <el-input
                         v-model="ruleForm.certTitle"
-                        placeholder="Please, enter your certificate title ."
+                        :placeholder="$t('CertUpload.certTitlePlaceholder')"
                       ></el-input>
                     </el-form-item>
 
-                    <el-form-item label="Certificate Description" prop="certDescription" >
+                    <el-form-item :label="$t('CertUpload.certDescriptionLabel')" prop="certDescription" >
                       <el-input
                         v-model="ruleForm.certDescription"
-                        placeholder="Please, enter your certificate description." 
+                        :placeholder="$t('CertUpload.certDescriptionPlaceholder')"
                       ></el-input>
                     </el-form-item>
 
-                     <el-form-item label="Criteria Narrative" prop="criteria_Narrative">
+                     <el-form-item :label="$t('CertUpload.criteria_NarrativeLabel')" prop="criteria_Narrative">
                       <el-input
                         v-model="ruleForm.criteria_Narrative" type="text"
-                        placeholder="Please, enter criteria narrative here."
+                        :placeholder="$t('CertUpload.criteria_NarrativePlaceholder')"
                       ></el-input>
                     </el-form-item>
 
 
-                    <el-form-item label="Issuer Name" prop="issuer">
+                    <el-form-item :label="$t('CertUpload.issuerLabel')" prop="issuer">
                       <el-input
                         v-model="ruleForm.issuer"
                         type="website"
-                        placeholder="Please, enter your school name here ."
+                        :placeholder="$t('CertUpload.issuerPlaceholder')"
                       ></el-input>
                     </el-form-item>
 
                     
-                     <el-form-item label="Certificate File" prop="certFile">
+                     <el-form-item :label="$t('CertUpload.certFileLabel')" prop="certFile">
                        <input 
                         type="file" 
                         v-on:change="certFileSelect()" class="uploadBtns" ref="certFile" id="certFile" name="certFile" 
@@ -71,15 +71,15 @@
       
                     <el-button
                       class="myBtn"
-                      type="success"
+                      type="primary"
                       @click="submitForm('ruleForm')"
-                      >Submit</el-button
+                      >{{$t('common.submit')}}</el-button
                     >
                     <el-button
                       class="myBtn"
                       type="danger"
                       @click="resetForm('ruleForm')"
-                      >Cancel</el-button
+                      >{{$t('common.cancel')}}</el-button
                     >
 
                    </el-col>
@@ -115,11 +115,12 @@ export default {
         certTitle: [
           {
             required: true,
+            message: this.$t('CertUpload.certTitleFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Please enter certificate title",
+            message: this.$t('CertUpload.certTitleFormat2'),
             trigger: ["blur", "change"]
           }
         ],
@@ -127,12 +128,12 @@ export default {
         criteria_Narrative: [
           {
             required: true,
-            message: "Please enter criteria narrative here.",
+            message: this.$t('CertUpload.criteria_NarrativeFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Please input criteria narrative here",
+            message: this.$t('CertUpload.criteria_NarrativeFormat2'),
             trigger: ["blur", "change"]
           }
         ],
@@ -140,12 +141,12 @@ export default {
          certDescription: [
           {
             required: true,
-            message: "Please enter certficate description",
+            message: this.$t('CertUpload.certDescriptionFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Please enter certficate description",
+            message: this.$t('CertUpload.certDescriptionFormat2'),
             trigger: ["blur", "change"]
           }
         ],
@@ -154,14 +155,14 @@ export default {
         issuer: [
           {
             required: true,
-            message: "Please enter name of school.",
+            message: this.$t('CertUpload.issuerFormat1'),
             trigger: "blur"
           },
-          {
-            min: 6,
-            message: "Length should be at least six.",
-            trigger: ["blur", "change"]
-          }
+          // {
+          //   min: 6,
+          //   message: this.$t('CertUpload.issuerFormat2'),
+          //   trigger: ["blur", "change"]
+          // }
         ],
         school_URL: [
           {
@@ -177,7 +178,7 @@ export default {
         ]
       },
       show: true,
-      menuList: [{ name: "Home", path: "/home" }]
+      menuList: [{ name: this.$t('common.home'), path: "/home" }]
     };
   },
   components: {
@@ -231,7 +232,7 @@ export default {
           studentCertCreateRequest(data).then(res => {
               console.log("Response from student certificate upload interface",res);
               this.$message({
-                message:"Congratulations. Certificate uploaded and creation successful.",
+                message:this.$t('CertUpload.createCertSuccess'),
                 type: "success"
               });
               this.$router.back(); // Redirect user back to previous page (certificate list page.)
@@ -239,7 +240,7 @@ export default {
               console.log(error);
               this.$message.error({
                 title: "error",
-                message:"Upload and certificate creation failed, please try again later, or contact the administrator! !!"
+                message:this.$t('CertUpload.createCertFail')
               });
             });
           });
@@ -262,9 +263,9 @@ export default {
       this.certFileformData.append('file', this.certFile);
     },
     logout() {
-      this.$confirm("Are you sure you want to quit?", "Log Out", {
-          confirmButtonText: 'confirm',
-          cancelButtonText: 'cancel',
+      this.$confirm(this.$t('common.logOutDialogMessage'), this.$t('common.logout'), {
+          confirmButtonText: this.$t('common.confirm'),
+          cancelButtonText: this.$t('common.cancel'),
           type: 'info'
         }).then(() => {
           sessionStorage.removeItem("STUDENT-INFO");
@@ -272,7 +273,7 @@ export default {
           this.$router.push("/login");
           this.$message({
             type: "info",
-            message: "You have Signed out successfully."
+            message: this.$t('common.logOutSuccess')
           });
         }).catch(() => {       
         });

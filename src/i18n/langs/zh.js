@@ -164,6 +164,29 @@ const zh = {
     CertificateID: "证书ID",
     SchoolPublicKey: "学校公钥"
   },
+  CertUpload: {
+    welcomeMsg: "欢迎使用证书上传",
+    instruction: "请填写下面的内容",
+    certTitleLabel: "证书标题",
+    certTitlePlaceholder: "请输入您的证书标题",
+    certTitleFormat1: "请在这里输入证书标题。",
+    certTitleFormat2: "长度至少为2",
+    certDescriptionLabel: "证书描述",
+    certDescriptionPlaceholder: "请在这里输入您的证书描述",
+    certDescriptionFormat1: "请输入您的证书描述",
+    certDescriptionFormat2: "长度至少为2",
+    criteria_NarrativeLabel: "标准叙述",
+    criteria_NarrativePlaceholder: "请在这里输入证书标准描述",
+    criteria_NarrativeFormat1: "请输入证书标准描述",
+    criteria_NarrativeFormat2: "长度至少为2",
+    issuerLabel: "学校名称",
+    issuerPlaceholder: "请在这里输入学校名称",
+    issuerFormat1: "请输入学校名称",
+    issuerFormat2: "长度至少为6",
+    certFileLabel: "证书文件",
+    createCertSuccess: "恭喜你! 证书已创建成功。",
+    createCertFail: "证书创建失败，请稍后再试，或与管理员联系！！！"
+  },
   ...zhLocale
 };
 

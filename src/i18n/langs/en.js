@@ -3,6 +3,7 @@ const en = {
     common: {
         login: "Login",
         register: "Register",
+        submit: "Submit",
         reset: "Reset",
         student: "Student",
         school: "School",
@@ -163,6 +164,29 @@ const en = {
       Signedby: "Signed by",
       CertificateID: "Certificate's ID",
       SchoolPublicKey: "School's Public Key"
+    },
+    CertUpload: {
+      welcomeMsg: "Welcome to Certificate upload",
+      instruction: "Please, fill the form below.",
+      certTitleLabel: "Certificate Title",
+      certTitlePlaceholder: "Please, enter your certificate title .",
+      certTitleFormat1: "Please enter certificate title here.",
+      certTitleFormat2: "Length should be at least two",
+      certDescriptionLabel: "Certificate Description",
+      certDescriptionPlaceholder: "Please, enter your certificate description.",
+      certDescriptionFormat1: "Please enter certficate description",
+      certDescriptionFormat2: "Length should be at least two",
+      criteria_NarrativeLabel: "Criteria Narrative",
+      criteria_NarrativePlaceholder: "Please, enter criteria narrative here.",
+      criteria_NarrativeFormat1: "Please enter criteria narrative here.",
+      criteria_NarrativeFormat2: "Length should be at least two",
+      issuerLabel: "Issuer Name",
+      issuerPlaceholder: "Please, enter your school name here .",
+      issuerFormat1: "Please enter name of school.",
+      issuerFormat2: "Length should be at least six.",
+      certFileLabel: "Certificate File",
+      createCertSuccess: "Congratulations. Certificate uploaded and creation successful.",
+      createCertFail: "Upload and certificate creation failed, please try again later, or contact the administrator!!!"
     },
     ...enLocale
 }
