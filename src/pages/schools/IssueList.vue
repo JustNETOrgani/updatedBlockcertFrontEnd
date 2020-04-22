@@ -2,29 +2,29 @@
   <div class="issue">
     <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" round @click="LoginOut"
-        >Log out</el-button
+        >{{$t('common.logout')}}</el-button
       >
     </Head>
     <div class="body">
-      <h1 class="title">School Certificates' List</h1>
+      <h1 class="title">{{$t('schoolCertificates.title')}}</h1>
 
       <!--Top panel-->
       <div id="topNav">
         <!--Radio buttons-->
         <div id="topNavLeft">
-          <label>Listing options:</label>
+          <label>{{$t('schoolCertificates.listOption')}}:</label>
           <el-radio-group v-model="radio" @input="onSelectRadio">
-            <el-radio label="all">All</el-radio>
-            <el-radio label="chkPending">Check Pending</el-radio>
-            <el-radio label="Issued">Issued</el-radio>
-            <el-radio label="revoked">Revoked</el-radio>
+            <el-radio label="all">{{$t('common.all')}}</el-radio>
+            <el-radio label="chkPending">{{$t('common.chkPending')}}</el-radio>
+            <el-radio label="Issued">{{$t('common.Issued')}}</el-radio>
+            <el-radio label="revoked">{{$t('common.revoked')}}</el-radio>
           </el-radio-group>
         </div>
         <div id="topNavMid">
           <!--Search box-->
           <div id="searchInputArea">
           <el-input
-            placeholder="Please input certificate title, student name or email."
+            :placeholder="$t('schoolCertificates.stdSearchItemPlaceholder')"
             v-model="searchInput.schSearchItem"
             clearable>
           </el-input>
@@ -34,15 +34,15 @@
           </div>
         </div>
         <div id="topNavRight">
-          <el-button type="primary" disabled @click="toCertCreatePage">Create new Cert.<i class="el-icon-upload el-icon-right"></i></el-button>
+          <el-button type="primary" disabled @click="toCertCreatePage">{{$t('schoolCertificates.createNewCert')}}<i class="el-icon-upload el-icon-right"></i></el-button>
         </div>
       </div>
       <!--Certificate display area-->
       <div  id="certDisplayArea" style="overflow-y:auto">
         <!--Building table-->
+                  <!-- element-loading-text="Loading Certificates..." -->
         <el-table
           v-loading="loading"
-          element-loading-text="Loading Certificates..."
           element-loading-spinner="el-icon-loading"
           element-loading-background="#E6F1F9"
           :data="schTableData"
@@ -50,46 +50,46 @@
           <!--Building table body-->
           <el-table-column
             prop="certTitle"
-            label= "Certificate's Title"
+            :label="$t('common.certTitle')"
             >
           </el-table-column>
           <el-table-column
             prop="critNarrative"
-            label= "Criteria Narrative"
+            :label="$t('common.critNarrative')"
             >
           </el-table-column>
           <el-table-column
             prop="stdName"
-            label= "Student's Name"
+            :label="$t('common.stdName')"
             >
           </el-table-column>
           <el-table-column
             prop="stdEmail"
-            label= "E-mail"
+            :label="$t('common.stdEmail')"
            >
           </el-table-column>
           <el-table-column
             prop="certStatus"
-            label= "Certificate's Status"
+            :label="$t('common.certStatus')"
            >
           </el-table-column>
           <el-table-column
           width="350"
           align="right"
-          label="Certificate's tasks">
+          :label="$t('common.operation')">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="info"
-              @click="getSchCertDetails(scope.$index, scope.row)">Details</el-button>
+              @click="getSchCertDetails(scope.$index, scope.row)">{{$t('common.certDetail')}}</el-button>
               <el-button
               size="mini"
               type="primary"
-              @click="certIssue(scope.$index, scope.row)">Issue</el-button>
+              @click="certIssue(scope.$index, scope.row)">{{$t('common.Issue')}}</el-button>
               <el-button
               size="mini"
               type="danger"
-              @click="revokeCert(scope.$index, scope.row)">Revoke</el-button>
+              @click="revokeCert(scope.$index, scope.row)">{{$t('common.Revoke')}}</el-button>
           </template>
         </el-table-column>
         </el-table>
@@ -107,31 +107,31 @@
         </el-pagination>
       </div>
 
-      <el-dialog title="Issuer information" :visible.sync="dialogFormVisible" width="35%">
+      <el-dialog :title="$t('schoolCertificates.issuerDialog')" :visible.sync="dialogFormVisible" width="35%">
         <el-form 
           :model="ruleForm" 
           class="demo-ruleForm" 
           :rules="rules" 
           ref="ruleForm"
         >
-          <el-form-item class="dialogLabels" label="Blockchain type" :label-width="formLabelWidth" prop="blockType">
-            <el-select v-model="ruleForm.blockType" placeholder="Please select the blockchain type.">
-              <el-option label="Bitcoin Testnet" value="bitcoin_testnet"></el-option>
-              <el-option label="Ethereum Testnet" value="ethereum_ropsten"></el-option>
-              <el-option label="Bitcoin Mainnet" value="bitcoin_mainnet"></el-option>
-              <el-option label="Ethereum Mainnet" value="ethereum_mainnet"></el-option>
+          <el-form-item class="dialogLabels" :label="$t('schoolCertificates.blockTypeLabel')" :label-width="formLabelWidth" prop="blockType">
+            <el-select v-model="ruleForm.blockType" :placeholder="$t('schoolCertificates.blockTypePlaceholder')">
+              <el-option :label="$t('schoolCertificates.blockType.bitcoin_testnet')" value="bitcoin_testnet"></el-option>
+              <el-option :label="$t('schoolCertificates.blockType.ethereum_ropsten')" value="ethereum_ropsten"></el-option>
+              <el-option :label="$t('schoolCertificates.blockType.bitcoin_mainnet')" value="bitcoin_mainnet"></el-option>
+              <el-option :label="$t('schoolCertificates.blockType.ethereum_mainnet')" value="ethereum_mainnet"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="Blockchain address" :label-width="formLabelWidth" prop="issuing_address">
-            <el-input v-model="ruleForm.issuing_address" placeholder="Please, enter your blockchain address."></el-input>
+          <el-form-item :label="$t('schoolCertificates.issuing_addressLabel')" :label-width="formLabelWidth" prop="issuing_address">
+            <el-input v-model="ruleForm.issuing_address" :placeholder="$t('schoolCertificates.issuing_addressPlaceholder')"></el-input>
           </el-form-item>
-          <el-form-item label="Private Key" prop="secret_key">
-            <el-input v-model="ruleForm.secret_key" type="password" placeholder="Please, enter your private key."></el-input>
+          <el-form-item :label="$t('schoolCertificates.secret_keyLabel')" prop="secret_key">
+            <el-input v-model="ruleForm.secret_key" type="password" :placeholder="$t('schoolCertificates.secret_keyPlaceholder')"></el-input>
           </el-form-item>
         </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">Confirm</el-button>
+        <el-button @click="dialogFormVisible = false">{{$t('common.cancel')}}</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm')">{{$t('common.confirm')}}</el-button>
       </span>
     </el-dialog>
 
@@ -153,7 +153,7 @@ export default {
   data() {
     return {
       menuList: [
-        { name: "Home", path: "/home" },
+        { name: this.$t('common.home'), path: "/home" },
         { name: this.$t('common.issueList'), path: "/schools/issueList" }
       ],
       radio: null,
@@ -178,29 +178,29 @@ export default {
       requiredCertDataForIssue: null,
        rules: {
         blockType: [
-            { required: true, message: 'Please select Blockchain type', trigger: 'change' }
+            { required: true, message: this.$t('schoolCertificates.blockTypeFormat1'), trigger: 'change' }
           ],
         issuing_address: [
           {
             required: true,
-            message: "Please input blockchain address.",
+            message: this.$t('schoolCertificates.issuing_addressFormat1'),
             trigger: "blur"
           },
           {
             min: 20,
-            message: "Length must be at least 20.",
+            message: this.$t('schoolCertificates.issuing_addressFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         secret_key: [
           {
             required: true,
-            message: "Please input school's private key.",
+            message: this.$t('schoolCertificates.secret_keyFormat1'),
             trigger: "blur"
           },
           {
             min: 20,
-            message: "Length should be at least 20.",
+            message: this.$t('schoolCertificates.secret_keyFormat2'),
             trigger: ["blur", "change"]
           }
         ]
@@ -213,20 +213,21 @@ export default {
   },
   methods: {
     LoginOut() {
-      this.$confirm("Are you sure you want to quit?", "Login Out", {
-          confirmButtonText: 'confirm',
-          cancelButtonText: 'cancel',
-          type: 'info'
-        }).then(() => {
-          sessionStorage.removeItem("SCHOOL-INFO");
+      this.$confirm(this.$t('common.logOutDialogMessage'), this.$t('common.logout'), {
+        confirmButtonText: this.$t('common.confirm'),
+        cancelButtonText: this.$t('common.cancel'),
+        type: "info"
+      })
+        .then(() => {
+          sessionStorage.removeItem("STUDENT-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
           this.$router.push("/home");
           this.$message({
             type: "info",
-            message: "Sign out successfully"
+            message: this.$t('common.logOutSuccess')
           });
-        }).catch(() => {       
-        });
+        })
+        .catch(() => {});
     },
     handleSizeChange(size) {
       console.log(`${size} items per page`);
@@ -335,7 +336,7 @@ export default {
         this.$message({
             showClose: true,
             type: "warning",
-            message: "Search criteria cannot be empty."
+            message: this.$t('schoolCertificates.itemToSearch')
           });
         return
       }
@@ -359,7 +360,7 @@ export default {
         this.$store.commit("certViewData", res.data);
         this.$store.commit("set_certDispStatus", certStatusToDisplay);
         this.$router.push("/schools/schoolCertDetails");
-        this.$message('Showing details of a certificate.'); 
+        this.$message(this.$t('schoolCertificates.ShowingDetail')); 
         })
     },
     revokeCert(index, row){
@@ -368,11 +369,11 @@ export default {
       if(row['certStatus']=='Issued'){
         let reasonForRevocation = ''
         console.log("Initiating certificate revocation.")
-        this.$prompt('Please input revocation reason', 'Revocation reason', {
-          confirmButtonText: 'OK',
-          cancelButtonText: 'Cancel', 
+        this.$prompt(this.$t('schoolCertificates.revocationReasonMsg'), this.$t('schoolCertificates.revocationReason'), {
+          confirmButtonText: this.$t('common.confirm'),
+          cancelButtonText: this.$t('common.cancel'), 
           inputPattern: /[A-Za-z]/,
-          inputErrorMessage: 'Please, only letters are required.'
+          inputErrorMessage: this.$t('schoolCertificates.inputErrorMessage')
         }).then(({ value }) => {
           reasonForRevocation = value
           console.log("Revocation reason entered: ", reasonForRevocation)
@@ -390,20 +391,20 @@ export default {
           revokeCertificate(certRevokeData,schoolPubKey).then(res=>{
             console.log("Response data from cert revocation interface: ", res.data)
             this.$message({
-              message: "Certificate revocation successful.",
+              message: this.$t('schoolCertificates.revocationSuccess'),
                 type: "success"
               });
           }).catch(function(error) {
               console.log(error);
               this.$message.error({
-                title: "Revocation error",
-                message:"Certificate revocation failed. Please try again later, or contact the administrator!!!"
+                title: this.$t('schoolCertificates.revocationErrorTitle'),
+                message:this.$t('schoolCertificates.revocationError')
               });
             }); 
         })       
       }
       else{
-            this.$message.error('Sorry! Only issued certificates can be revoked.');
+            this.$message.error(this.$t('schoolCertificates.CanBeRevoked'));
             return
       }
 
@@ -461,7 +462,7 @@ export default {
           createCertInterface(certDatObj,CertWSID).then(res=>{
             console.log("Response from Cert create interface: ", res)
             this.$message({
-              message: "Certificate creation successful.",
+              message: this.$t('schoolCertificates.CertificateCreationSuccess'),
               type: "success",
               center: true
             }); 
@@ -469,9 +470,9 @@ export default {
           .catch(function(error) {
               console.log(error);
               this.$message.error({
-                title: "error",
+                title: this.$t('schoolCertificates.CertificateCreationErrorTitle'),
                 message:
-                  "Certificate creation failed, please try again later, or contact the administrator!!!"
+                  this.$t('schoolCertificates.CertificateCreationError')
               });
             });
         }
@@ -492,7 +493,7 @@ export default {
         this.requiredCertDataForIssue = certDataToUse
       }
       else{
-            this.$message.error('Sorry! Certificate already issued on Blockchain.');
+            this.$message.error(this.$t('schoolCertificates.CertificateAlreadyIssue'));
             return
       }
     }

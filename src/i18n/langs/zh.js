@@ -3,6 +3,7 @@ const zh = {
   common: {
     login: "登录",
     register: "注册",
+    submit: "提交",
     reset: "重置",
     student: "学生",
     school: "学校",
@@ -28,7 +29,12 @@ const zh = {
     certTitle: "标题",
     certIssuer: "颁发者",
     certStatus: "状态",
-    certDetail: "查看详情",
+    critNarrative: "标准叙述", 
+    stdName: "姓名",
+    stdEmail: "邮箱",
+    certDetail: "详情",
+    Issue: "颁发",
+    Revoke: "撤销"
   },
   certstatus: {
     Created: "Created",
@@ -166,6 +172,7 @@ const zh = {
   },
   CertUpload: {
     welcomeMsg: "欢迎使用证书上传",
+    schoolwelcomeMsg: "欢迎使用学校证书创建",
     instruction: "请填写下面的内容",
     certTitleLabel: "证书标题",
     certTitlePlaceholder: "请输入您的证书标题",
@@ -186,6 +193,44 @@ const zh = {
     certFileLabel: "证书文件",
     createCertSuccess: "恭喜你! 证书已创建成功。",
     createCertFail: "证书创建失败，请稍后再试，或与管理员联系！！！"
+  },
+  schoolCertificates: {
+    title: "学校证书列表",
+    listOption: "筛选",
+    stdSearchItemPlaceholder: "请输入证书名称或颁发者",
+    stdSearchItemFormat: "搜索条件不能为空",
+    createNewCert: "新建证书",
+    issuerDialog: "颁发者信息",
+    blockTypeLabel: "区块链类型",
+    blockTypePlaceholder: "请选择区块链类型",
+    blockTypeFormat1: '请选择区块链类型',
+    blockType: {
+      bitcoin_testnet: "比特币测试区块链",
+      ethereum_ropsten: "以太坊测试区块链",
+      bitcoin_mainnet: "比特币区块链",
+      ethereum_mainnet: "以太坊区块链"
+    },
+    issuing_addressLabel: "区块链地址",
+    issuing_addressPlaceholder: "请输入区块链地址",
+    issuing_addressFormat1: "请输入区块链地址",
+    issuing_addressFormat2: "长度至少为20",
+    secret_keyLabel: "私钥",
+    secret_keyPlaceholder: "请输入颁发者私钥",
+    secret_keyFormat1: "请输入颁发者私钥",
+    secret_keyFormat2: "长度至少为20",
+    itemToSearch: "搜索条件不能为空",
+    ShowingDetail: "显示证书的详细信息",
+    revocationReasonMsg: "请输入撤销原因",
+    revocationReason: "撤销原因",
+    inputErrorMessage: "只能填写字母",
+    revocationSuccess: "证书撤销成功",
+    revocationError: "证书撤销失败, 请稍后再试, 或与管理员联系！！！",
+    revocationErrorTitle: "撤销错误",
+    CanBeRevoked: '抱歉! 只能撤销已颁发的证书',
+    CertificateCreationSuccess: "证书创建成功",
+    CertificateCreationError: "证书创建失败, 请稍后再试, 或与管理员联系！！！",
+    CertificateCreationErrorTitle: "创建错误",
+    CertificateAlreadyIssue: "抱歉！证书已经颁发"
   },
   ...zhLocale
 };

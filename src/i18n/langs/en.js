@@ -29,7 +29,12 @@ const en = {
         certTitle: "Title",
         certIssuer: "Issuer",
         certStatus: "Status",
-        certDetail: "View Details",
+        critNarrative: "Criteria Narrative", 
+        stdName: "Student's Name",
+        stdEmail: "E-mail",
+        certDetail: "Details",
+        Issue: "Issue",
+        Revoke: "Revoke"
       },
     certstatus: {
       Created: "Created",
@@ -167,6 +172,7 @@ const en = {
     },
     CertUpload: {
       welcomeMsg: "Welcome to Certificate upload",
+      schoolwelcomeMsg: "School Certificate Creation",
       instruction: "Please, fill the form below.",
       certTitleLabel: "Certificate Title",
       certTitlePlaceholder: "Please, enter your certificate title .",
@@ -187,6 +193,44 @@ const en = {
       certFileLabel: "Certificate File",
       createCertSuccess: "Congratulations. Certificate uploaded and creation successful.",
       createCertFail: "Upload and certificate creation failed, please try again later, or contact the administrator!!!"
+    },
+    schoolCertificates: {
+      title: "School certificate's list",
+      listOption: "Listing options",
+      stdSearchItemPlaceholder: "Please input certificate name or issuer",
+      stdSearchItemFormat: "Search criteria cannot be empty.",
+      createNewCert: "Create new Cert",
+      issuerDialog: "Issuer information",
+      blockTypeLabel: "Blockchain type",
+      blockTypePlaceholder: "Please select the blockchain type.",
+      blockTypeFormat1: 'Please select Blockchain type',
+      blockType: {
+        bitcoin_testnet: "Bitcoin Testnet",
+        ethereum_ropsten: "Ethereum Testnet",
+        bitcoin_mainnet: "Bitcoin Mainnet",
+        ethereum_mainnet: "Ethereum Mainnet"
+      },
+      issuing_addressLabel: "Blockchain address",
+      issuing_addressPlaceholder: "Please, enter your blockchain address.",
+      issuing_addressFormat1: "Please input blockchain address.",
+      issuing_addressFormat2: "Length must be at least 20.",
+      secret_keyLabel: "Private Key",
+      secret_keyPlaceholder: "Please, enter your private key.",
+      secret_keyFormat1: "Please input school's private key.",
+      secret_keyFormat2: "Length should be at least 20.",
+      itemToSearch: "Search criteria cannot be empty.",
+      ShowingDetail: "Showing details of a certificate.",
+      revocationReasonMsg: "Please input revocation reason",
+      revocationReason: "Revocation reason",
+      inputErrorMessage: "Please, only letters are required.",
+      revocationSuccess: "Certificate revocation successful.",
+      revocationError: "Certificate revocation failed. Please try again later, or contact the administrator!!!",
+      revocationErrorTitle: "Revocation error",
+      CanBeRevoked: 'Sorry! Only issued certificates can be revoked.',
+      CertificateCreationSuccess: "Certificate creation successful.",
+      CertificateCreationError: "Certificate creation failed, please try again later, or contact the administrator!!!",
+      CertificateCreationErrorTitle: "error",
+      CertificateAlreadyIssue: "Sorry! Certificate already issued on Blockchain."
     },
     ...enLocale
 }
