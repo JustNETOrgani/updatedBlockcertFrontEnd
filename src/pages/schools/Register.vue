@@ -8,113 +8,132 @@
     <div class="body">
       <div id="middlePage">
         <div id="msgArea">
-          <p id="welcomeMsg">Welcome to School Registration</p>
+          <p id="welcomeMsg">{{$t('schoolRegister.welcomeMsg')}}</p>
         </div>
         <div id="formArea">
           <p id="instruction">
-            Please, fill the form below.
+            {{$t('schoolRegister.instruction')}}
           </p>
           <!--Form to be filled-->
           <el-row>
             <el-col :span="20" :offset="2">
               <div class="grid-content bg-purple-light">
-                <el-form id="myForm"
+                <el-form
+                  id="myForm"
                   :model="ruleForm"
                   :rules="rules"
                   ref="ruleForm"
                   label-width="160px"
                   class="demo-ruleForm"
                 >
-                  <el-form-item label="School Name" prop="sname">
-                      <el-input
-                        v-model="ruleForm.sname"
-                        placeholder="Please, enter your school name here."
-                      ></el-input>
-                    </el-form-item>
+                  <el-form-item :label="$t('schoolRegister.snameLabel')" prop="sname">
+                    <el-input
+                      v-model="ruleForm.sname"
+                      :placeholder="$t('schoolRegister.snamePlaceholder')"
+                    ></el-input>
+                  </el-form-item>
 
-                    <el-form-item label="Email Address" prop="schoolemail">
-                      <el-input
-                        v-model="ruleForm.schoolemail"
-                        placeholder="Please, enter your email here."
-                      ></el-input>
-                    </el-form-item>
+                  <el-form-item :label="$t('schoolRegister.schoolemailLabel')" prop="schoolemail">
+                    <el-input
+                      v-model="ruleForm.schoolemail"
+                      :placeholder="$t('schoolRegister.schoolemailPlaceholder')"
+                    ></el-input>
+                  </el-form-item>
 
-                     <el-form-item label="Password" prop="password">
-                      <el-input
-                        v-model="ruleForm.password" type="password"
-                        placeholder="Please, enter valid password."
-                      ></el-input>
-                    </el-form-item>
+                  <el-form-item :label="$t('schoolRegister.passwordLabel')" prop="password">
+                    <el-input
+                      v-model="ruleForm.password"
+                      type="password"
+                      :placeholder="$t('schoolRegister.passwordPlaceholder')"
+                    ></el-input>
+                  </el-form-item>
 
+                  <el-form-item :label="$t('schoolRegister.school_URLLabel')" prop="school_URL">
+                    <el-input
+                      v-model="ruleForm.school_URL"
+                      type="website"
+                      :placeholder="$t('schoolRegister.school_URLPlaceholder')"
+                    ></el-input>
+                  </el-form-item>
 
-                    <el-form-item label="Official Website" prop="school_URL">
-                      <el-input
-                        v-model="ruleForm.school_URL"
-                        type="website"
-                        placeholder="Please, enter your school website ."
-                      ></el-input>
-                    </el-form-item>
-
-                    <el-form-item label="Blockchain Address" prop="bAddress">
-                      <el-input
-                        v-model="ruleForm.bAddress"
-                        placeholder="Please, enter your blockchain address."
-                      ></el-input>
-                    </el-form-item>
+                  <el-form-item :label="$t('schoolRegister.bAddressLabel')" prop="bAddress">
+                    <el-input
+                      v-model="ruleForm.bAddress"
+                      :placeholder="$t('schoolRegister.bAddressPlaceholder')"
+                    ></el-input>
+                  </el-form-item>
                   <div id="blockchainType">
                     <p id="blockchainAddressTypeLink">
-                      *You can create Bitcoin address
+                      *{{$t('schoolRegister.blockchainTypeBitcoin')}}
                       <a href="https://www.bitaddress.org/" target="_blank"
-                        >here. </a
-                      >Ethereum address<a
+                        >{{$t('schoolRegister.here')}}. </a
+                      >{{$t('schoolRegister.blockchainTypeEthereum')}}<a
                         href="https://www.myetherwallet.com/"
                         target="_blank"
                       >
-                        here</a
+                        {{$t('schoolRegister.here')}}</a
                       >*
                     </p>
                     <fieldset>
-                      <legend>Signature Lines</legend>
+                      <legend>{{$t('schoolRegister.SignatureLines')}}</legend>
 
-                      <el-form-item label="Job Title" prop="jobTitle">
-                      <el-input
-                        v-model="ruleForm.jobTitle"
-                        type="text"
-                        placeholder="Please, enter job title"
-                      ></el-input>
-                    </el-form-item>
+                      <el-form-item :label="$t('schoolRegister.jobTitleLabel')" prop="jobTitle">
+                        <el-input
+                          v-model="ruleForm.jobTitle"
+                          type="text"
+                          :placeholder="$t('schoolRegister.jobTitlePlaceholder')"
+                        ></el-input>
+                      </el-form-item>
 
-                    <el-form-item label="Signature Name" prop="signatureName">
-                      <el-input
-                        v-model="ruleForm.signatureName"
-                        type="text"
-                        placeholder="Please, enter signature name"
-                      ></el-input>
-                    </el-form-item>
+                      <el-form-item :label="$t('schoolRegister.signatureNameLabel')" prop="signatureName">
+                        <el-input
+                          v-model="ruleForm.signatureName"
+                          type="text"
+                          :placeholder="$t('schoolRegister.signatureNamePlaceholder')"
+                        ></el-input>
+                      </el-form-item>
 
-                     <el-form-item label="Signature Image" prop="signatureImage">
-                       <input 
-                        type="file" 
-                        v-on:change="onSigImgFileSelect()" class="uploadBtns" ref="sigImg" id="sigImg" name="sigImg" 
-                        accept=".jpeg,.png,.jpg">
-                  </el-form-item>
-                  <el-form-item label="School Logo" prop="school_logo">
-                    <input 
-                        type="file" 
-                        v-on:change="onSchLogoFileSelect()" class="uploadBtns" ref="schLogo" id="schLogo" name="schLogo" 
-                        accept=".jpeg,.png,.jpg">
-                  </el-form-item>
-                </fieldset>
+                      <el-form-item
+                        :label="$t('schoolRegister.signatureImageLabel')"
+                        prop="signatureImage"
+                      >
+                        <input
+                          type="file"
+                          v-on:change="onSigImgFileSelect()"
+                          class="uploadBtns"
+                          ref="sigImg"
+                          id="sigImg"
+                          name="sigImg"
+                          accept=".jpeg,.png,.jpg"
+                        />
+                      </el-form-item>
+                      <el-form-item :label="$t('schoolRegister.school_logoLabel')" prop="school_logo">
+                        <input
+                          type="file"
+                          v-on:change="onSchLogoFileSelect()"
+                          class="uploadBtns"
+                          ref="schLogo"
+                          id="schLogo"
+                          name="schLogo"
+                          accept=".jpeg,.png,.jpg"
+                        />
+                      </el-form-item>
+                    </fieldset>
                   </div>
                   <el-form-item>
                     <el-button
                       class="myBtn"
                       type="primary"
-                      @click="submitForm('ruleForm')">Register</el-button>
+                      @click="submitForm('ruleForm')"
+                      >{{$t('common.register')}}</el-button
+                    >
+                    <!-- id="myBtnRight" 之前有的按钮-->
                     <el-button
-                      class="myBtn" id="myBtnRight"
+                      class="myBtn"
                       type="danger"
-                      @click="resetForm('ruleForm')">Reset</el-button>
+                      @click="resetForm('ruleForm')"
+                      >{{$t('common.reset')}}</el-button
+                    >
                   </el-form-item>
                 </el-form>
               </div>
@@ -142,27 +161,28 @@ export default {
         sname: "",
         schoolemail: "",
         school_URL: "",
-        schoolID:"",
-        revocationList:"",
+        schoolID: "",
+        revocationList: "",
         bAddress: "",
-        jobTitle:"",
-        signatureName:"",
-        signatureImage:"",
+        jobTitle: "",
+        signatureName: "",
+        signatureImage: "",
         school_logo: ""
       },
-      sigImg:'',
-      schLogo:null,
-      sigformData:null,
-      logoformData:null,
+      sigImg: "",
+      schLogo: null,
+      sigformData: null,
+      logoformData: null,
       rules: {
         sname: [
           {
             required: true,
+            message: this.$t('schoolRegister.snameFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Please enter school name",
+            message: this.$t('schoolRegister.snameFormat2'),
             trigger: ["blur", "change"]
           }
         ],
@@ -170,22 +190,24 @@ export default {
         jobTitle: [
           {
             required: true,
+            message: this.$t('schoolRegister.jobTitleFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Please enter job title",
+            message: this.$t('schoolRegister.jobTitleFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         signatureName: [
           {
             required: true,
+            message: this.$t('schoolRegister.signatureNameFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Please enter signature name",
+            message: this.$t('schoolRegister.signatureNameFormat2'),
             trigger: ["blur", "change"]
           }
         ],
@@ -193,60 +215,60 @@ export default {
         schoolemail: [
           {
             required: true,
-            message: "Please input a valid email address.",
+            message: this.$t('schoolRegister.schoolemailFormat1'),
             trigger: "blur"
           },
           {
             type: "email",
-            message: "Please input a valid email address",
+            message: this.$t('schoolRegister.schoolemailFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         password: [
           {
             required: true,
-            message: "Please input your password.",
+            message: this.$t('schoolRegister.schoolemailFormat1'),
             trigger: "blur"
           },
           {
             min: 6,
-            message: "Length should be at least six.",
+            message: this.$t('schoolRegister.schoolemailFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         bAddress: [
           {
             required: true,
-            message: "Please input your blockchain address.",
+            message: this.$t('schoolRegister.bAddressFormat1'),
             trigger: "blur"
           },
           {
             min: 20,
-            message: "Length should be at least twenty",
+            message: this.$t('schoolRegister.bAddressFormat2'),
             trigger: ["blur", "change"]
           }
         ],
-        sAddress: [
-          {
-            required: true,
-            message: "Please Enter your school address",
-            trigger: "blur"
-          },
-          {
-            min: 2,
-            message: "Length should be at least five(5)",
-            trigger: ["blur", "change"]
-          }
-        ],
+        // sAddress: [
+        //   {
+        //     required: true,
+        //     message: "Please Enter your school address",
+        //     trigger: "blur"
+        //   },
+        //   {
+        //     min: 2,
+        //     message: "Length should be at least five(5)",
+        //     trigger: ["blur", "change"]
+        //   }
+        // ],
         school_URL: [
           {
             required: true,
-            message: "Please Enter your school Website",
+            message: this.$t('schoolRegister.school_URLFormat1'),
             trigger: "blur"
           },
           {
             min: 5,
-            message: "Length should be at least five(5)",
+            message: this.$t('schoolRegister.school_URLFormat2'),
             trigger: ["blur", "change"]
           }
         ]
@@ -256,7 +278,7 @@ export default {
     };
   },
   components: {
-    Head,
+    Head
     // Footer
   },
   methods: {
@@ -268,71 +290,80 @@ export default {
             email: this.ruleForm.schoolemail,
             official_website: this.ruleForm.school_URL,
             // To be system generated begins.
-            // id_url:"",   
+            // id_url:"",
             //revocation_list:"",
-            //introduction_url:"", 
+            //introduction_url:"",
             // To be system generated ends.
             public_key: this.ruleForm.bAddress,
-            job_title:this.ruleForm.jobTitle,
-            signature_name:this.ruleForm.signatureName,
-            signature_file_wsid:"", // To be derived from file upload interface.
-            logo_file_wsid:"",      // To be derived from file upload interface.
+            job_title: this.ruleForm.jobTitle,
+            signature_name: this.ruleForm.signatureName,
+            signature_file_wsid: "", // To be derived from file upload interface.
+            logo_file_wsid: "", // To be derived from file upload interface.
             password: this.ruleForm.password
           };
           // Get signature wsid from file upload interface.
-           getSigImageDetails(this.sigformData).then(res1 =>{
-            Promise.resolve(res1)
-            var firstResponseValue = res1
-            console.log("Response for Signature File from File Upload Interface: ", firstResponseValue)
-            var sigData = firstResponseValue['data']
-            data.signature_file_wsid =  sigData['wsid']
-            console.log("Sig. File wsid is: ", data.signature_file_wsid)
+          getSigImageDetails(this.sigformData).then(res1 => {
+            Promise.resolve(res1);
+            var firstResponseValue = res1;
+            console.log(
+              "Response for Signature File from File Upload Interface: ",
+              firstResponseValue
+            );
+            var sigData = firstResponseValue["data"];
+            data.signature_file_wsid = sigData["wsid"];
+            console.log("Sig. File wsid is: ", data.signature_file_wsid);
             // Get school logo wsid from file upload interface.
-            getSchLogoDetails(this.logoformData).then(res2 =>{
-            Promise.resolve(res2)
-            var secondResponseValue = res2
-            console.log("Response for School Logo file from File Upload Interface: ", secondResponseValue)
-            var logoData = secondResponseValue['data']
-            data.logo_file_wsid = logoData['wsid'] 
-            console.log("School logo File wsid is: ", data.logo_file_wsid)
-            // Send data to School registration interface.
-            register(data)
-            .then(res => {
-              console.log("Registration response from school register interface",res);
-              this.$message({
-                message:
-                  "Congratulations. Registration successful, Please Login",
-                type: "success"
-              });
-              this.$router.replace("/login");
-            })
-            .catch(function(error) {
-              console.log(error);
-              this.$message.error({
-                title: "error",
-                message:
-                  "Registration failed, please try again later, or contact the administrator! !!"
-              });
+            getSchLogoDetails(this.logoformData).then(res2 => {
+              Promise.resolve(res2);
+              var secondResponseValue = res2;
+              console.log(
+                "Response for School Logo file from File Upload Interface: ",
+                secondResponseValue
+              );
+              var logoData = secondResponseValue["data"];
+              data.logo_file_wsid = logoData["wsid"];
+              console.log("School logo File wsid is: ", data.logo_file_wsid);
+              // Send data to School registration interface.
+              register(data)
+                .then(res => {
+                  console.log(
+                    "Registration response from school register interface",
+                    res
+                  );
+                  this.$message({
+                    message:
+                      this.$t('schoolRegister.registrationSuccess'),
+                    type: "success"
+                  });
+                  this.$router.replace("/login");
+                })
+                .catch(function(error) {
+                  console.log(error);
+                  this.$message.error({
+                    title: "error",
+                    message:
+                      this.$t('schoolRegister.registrationFail'),
+                  });
+                });
             });
-          })
           });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
-    }, 
-    onSigImgFileSelect(){ 
-      this.sigImg = this.$refs.sigImg.files[0];
-      console.log("School signature file: ", this.sigImg)
-      this.sigformData = new FormData();
-      this.sigformData.append('file', this.sigImg);
     },
-    onSchLogoFileSelect(){ 
+    onSigImgFileSelect() {
+      this.sigImg = this.$refs.sigImg.files[0];
+      console.log("School signature file: ", this.sigImg);
+      this.sigformData = new FormData();
+      this.sigformData.append("file", this.sigImg);
+    },
+    onSchLogoFileSelect() {
       this.schLogo = this.$refs.schLogo.files[0];
-      console.log("School logo file: ", this.schLogo)
+      console.log("School logo file: ", this.schLogo);
       this.logoformData = new FormData();
-      this.logoformData.append('file', this.schLogo);
+      this.logoformData.append("file", this.schLogo);
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -361,20 +392,37 @@ export default {
 }
 #msgArea {
   width: 100%;
+  margin-bottom: 1rem;
+}
+/* #msgArea {
+  width: 100%;
   margin-top: 1.5%;
   margin-bottom: 0.5rem;
-}
-#welcomeMsg {
+} */
+/* #welcomeMsg {
   color: #477ea3;
   font-size: 1.5rem;
   margin-top: -2.5%;
   padding-top: 1rem;
+} */
+
+#welcomeMsg {
+  color: #477ea3;
+  font-size: 1.5rem;
+  padding-top: 1rem;
 }
+
+/* #instruction {
+  color: #477ea3;
+  font-style: italic;
+  margin-top: -2.4%;
+  padding-bottom: 1rem;
+} */
 
 #instruction {
   color: #477ea3;
   font-style: italic;
-  margin-top: -2.4%;
+  padding-top: 0.5rem;
   padding-bottom: 1rem;
 }
 
@@ -384,10 +432,10 @@ export default {
   background-color: #ffffff;
 }
 
-#myForm{
+/* #myForm{
   margin-top: -2.5%;
    align-items: center;
-}
+} */
 
 #blockchainType {
   color: #15415e;
@@ -395,10 +443,10 @@ export default {
   font-weight: 90;
 }
 #myBtnRight {
-  margin-right: 50%; 
+  margin-right: 50%;
 }
 
-.myBtn{
+.myBtn {
   margin-top: 1rem;
 }
 
