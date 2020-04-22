@@ -20,8 +20,23 @@ const en = {
         txid: "Transaction ID",
         home: "Home",
         certificates: "Certificates",
-        issueList: "Issue certificate"
+        issueList: "Issue certificate",
+        all: "All",
+        chkPending: "Check Pending",
+        Issued: "Issued",
+        revoked: "Revoked",
+        certTitle: "Title",
+        certIssuer: "Issuer",
+        certStatus: "Status",
+        certDetail: "View Details",
       },
+    certstatus: {
+      Created: "Created",
+      Issued: "Issued",
+      Issuing: "Issuing",
+      FailedIssue: "Failed Issue",
+      Revoked: "Revoked"
+    },
     home: {
         index: {
           page: "Blockcerts Universal View",
@@ -130,6 +145,14 @@ const en = {
       school_logoLabel: "School Logo",
       registrationSuccess: "Congratulations. Registration successful, Please Login",
       registrationFail: "Registration failed, please try again later, or contact the administrator!!!"
+    },
+    studentCertificates: {
+      title: "Certificates' List",
+      listOption: "Listing options",
+      stdSearchItemPlaceholder: "Please input certificate name or issuer",
+      stdSearchItemFormat: "Search criteria cannot be empty.",
+      certificateDetailInfo: "Now viewing a certificate detail.",
+      UploadCert: "Upload Cert."
     },
     ...enLocale
 }

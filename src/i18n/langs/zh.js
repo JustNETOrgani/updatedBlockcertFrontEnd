@@ -19,7 +19,23 @@ const zh = {
     operation: "操作",
     txid: "交易哈希",
     home: "首页",
-    certificates: "我的证书"
+    certificates: "我的证书",
+    issueList: "证书颁发",
+    all: "全部",
+    chkPending: "检查中",
+    Issued: "已颁发",
+    revoked: "已撤销",
+    certTitle: "标题",
+    certIssuer: "颁发者",
+    certStatus: "状态",
+    certDetail: "查看详情",
+  },
+  certstatus: {
+    Created: "Created",
+    Issued: "Issued",
+    Issuing: "Issuing",
+    FailedIssue: "Failed Issue",
+    Revoked: "Revoked"
   },
   home: {
     index: {
@@ -129,6 +145,14 @@ const zh = {
     school_logoLabel: "学校徽章",
     registrationSuccess: "恭喜你, 注册成功 请登录",
     registrationFail: "注册失败，请稍后再试，或联系管理员！！！"
+  },
+  studentCertificates: {
+    title: "证书列表",
+    listOption: "筛选",
+    stdSearchItemPlaceholder: "请输入证书名称或者颁发者名称",
+    stdSearchItemFormat: "搜索条件不能为空",
+    certificateDetailInfo: "现在查看证书详细信息",
+    UploadCert: "证书上传"
   },
   ...zhLocale
 };
