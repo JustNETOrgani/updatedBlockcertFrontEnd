@@ -2,17 +2,17 @@
   <div class="pageContainer">
     <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" @click="LoginURL" round
-        >Login</el-button
+        >{{$t('common.login')}}</el-button
       >
     </Head>
     <div class="body">
       <div id="middlePage">
         <div id="msgArea">
-          <p id="welcomeMsg">Welcome to Student Registration</p>
+          <p id="welcomeMsg">{{$t('studentRegister.welcomeMsg')}}</p>
         </div>
         <div id="formArea">
           <p id="instruction">
-            Please, fill the form below.
+            {{$t('studentRegister.instruction')}}
           </p>
           <!--Form to be filled-->
           <el-row>
@@ -25,54 +25,52 @@
                   label-width="160px"
                   class="demo-ruleForm"
                 >
-                  <el-form-item label="First name" prop="fname">
+                  <el-form-item :label="$t('studentRegister.fnameLabel')" prop="fname">
                     <el-input
                       v-model="ruleForm.fname"
-                      placeholder="Please, enter your first name here."
+                      :placeholder="$t('studentRegister.fnamePlaceholder')"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="Last name" prop="lname">
+                  <el-form-item :label="$t('studentRegister.lnameLabel')" prop="lname">
                     <el-input
                       v-model="ruleForm.lname"
-                      placeholder="Please, enter your last name here."
+                      :placeholder="$t('studentRegister.lnamePlaceholder')"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="Email address" prop="email">
+                  <el-form-item :label="$t('studentRegister.emailLabel')" prop="email">
                     <el-input
                       v-model="ruleForm.email"
-                      placeholder="Please, enter your email here."
+                      :placeholder="$t('studentRegister.emailPlaceholder')"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="Student ID" prop="stdID">
+                  <el-form-item :label="$t('studentRegister.stdIDLabel')" prop="stdID">
                     <el-input
                       v-model="ruleForm.stdID"
-                      placeholder="Please, enter your student ID."
+                      :placeholder="$t('studentRegister.stdIDPlaceholder')"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="Password" prop="password">
+                  <el-form-item :label="$t('studentRegister.passwordLabel')" prop="password">
                     <el-input
                       v-model="ruleForm.password"
                       type="password"
-                      placeholder="Please, enter your password."
+                      :placeholder="$t('studentRegister.passwordPlaceholder')"
                     ></el-input>
                   </el-form-item>
-                  <el-form-item label="Blockchain address" prop="bAddress">
+                  <el-form-item :label="$t('studentRegister.bAddressLabel')" prop="bAddress">
                     <el-input
                       v-model="ruleForm.bAddress"
-                      placeholder="Please, enter your blockchain address."
+                      :placeholder="$t('studentRegister.bAddressPlaceholder')"
                     ></el-input>
                   </el-form-item>
                   <div id="blockchainType">
                     <p id="blockchainAddressTypeLink">
-                      *You can create Bitcoin address
+                      *{{$t('studentRegister.blockchainAddressTypeLinkBitcoin')}}
                       <a href="https://www.bitaddress.org/" target="_blank"
-                        >here. </a
-                      >Ethereum address<a
+                        >{{$t('studentRegister.link')}}. </a
+                      >{{$t('studentRegister.blockchainAddressTypeLinkEthereum')}}<a
                         href="https://www.myetherwallet.com/"
                         target="_blank"
-                      >
-                        here</a
-                      >*
+                      >{{$t('studentRegister.link')}}</a>*
                     </p>
                   </div>
                   <el-form-item>
@@ -80,13 +78,13 @@
                       class="myBtn"
                       type="primary"
                       @click="submitForm('ruleForm')"
-                      >Register</el-button
+                      >{{$t('common.register')}}</el-button
                     >
                     <el-button
                       class="myBtn"
                       type="danger"
                       @click="resetForm('ruleForm')"
-                      >Reset</el-button
+                      >{{$t('common.reset')}}</el-button
                     >
                   </el-form-item>
                 </el-form>
@@ -121,78 +119,78 @@ export default {
         fname: [
           {
             required: true,
-            message: "Please input your first name.",
+            message: this.$t('studentRegister.fnameFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Length should be at least two",
+            message: this.$t('studentRegister.fnameFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         lname: [
           {
             required: true,
-            message: "Please input your last name.",
+            message: this.$t('studentRegister.lnameFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Length should be at least two",
+            message: this.$t('studentRegister.lnameFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         email: [
           {
             required: true,
-            message: "Please input email address.",
+            message: this.$t('studentRegister.emailFormat1'),
             trigger: "blur"
           },
           {
             type: "email",
-            message: "Please input correct email address",
+            message: this.$t('studentRegister.emailFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         stdID: [
           {
             required: true,
-            message: "Please input your student ID.",
+            message: this.$t('studentRegister.stdIDFormat1'),
             trigger: "blur"
           },
           {
             min: 2,
-            message: "Length should be at least two",
+            message: this.$t('studentRegister.stdIDFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         password: [
           {
             required: true,
-            message: "Please input your password.",
+            message: this.$t('studentRegister.passwordFormat1'),
             trigger: "blur"
           },
           {
             min: 6,
-            message: "Length should be at least six.",
+            message: this.$t('studentRegister.passwordFormat2'),
             trigger: ["blur", "change"]
           }
         ],
         bAddress: [
           {
             required: true,
-            message: "Please input your blockchain address.",
+            message: this.$t('studentRegister.bAddressFormat1'),
             trigger: "blur"
           },
           {
             min: 20,
-            message: "Length should be at least twenty",
+            message: this.$t('studentRegister.bAddressFormat2'),
             trigger: ["blur", "change"]
           }
         ]
       },
       show: true,
-      menuList: [{ name: "Home", path: "/home" }]
+      menuList: [{ name: this.$t('common.home'), path: "/home" }]
     };
   },
   components: {
@@ -215,7 +213,7 @@ export default {
             .then(res => {
               console.log(res);
               this.$message({
-                message: "Congratulations. Registration successful, Please Login",
+                message: this.$t('studentRegister.registrationSuccess'),
                 type: "success"
               });
               this.$router.replace("/login");
@@ -225,7 +223,7 @@ export default {
               this.$message.error({
                 title: "error",
                 message:
-                  "Registration failed, please try again later, or contact the administrator! !!"
+                  this.$t('studentRegister.registrationFail')
               });
             });
         } else {

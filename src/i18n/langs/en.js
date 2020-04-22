@@ -3,6 +3,7 @@ const en = {
     common: {
         login: "Login",
         register: "Register",
+        reset: "Reset",
         student: "Student",
         school: "School",
         confirm: "Confirm",
@@ -44,19 +45,52 @@ const en = {
           }
         }
       },
-      login: {
-        usernamePlaceHolder: "Please, input your username.",
-        passwordPlaceHolder: "Please, input your password.",
-        username: "Username: ",
-        password: "Password: ",
-        role: "Role: ",
-        usernameMessage: "Please input username.",
-        usernameFormat: "Length should be at least two",
-        passwordMessage: "Please input your password.",
-        passwordFormat: "Length should be at least six.",
-        loginSuccess: "Congratulations. Login successful",
-        loginFail: "Account or password is wrong, please enter the correct account and password"
-      },
+    login: {
+      usernamePlaceHolder: "Please, input your username.",
+      passwordPlaceHolder: "Please, input your password.",
+      username: "Username: ",
+      password: "Password: ",
+      role: "Role: ",
+      usernameMessage: "Please input username.",
+      usernameFormat: "Length should be at least two",
+      passwordMessage: "Please input your password.",
+      passwordFormat: "Length should be at least six.",
+      loginSuccess: "Congratulations. Login successful",
+      loginFail: "Account or password is wrong, please enter the correct account and password"
+    },
+    studentRegister:{
+      welcomeMsg: "Welcome to Student Registration",
+      instruction: "Please, fill the form below.",
+      fnameLabel: "First name",
+      fnamePlaceholder: "Please, enter your first name here.",
+      fnameFormat1: "Please input your first name",
+      fnameFormat2: "Length should be at least two",
+      lnameLabel: "Last name",
+      lnamePlaceholder: "Please, enter your last name here.",
+      lnameFormat1: "Please input your last name",
+      lnameFormat2: "Length should be at least two",
+      emailLabel: "Email address",
+      emailPlaceholder: "Please, enter your email here.",
+      emailFormat1: "Please input email address",
+      emailFormat2: "Please input correct email address",
+      stdIDLabel: "Student ID",
+      stdIDPlaceholder: "Please, enter your student ID.",
+      stdIDFormat1: "Please input your student ID",
+      stdIDFormat2: "Length should be at least two",
+      passwordLabel: "Password",
+      passwordPlaceholder: "Please, enter your password.",
+      passwordFormat1: "Please input your password",
+      passwordFormat2: "Length should be at least six",
+      bAddressLabel: "Blockchain address",
+      bAddressPlaceholder: "Please, enter your blockchain address.",
+      bAddressFormat1: "Please input your blockchain address",
+      bAddressFormat2: "Length should be at least twenty",
+      blockchainAddressTypeLinkBitcoin: "You can create Bitcoin address",
+      blockchainAddressTypeLinkEthereum: "Ethereum address",
+      link: "here",
+      registrationSuccess: "Congratulations. Registration successful, Please Login",
+      registrationFail: "Registration failed, please try again later, or contact the administrator!!!"
+    },
     ...enLocale
 }
 
