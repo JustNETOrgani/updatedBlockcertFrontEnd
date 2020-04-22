@@ -154,6 +154,16 @@ const en = {
       certificateDetailInfo: "Now viewing a certificate detail.",
       UploadCert: "Upload Cert."
     },
+    CertDetail:{
+      title: "Student Certificate's Information",
+      h3: "Blockchain-based certificate",
+      awardedto: "Awarded to",
+      Issuedon: "Issued on",
+      StatusofCertificate: "Status of Certificate",
+      Signedby: "Signed by",
+      CertificateID: "Certificate's ID",
+      SchoolPublicKey: "School's Public Key"
+    },
     ...enLocale
 }
 

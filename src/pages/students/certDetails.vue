@@ -2,36 +2,36 @@
   <div class="certificate">
     <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" round @click="LoginOut"
-        >Logout</el-button
+        >{{$t('common.logout')}}</el-button
       >
     </Head>
     <div class="body">
-      <h1 class="title">Student Certificate's Information</h1>
+      <h1 class="title">{{$t('CertDetail.title')}}</h1>
       <!--Certificate display area-->
       <div  id="certDisplayArea" style="overflow-y:auto">
         <el-row>
             <el-col :span="18" :offset="2">
                 <h2>{{issuerName}}</h2>
-                <h3>Blockchain-based certificate</h3>
+                <h3>{{$t('CertDetail.h3')}}</h3>
                 <img :src="schLogo" id="logoForSchool" alt="School Logo"/>
                 <br>
                 <p><b>{{certDescription}}</b></p>
                 <i><b>{{certCriteria}}</b></i>
-                <u><p>Awarded to</p></u>
+                <u><p>{{$t('CertDetail.awardedto')}}</p></u>
                 <i>{{stdName}}</i>
                 <br>
-                <p><b>Issued on:</b> {{issuedDate}}</p>
-                <p id="statusOfCert"><b>Status of Certificate: {{certStatus}}</b></p>
-                <p><b>Signed by: {{jobTible}}</b></p>
+                <p><b>{{$t('CertDetail.Issuedon')}}:</b> {{issuedDate}}</p>
+                <p id="statusOfCert"><b>{{$t('CertDetail.StatusofCertificate')}}: {{certStatus}}</b></p>
+                <p><b>{{$t('CertDetail.Signedby')}}: {{jobTible}}</b></p>
             </el-col>
         </el-row>
         <el-row>
             <el-col :span="8" :offset="1">
-                <p><b>Certificate's ID: </b></p> 
+                <p><b>{{$t('CertDetail.CertificateID')}}: </b></p> 
                 <p  class="smallFontSz">{{stdCertID}}</p>
             </el-col>
             <el-col :span="8" :offset="5">
-                <p><b>School's Public Key:</b></p> 
+                <p><b>{{$t('CertDetail.SchoolPublicKey')}}</b></p> 
                 <p class="smallFontSz">{{schPubKey}}</p>
             </el-col>
         </el-row>
@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       menuList: [
-        { name: "Home", path: "/home" },
+        { name: this.$t('common.home'), path: "/home" },
       ],
       // Data to appear on certificate.
       issuerName: '',
@@ -87,9 +87,9 @@ export default {
   },
   methods: {
     LoginOut() {
-      this.$confirm("Are you sure you want to quit?", "Log Out", {
-          confirmButtonText: 'confirm',
-          cancelButtonText: 'cancel',
+      this.$confirm(this.$t('common.logOutDialogMessage'), this.$t('common.logout'), {
+          confirmButtonText: this.$t('common.confirm'),
+          cancelButtonText: this.$t('common.cancel'),
           type: 'info'
         }).then(() => {
           sessionStorage.removeItem("STUDENT-INFO");
@@ -99,7 +99,7 @@ export default {
           this.$router.push("/home");
           this.$message({
             type: "info",
-            message: "Signed out successfully."
+            message: this.$t('common.logOutSuccess')
           });
         }).catch(() => {       
         });

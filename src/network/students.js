@@ -36,7 +36,7 @@ export function getCertificates() {
 export async function viewCertDetails(certID) {
   console.log("Getting cert details from: ", 'http://127.0.0.1:8000/v1/api/certificates/'+certID+'/detail') 
   return certRequest({
-    url: '/v1/api/certificates/'+certID+'/detail',
+    url: '/v1/api/certificates/'+certID+'/detail/',
     method: 'get', 
   });
 }

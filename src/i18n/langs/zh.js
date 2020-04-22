@@ -154,6 +154,16 @@ const zh = {
     certificateDetailInfo: "现在查看证书详细信息",
     UploadCert: "证书上传"
   },
+  CertDetail:{
+    title: "学生证书信息",
+    h3: "基于区块链的证书",
+    awardedto: "授予",
+    Issuedon: "发布时间",
+    StatusofCertificate: "证书状态",
+    Signedby: "签名者",
+    CertificateID: "证书ID",
+    SchoolPublicKey: "学校公钥"
+  },
   ...zhLocale
 };
 
