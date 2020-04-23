@@ -170,12 +170,12 @@ export default {
     },
     menuList: function() {
       if (!this.needLogin) {
-        if(sessionStorage.getItem('SCHOOL-INFO')){
+        if(sessionStorage.getItem('USER-TYPE')==="school"){
           return [
             { name: this.$t('common.home'), path: "/home" },
             { name: this.$t('common.issueList'), path: "/schools/issueList"}
           ]
-        }else if(sessionStorage.getItem('STUDENT-INFO')){
+        }else if(sessionStorage.getItem('USER-TYPE')==="student"){
           return [
             { name: this.$t('common.home'), path: "/home" },
             { name: this.$t('common.certificates'), path: "/students/certificates"}
@@ -295,8 +295,10 @@ export default {
           type: 'info'
         }).then(() => {
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
-          sessionStorage.removeItem("SCHOOL-INFO");
-          sessionStorage.removeItem("STUDENT-INFO");
+          // sessionStorage.removeItem("SCHOOL-INFO");
+          // sessionStorage.removeItem("STUDENT-INFO");
+          sessionStorage.removeItem('USER-TYPE');
+          sessionStorage.clear()
           location.reload();
           this.$message({
             type: "info",

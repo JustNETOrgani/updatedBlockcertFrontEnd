@@ -157,7 +157,8 @@ export default {
                 console.log("Login response: ", res.data)
                 console.log("Login response data data: ", res.data.data)
                 this.$store.commit("set_token", res.data.data.token);
-                this.$store.commit("set_student_info", res.data.data.student);
+                // this.$store.commit("set_student_info", res.data.data.student);
+                this.$store.commit("set_user_type", "student");
                 this.$router.push("/students/certificates");
                 this.LoginButtonLoading = false;
                 this.$message({
@@ -187,7 +188,8 @@ export default {
                 console.log("SchooolLogin response: ", res.data)
                 console.log("School Login response data data: ", res.data.data)
                 this.$store.commit("set_token", res.data.data.token);
-                this.$store.commit("set_school_info", res.data.data.school);
+                // this.$store.commit("set_school_info", res.data.data.school);
+                this.$store.commit("set_user_type", "school");
                 this.$router.push("/schools/issueList");
                 this.$message({
                   message: this.$t('login.loginSuccess'),

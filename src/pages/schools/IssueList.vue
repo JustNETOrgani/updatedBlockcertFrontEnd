@@ -219,8 +219,10 @@ export default {
         type: "info"
       })
         .then(() => {
-          sessionStorage.removeItem("STUDENT-INFO");
+          // sessionStorage.removeItem("STUDENT-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
+          sessionStorage.removeItem('USER-TYPE');
+          sessionStorage.clear()
           this.$router.push("/home");
           this.$message({
             type: "info",

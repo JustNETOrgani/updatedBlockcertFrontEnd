@@ -92,10 +92,12 @@ export default {
           cancelButtonText: this.$t('common.cancel'),
           type: 'info'
         }).then(() => {
-          sessionStorage.removeItem("STUDENT-INFO");
+          // sessionStorage.removeItem("STUDENT-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
           sessionStorage.removeItem("Cert_Details");
           sessionStorage.removeItem("Cert_Status");
+          sessionStorage.removeItem('USER-TYPE');
+          sessionStorage.clear()
           this.$router.push("/home");
           this.$message({
             type: "info",
