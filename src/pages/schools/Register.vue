@@ -124,6 +124,7 @@
                     <el-button
                       class="myBtn"
                       type="primary"
+                      :loading="registBtnLoadState"
                       @click="submitForm('ruleForm')"
                       >{{$t('common.register')}}</el-button
                     >
@@ -169,6 +170,7 @@ export default {
         signatureImage: "",
         school_logo: ""
       },
+      registBtnLoadState: false,
       sigImg: "",
       schLogo: null,
       sigformData: null,
@@ -248,18 +250,6 @@ export default {
             trigger: ["blur", "change"]
           }
         ],
-        // sAddress: [
-        //   {
-        //     required: true,
-        //     message: "Please Enter your school address",
-        //     trigger: "blur"
-        //   },
-        //   {
-        //     min: 2,
-        //     message: "Length should be at least five(5)",
-        //     trigger: ["blur", "change"]
-        //   }
-        // ],
         school_URL: [
           {
             required: true,
@@ -284,6 +274,7 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
+        this.registBtnLoadState = true
         if (valid) {
           var data = {
             name: this.ruleForm.sname,
@@ -336,9 +327,11 @@ export default {
                     type: "success"
                   });
                   this.$router.replace("/login");
+                  this.registBtnLoadState = false
                 })
                 .catch(function(error) {
                   console.log(error);
+                  this.registBtnLoadState = false
                   this.$message.error({
                     title: "error",
                     message:
