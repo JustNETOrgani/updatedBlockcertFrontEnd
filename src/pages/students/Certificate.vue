@@ -24,7 +24,7 @@
           <div id="searchInputArea">
             <el-input
               :placeholder="$t('studentCertificates.stdSearchItemPlaceholder')"
-              v-model="searchInput.stdSearchItem"
+              v-model="searchInput"
               clearable
             >
             </el-input>
@@ -100,11 +100,10 @@ export default {
         { name: this.$t('common.home'), path: "/home" },
         { name: this.$t("common.certificates"), path: "/students/certificates" }
       ],
-      radio: null,
-      searchInput: { stdSearchItem: "" },
+      radio: 'all',
+      searchInput: '',
       tableData: [],
       certImageWSID: [], // To be used to view details about the certificate.
-      certData: [], // To hold the entire certificates.
       loading: false,
       total: 0,
       currentPage: 1,
@@ -115,6 +114,38 @@ export default {
   components: {
     Head,
     // Footer
+  },
+  created() {
+    this.loading = true;
+    getCertificates().then(res => {
+      console.log("Certificates for this student on page load: ", res.data);
+      this.total = res.data.count;
+      for (let i = 0; i < this.total; i++) {
+        let tbObj = {};
+        tbObj.certTitle = res.data.results[i]["certificate_title"];
+        tbObj.certIssuer = res.data.results[i]["school_name"]; //
+        tbObj.certStatus = res.data.results[i]["status"];
+        // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
+        if (tbObj["certStatus"] == 0) {
+          tbObj["certStatus"] = "Created";
+        }
+        if (tbObj["certStatus"] == 1) {
+          tbObj["certStatus"] = "Issued";
+        }
+        if (tbObj["certStatus"] == 2) {
+          tbObj["certStatus"] = "Issuing";
+        }
+        if (tbObj["certStatus"] == 3) {
+          tbObj["certStatus"] = "Failed Issue";
+        }
+        if (tbObj["certStatus"] == 4) {
+          tbObj["certStatus"] = "Revoked";
+        }
+        this.filteredData[i] = tbObj;
+        }
+      this.loading = false;
+      this.tableData = this.filteredData
+     })
   },
   methods: {
     LoginOut() {
@@ -138,21 +169,22 @@ export default {
       this.$router.push("/students/cert_upload");
     },
     getStudentSearch() {
-      let itemToSearch = this.searchInput.stdSearchItem;
-      if (itemToSearch == null || itemToSearch == "") {
+      if (this.searchInput == null || this.searchInput == "") {
         this.$message({
           showClose: true,
           type: "warning",
           message: this.$t('common.stdSearchItemFormat')
         });
       } else {
-        console.log("Certificate search initiated using: ", itemToSearch);
+        console.log("Certificate search initiated using: ", this.searchInput);
         // Continue to perform certificate search.
-        let filteredData = null;
-        filteredData = this.certData.filter(function(el) {
-          return el.certTitle == itemToSearch || el.certIssuer == itemToSearch;
+        let searchCriteria = this.searchInput
+        let filteredCertData = null;
+        filteredCertData = this.filteredData.filter(function(el) {
+          console.log("Inside filter, using: ", searchCriteria)
+          return el.certTitle == searchCriteria|| el.certIssuer == searchCriteria;
         });
-        this.tableData = filteredData;
+        this.tableData = filteredCertData;
       }
     },
     handleSizeChange(size) {
@@ -165,6 +197,10 @@ export default {
       this.currentPage = current;
       this.currentCertData();
     },
+    currentCertData(){
+     this.tableData = this.filteredData
+    },
+
     onSelect(data) {
       this.radio = data;
       console.log("User has selected:", this.radio);
@@ -172,18 +208,14 @@ export default {
       // Perform action based on student's selection.
       getCertificates().then(res => {
         console.log("Certificates for this student: ", res.data);
-        //this.certs = res.data
-        var allCerts = res.data.results;
         this.total = res.data.count;
-        var totalCert = allCerts.length;
-        console.log("Total certs: ", totalCert);
-
-        for (let i = 0; i < totalCert; i++) {
+        console.log("Total certs: ", this.total);
+        for (let i = 0; i < this.total; i++) {
           let tbObj = {};
-          tbObj.certTitle = allCerts[i]["certificate_title"];
-          tbObj.certIssuer = allCerts[i]["school_name"]; //
-          tbObj.certStatus = allCerts[i]["status"];
-          this.certImageWSID.push(allCerts[i]["cert_id"]);
+          tbObj.certTitle = res.data.results[i]["certificate_title"];
+          tbObj.certIssuer = res.data.results[i]["school_name"]; //
+          tbObj.certStatus = res.data.results[i]["status"];
+          this.certImageWSID.push(res.data.results[i]["cert_id"]);
           // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
           if (tbObj["certStatus"] == 0) {
             tbObj["certStatus"] = "Created";
@@ -200,23 +232,21 @@ export default {
           if (tbObj["certStatus"] == 4) {
             tbObj["certStatus"] = "Revoked";
           }
-          this.certData[i] = tbObj;
+          this.filteredData[i] = tbObj;
         }
 
         if (this.radio == "all") {
           console.log("Retrieving all certificates.");
           // Get all certificates.
-          this.filteredData = this.certData;
           this.total = this.filteredData.length;
           this.tableData = this.filteredData;
           this.loading = false;
           return;
         }
         if (this.radio == "chkPending") {
-          let chkCertData = null;
           console.log("Retrieving check pending certificates.");
           // Get check pending certificates.
-          chkCertData = this.certData.filter(function(el) {
+          this.filteredData = this.filteredData.filter(function(el) {
             return (
               el.certStatus != "Failed Issue" &&
               el.certStatus != "Revoked" &&
@@ -224,7 +254,6 @@ export default {
               el.certStatus != "Issuing"
             );
           });
-          this.filteredData = chkCertData;
           this.total = this.filteredData.length;
           this.tableData = this.filteredData;
           this.loading = false;
@@ -232,9 +261,8 @@ export default {
         }
         if (this.radio == "Issued") {
           console.log("Retrieving issued certificates.");
-          let issuedCertData = null;
           // Get Issued certificates.
-          issuedCertData = this.certData.filter(function(el) {
+          this.filteredData = this.filteredData.filter(function(el) {
             return (
               el.certStatus != "Failed Issue" &&
               el.certStatus != "Revoked" &&
@@ -242,7 +270,6 @@ export default {
               el.certStatus != "Issuing"
             );
           });
-          this.filteredData = issuedCertData;
           this.total = this.filteredData.length;
           this.tableData = this.filteredData;
           this.loading = false;
@@ -250,8 +277,7 @@ export default {
         } else {
           console.log("Retrieving revoked certificates.");
           // Get revoked certificates.
-          let rvkCertData = null;
-          rvkCertData = this.certData.filter(function(el) {
+          this.filteredData = this.filteredData.filter(function(el) {
             return (
               el.certStatus != "Issued" &&
               el.certStatus != "Created" &&
@@ -259,7 +285,6 @@ export default {
               el.certStatus != "Failed Issue"
             );
           });
-          this.filteredData = rvkCertData;
           this.total = this.filteredData.length;
           this.tableData = this.filteredData;
         }
