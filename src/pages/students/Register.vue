@@ -77,6 +77,7 @@
                     <el-button
                       class="myBtn"
                       type="primary"
+                      :loading="registBtnLoadState"
                       @click="submitForm('ruleForm')"
                       >{{$t('common.register')}}</el-button
                     >
@@ -115,6 +116,7 @@ export default {
         password: "",
         bAddress: ""
       },
+      registBtnLoadState: false,
       rules: {
         fname: [
           {
@@ -200,6 +202,7 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
+        this.registBtnLoadState = true
         if (valid) {
           var data = {
             first_name: this.ruleForm.fname,
@@ -217,6 +220,7 @@ export default {
                 type: "success"
               });
               this.$router.replace("/login");
+              this.registBtnLoadState = false
             })
             .catch(function(error) {
               console.log(error);
