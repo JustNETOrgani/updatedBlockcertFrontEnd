@@ -136,13 +136,13 @@
     </el-dialog>
 
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import { getSchCertificates } from "@/network/schools";
 import { viewCertDetails } from "@/network/schools"; 
 import { createCertInterface } from "@/network/schools"; 
@@ -209,7 +209,7 @@ export default {
   },
   components: {
     Head,
-    Footer
+    // Footer
   },
   methods: {
     LoginOut() {

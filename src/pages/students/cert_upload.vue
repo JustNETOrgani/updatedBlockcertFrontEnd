@@ -88,13 +88,13 @@
         </div>
       </div>
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import { getCertFileDetails } from "@/network/students"; 
 import { studentCertCreateRequest } from "@/network/students";
 
@@ -183,7 +183,7 @@ export default {
   },
   components: {
     Head,
-    Footer
+    // Footer
   },
   methods: {
     submitForm(formName) {

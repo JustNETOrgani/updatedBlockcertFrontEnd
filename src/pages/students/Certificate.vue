@@ -54,7 +54,7 @@
           <!--Building table body-->
           <el-table-column prop="certTitle" :label="$t('common.certTitle')">
           </el-table-column>
-          <el-table-column prop="certIssuer" :label="$t('common.certIssuer')">
+          <el-table-column prop="certIssuer" :label="$t('common.school')">
           </el-table-column>
           <el-table-column prop="certStatus" :label="$t('common.certStatus')">
           </el-table-column>

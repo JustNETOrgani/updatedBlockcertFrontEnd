@@ -37,13 +37,13 @@
         </el-row>
       </div>
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 
 export default {
   name: "certificate",
@@ -83,7 +83,7 @@ export default {
     
   components: {
     Head,
-    Footer
+    // Footer
   },
   methods: {
     LoginOut() {
