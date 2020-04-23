@@ -224,6 +224,7 @@ export default {
             })
             .catch(function(error) {
               console.log(error);
+              this.registBtnLoadState = false
               this.$message.error({
                 title: "error",
                 message:
