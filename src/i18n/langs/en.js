@@ -195,7 +195,7 @@ const en = {
       issuerFormat1: "Please enter name of school.",
       issuerFormat2: "Length should be at least six.",
       certFileLabel: "Certificate File",
-      certFileselectFile: "Certificate File",
+      selectFile: "select file",
       selectFileFormat: "jpg/png/jpeg/pdf files with a size less than 10MB",
       selectFileFormatWarning: "The uploaded file can only be in jpeg, png, jpg, pdf format!",
       selectFileSizeWarning: "The upload file size cannot exceed 10MB!",
