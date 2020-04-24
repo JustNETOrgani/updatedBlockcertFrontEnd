@@ -103,7 +103,6 @@ export default {
       radio: 'all',
       searchInput: '',
       tableData: [],
-      certImageWSID: [], // To be used to view details about the certificate.
       loading: false,
       total: 0,
       currentPage: 1,
@@ -125,7 +124,7 @@ export default {
         tbObj.certTitle = res.data.results[i]["certificate_title"];
         tbObj.certIssuer = res.data.results[i]["school_name"]; //
         tbObj.certStatus = res.data.results[i]["status"];
-        this.certImageWSID.push(res.data.results[i]["cert_id"]);
+        tbObj.certWSID = res.data.results[i]["cert_id"];
         // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
         if (tbObj["certStatus"] == 0) {
           tbObj["certStatus"] = "Created";
@@ -221,6 +220,7 @@ export default {
           tbObj.certTitle = res.data.results[i]["certificate_title"];
           tbObj.certIssuer = res.data.results[i]["school_name"]; //
           tbObj.certStatus = res.data.results[i]["status"];
+          tbObj.certWSID = res.data.results[i]["cert_id"];
           // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
           if (tbObj["certStatus"] == 0) {
             tbObj["certStatus"] = "Created";
@@ -243,7 +243,6 @@ export default {
         if (this.radio == "all") {
           console.log("Retrieving all certificates.");
           // Get all certificates.
-          this.total = this.filteredData.length;
           this.tableData = this.filteredData;
           this.loading = false;
           return;
@@ -296,7 +295,9 @@ export default {
     getCertDetails(index, row) {
       console.log("Getting details for index: ", index, row);
       console.log("Cert status is: ", row["certStatus"]);
-      let certIDtoGetDetails = this.certImageWSID[index];
+      console.log("certIDs: ", this.tableData)
+      let certIDtoGetDetails = this.tableData[index]['certWSID'];
+      console.log("CertID to use: ", certIDtoGetDetails)
       let certStatusToDisplay = row["certStatus"];
       viewCertDetails(certIDtoGetDetails).then(res => {
         console.log("View details of cert.: ", res);
