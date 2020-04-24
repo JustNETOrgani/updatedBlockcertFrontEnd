@@ -125,6 +125,7 @@ export default {
         tbObj.certTitle = res.data.results[i]["certificate_title"];
         tbObj.certIssuer = res.data.results[i]["school_name"]; //
         tbObj.certStatus = res.data.results[i]["status"];
+        this.certImageWSID.push(res.data.results[i]["cert_id"]);
         // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
         if (tbObj["certStatus"] == 0) {
           tbObj["certStatus"] = "Created";
@@ -212,12 +213,14 @@ export default {
         console.log("Certificates for this student: ", res.data);
         this.total = res.data.count;
         console.log("Total certs: ", this.total);
+        // Empty filteredData and TableData Array.
+        this.filteredData = []
+        this.tableData = []
         for (let i = 0; i < this.total; i++) {
           let tbObj = {};
           tbObj.certTitle = res.data.results[i]["certificate_title"];
           tbObj.certIssuer = res.data.results[i]["school_name"]; //
           tbObj.certStatus = res.data.results[i]["status"];
-          this.certImageWSID.push(res.data.results[i]["cert_id"]);
           // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
           if (tbObj["certStatus"] == 0) {
             tbObj["certStatus"] = "Created";
@@ -248,7 +251,7 @@ export default {
         if (this.radio == "chkPending") {
           console.log("Retrieving check pending certificates.");
           // Get check pending certificates.
-          this.filteredData = this.filteredData.filter(function(el) {
+          this.tableData = this.filteredData.filter(function(el) {
             return (
               el.certStatus != "Failed Issue" &&
               el.certStatus != "Revoked" &&
@@ -256,15 +259,14 @@ export default {
               el.certStatus != "Issuing"
             );
           });
-          this.total = this.filteredData.length;
-          this.tableData = this.filteredData;
+          this.total = this.tableData.length;
           this.loading = false;
           return;
         }
         if (this.radio == "Issued") {
           console.log("Retrieving issued certificates.");
           // Get Issued certificates.
-          this.filteredData = this.filteredData.filter(function(el) {
+          this.tableData = this.filteredData.filter(function(el) {
             return (
               el.certStatus != "Failed Issue" &&
               el.certStatus != "Revoked" &&
@@ -272,14 +274,13 @@ export default {
               el.certStatus != "Issuing"
             );
           });
-          this.total = this.filteredData.length;
-          this.tableData = this.filteredData;
+          this.total = this.tableData.length;
           this.loading = false;
           return;
         } else {
           console.log("Retrieving revoked certificates.");
           // Get revoked certificates.
-          this.filteredData = this.filteredData.filter(function(el) {
+          this.tableData = this.filteredData.filter(function(el) {
             return (
               el.certStatus != "Issued" &&
               el.certStatus != "Created" &&
@@ -287,8 +288,8 @@ export default {
               el.certStatus != "Failed Issue"
             );
           });
-          this.total = this.filteredData.length;
-          this.tableData = this.filteredData;
+          this.total = this.tableData.length;
+          this.loading = false;
         }
       });
     },
