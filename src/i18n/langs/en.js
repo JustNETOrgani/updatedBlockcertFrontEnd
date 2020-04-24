@@ -148,6 +148,10 @@ const en = {
       signatureNameFormat1: "Please input signature name",
       signatureNameFormat2: "Length should be at least two",
       signatureImageLabel: "Signature Image",
+      selectFile: "select file",
+      selectFileFormat: "jpg/png/jpeg files with a size less than 5MB",
+      selectFileFormatWarning: "The uploaded file can only be in jpeg, png, jpg format!",
+      selectFileSizeWarning: "The upload file size cannot exceed 5MB!",
       school_logoLabel: "School Logo",
       registrationSuccess: "Congratulations. Registration successful, Please Login",
       registrationFail: "Registration failed, please try again later, or contact the administrator!!!"
@@ -191,6 +195,10 @@ const en = {
       issuerFormat1: "Please enter name of school.",
       issuerFormat2: "Length should be at least six.",
       certFileLabel: "Certificate File",
+      certFileselectFile: "Certificate File",
+      selectFileFormat: "jpg/png/jpeg/pdf files with a size less than 10MB",
+      selectFileFormatWarning: "The uploaded file can only be in jpeg, png, jpg, pdf format!",
+      selectFileSizeWarning: "The upload file size cannot exceed 10MB!",
       createCertSuccess: "Congratulations. Certificate uploaded and creation successful.",
       createCertFail: "Upload and certificate creation failed, please try again later, or contact the administrator!!!"
     },
