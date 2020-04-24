@@ -43,8 +43,6 @@
                   <!-- element-loading-text="Loading Certificates..." -->
         <el-table
           v-loading="loading"
-          element-loading-spinner="el-icon-loading"
-          element-loading-background="#E6F1F9"
           :data="schTableData"
           style="width: 100%; height:92%">
           <!--Building table body-->
@@ -156,7 +154,7 @@ export default {
         { name: this.$t('common.home'), path: "/home" },
         { name: this.$t('common.issueList'), path: "/schools/issueList" }
       ],
-      radio: null,
+      radio: 'all',
       searchInput:{schSearchItem:''},
       schTableData: [],
       dialogFormVisible: false,
@@ -166,10 +164,9 @@ export default {
       currentPage: 1,
       limit: 10,
       certImageWSID: [], // To be used to view details about the certificate.
-      certData: [], // To hold the entire certificates.
       filteredData: [],
       certDataResponse: [],
-      schInfo: sessionStorage.getItem('SCHOOL-INFO'),
+      schInfo: sessionStorage.getItem('USER-TYPE'==="school"),
        ruleForm: {
         blockType: "",
         issuing_address: "",
@@ -211,6 +208,42 @@ export default {
     Head,
     Footer
   },
+  created() {
+    this.loading = true;
+    getSchCertificates().then(res=>{
+      console.log("Certificates for this School: ", res.data)
+      this.total = res.data.count;
+      console.log("Total certs: ", this.total)
+      for(let i=0; i < this.total; i++){
+        let tbObj = {}
+        // Build needed fields for table display. Only five(5) for now. More can be added anytime.
+        tbObj.certTitle = res.data.results[i]["certificate_title"]
+        tbObj.critNarrative = res.data.results[i]["criteria_narrative"]    
+        tbObj.stdName = res.data.results[i]["student_name"]
+        tbObj.stdEmail = res.data.results[i]["email"]
+        tbObj.certStatus = res.data.results[i]["status"]
+        // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
+        if(tbObj['certStatus']==0){
+          tbObj['certStatus']='Created'
+        }
+        if(tbObj['certStatus']==1){
+          tbObj['certStatus']='Issued'
+        }
+        if(tbObj['certStatus']==2){
+          tbObj['certStatus']='Issuing'
+        }
+        if(tbObj['certStatus']==3){
+          tbObj['certStatus']='Failed Issue'
+        }
+        if(tbObj['certStatus']==4){
+          tbObj['certStatus']='Revoked'
+        }
+        this.filteredData[i] = tbObj
+      }
+      this.loading = false
+      this.schTableData = this.filteredData
+    })
+  },
   methods: {
     LoginOut() {
       this.$confirm(this.$t('common.logOutDialogMessage'), this.$t('common.logout'), {
@@ -249,21 +282,19 @@ export default {
       this.loading = true
       getSchCertificates().then(res=>{
         console.log("Certificates for this School: ", res.data)
-        this.certDataResponse = res.data.results
+        //this.certDataResponse = res.data.results
         this.total = res.data.count;
-        var allCerts = res.data.results
-        var totalCert = allCerts.length
-        console.log("Total certs: ", totalCert)
+        console.log("Total certs: ", this.total)
         
-        for(let i=0; i < totalCert; i++){
+        for(let i=0; i < this.total; i++){
           let tbObj = {}
           // Build needed fields for table display. Only five(5) for now. More can be added anytime.
-          tbObj.certTitle = allCerts[i]["certificate_title"]
-          tbObj.critNarrative = allCerts[i]["criteria_narrative"]    
-          tbObj.stdName = allCerts[i]["student_name"]
-          tbObj.stdEmail = allCerts[i]["email"]
-          tbObj.certStatus = allCerts[i]["status"]
-          this.certImageWSID.push(allCerts[i]["cert_id"])
+          tbObj.certTitle = res.data.results[i]["certificate_title"]
+          tbObj.critNarrative = res.data.results[i]["criteria_narrative"]    
+          tbObj.stdName = res.data.results[i]["student_name"]
+          tbObj.stdEmail = res.data.results[i]["email"]
+          tbObj.certStatus = res.data.results[i]["status"]
+          this.certImageWSID.push(res.data.results[i]["cert_id"])
           // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
           if(tbObj['certStatus']==0){
             tbObj['certStatus']='Created'
@@ -280,39 +311,45 @@ export default {
           if(tbObj['certStatus']==4){
             tbObj['certStatus']='Revoked'
           }
-          this.certData[i] = tbObj
+          this.filteredData[i] = tbObj
         }
 
         if(this.radio=='all'){
         console.log("Retrieving all certificates.")
         // Get all certificates.
-        this.loading = false
         this.total = res.data.count;
-        console.log("CertData is: ", this.certData)
-        this.filteredData = this.certData
+        this.loading = false
         this.schTableData = this.filteredData
         return
         }
         if(this.radio=='chkPending'){
-          let chkCertData = null
           console.log("Retrieving check pending certificates.")
           // Get check pending certificates.
-          chkCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Failed Issue" && el.certStatus != "Revoked" && el.certStatus != "Issued" && el.certStatus != "Issuing") });
-          this.total = chkCertData.length
-          this.filteredData = chkCertData
+          this.filteredData = this.filteredData.filter(function(el) { 
+            return (
+              el.certStatus != "Failed Issue" && 
+              el.certStatus != "Revoked" && 
+              el.certStatus != "Issued" && 
+              el.certStatus != "Issuing"
+            ) 
+          });
+          this.total = this.filteredData.length
           this.loading = false
           this.schTableData = this.filteredData
           return
         }
         if(this.radio=='Issued'){
           console.log("Retrieving issued certificates.")
-          let issuedCertData = null
           // Get Issued certificates.
-          issuedCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Failed Issue" && el.certStatus != "Revoked" && el.certStatus != "Created" && el.certStatus != "Issuing") }); 
-          this.total = issuedCertData.length
-          this.filteredData = issuedCertData
+          this.filteredData = this.filteredData.filter(function(el) { 
+            return (
+              el.certStatus != "Failed Issue" && 
+              el.certStatus != "Revoked" && 
+              el.certStatus != "Created" && 
+              el.certStatus != "Issuing"
+            ) 
+          }); 
+          this.total = this.filteredData.length
           this.loading = false
           this.schTableData = this.filteredData
           return
@@ -320,11 +357,15 @@ export default {
         else{
           console.log("Retrieving revoked certificates.")
           // Get revoked certificates.
-           let rvkCertData = null
-          rvkCertData = this.certData.filter(function(el) { 
-            return (el.certStatus != "Issued" && el.certStatus != "Created" && el.certStatus != "Issuing" && el.certStatus != "Failed Issue") }); 
-          this.total = rvkCertData.length
-          this.filteredData = rvkCertData
+          this.filteredData = this.filteredData.filter(function(el) { 
+            return (
+              el.certStatus != "Issued" && 
+              el.certStatus != "Created" && 
+              el.certStatus != "Issuing" && 
+              el.certStatus != "Failed Issue"
+            ) 
+          }); 
+          this.total = this.filteredData.length
           this.loading = false
           this.schTableData = this.filteredData
       }
@@ -343,10 +384,10 @@ export default {
       else{
         console.log("School Certificate search initiated using: ", itemToSearch)
         // Continue to perform certificate search.
-        let filteredData = null
-        filteredData = this.certData.filter(function(el) { 
+        //let filteredCertData = null
+        this.filteredData = this.filteredData.filter(function(el) { 
             return (el.certTitle == itemToSearch || el.stdName == itemToSearch || el.stdEmail == itemToSearch) });
-        this.schTableData = filteredData
+        this.schTableData = this.filteredData
         return
       }
     },
