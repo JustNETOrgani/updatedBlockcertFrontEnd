@@ -54,10 +54,22 @@
 
                     
                      <el-form-item :label="$t('CertUpload.certFileLabel')" prop="certFile">
-                       <input 
+                       <!-- <input 
                         type="file" 
                         v-on:change="certFileSelect()" class="uploadBtns" ref="certFile" id="certFile" name="certFile" 
-                        accept=".jpeg,.png,.jpg,.pdf">
+                        accept=".jpeg,.png,.jpg,.pdf"> -->
+                        <el-upload
+                          class="upload-demo"
+                          action="doUpload"
+                          :http-request="beforeUpload"
+                        >
+                          <el-button slot="trigger" size="small" type="primary">
+                            {{$t('CertUpload.selectFile')}}
+                            </el-button>
+                          <div class="el-upload__tip" slot="tip">
+                            {{$t('CertUpload.selectFileFormat')}}
+                          </div>
+                        </el-upload>
                   </el-form-item>
                   
                 </el-form>
@@ -88,13 +100,13 @@
         </div>
       </div>
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import { getCertFileDetails } from "@/network/students"; 
 import { studentCertCreateRequest } from "@/network/students";
 
@@ -183,7 +195,7 @@ export default {
   },
   components: {
     Head,
-    Footer
+    // Footer
   },
   methods: {
     submitForm(formName) {
@@ -256,11 +268,33 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     }, 
-    certFileSelect(){ 
-      this.certFile = this.$refs.certFile.files[0];
-      console.log("Student certificate file: ", this.certFile)
+    // certFileSelect(){ 
+    //   this.certFile = this.$refs.certFile.files[0];
+    //   console.log("Student certificate file: ", this.certFile)
+    //   this.certFileformData = new FormData();
+    //   this.certFileformData.append('file', this.certFile);
+    // },
+    beforeUpload(item) {
+      let file = item.file
+      console.log(file, "文件");
+      // this.files = file;
+      const extension = file.name.split(".")[1] === "jpeg";
+      const extension2 = file.name.split(".")[1] === "png";
+      const extension3 = file.name.split(".")[1] === "jpg";
+      const extension4 = file.name.split(".")[1] === "pdf";
+      const isLt2M = file.size / 1024 / 1024 < 10;
+      if (!extension && !extension2 && !extension3 && !extension4) {
+        this.$message.warning(this.$t('CertUpload.selectFileFormatWarning'));
+        return;
+      }
+      if (!isLt2M) {
+        this.$message.warning(this.$t('CertUpload.selectFileSizeWarning'));
+        return;
+      }
+      // this.fileName = file.name;
       this.certFileformData = new FormData();
-      this.certFileformData.append('file', this.certFile);
+      this.certFileformData.append("file", file);
+      return false; // 返回false不会自动上传
     },
     logout() {
       this.$confirm(this.$t('common.logOutDialogMessage'), this.$t('common.logout'), {
@@ -268,8 +302,10 @@ export default {
           cancelButtonText: this.$t('common.cancel'),
           type: 'info'
         }).then(() => {
-          sessionStorage.removeItem("STUDENT-INFO");
+          // sessionStorage.removeItem("STUDENT-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
+          sessionStorage.removeItem('USER-TYPE');
+          sessionStorage.clear()
           this.$router.push("/login");
           this.$message({
             type: "info",

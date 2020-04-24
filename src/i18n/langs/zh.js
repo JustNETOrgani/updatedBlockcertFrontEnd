@@ -148,6 +148,10 @@ const zh = {
     signatureNameFormat1: "请在输入签署名字",
     signatureNameFormat2: "长度至少为2",
     signatureImageLabel: "签署图片",
+    selectFile: "选择文件",
+    selectFileFormat: "jpg/png/jpeg 小于5MB",
+    selectFileFormatWarning: "上传的文件只能是jpeg，png，jpg格式！",
+    selectFileSizeWarning: "上传文件大小不能超过5MB！",
     school_logoLabel: "学校徽章",
     registrationSuccess: "恭喜你, 注册成功 请登录",
     registrationFail: "注册失败，请稍后再试，或联系管理员！！！"
@@ -191,6 +195,10 @@ const zh = {
     issuerFormat1: "请输入学校名称",
     issuerFormat2: "长度至少为6",
     certFileLabel: "证书文件",
+    selectFile: "选择文件",
+    selectFileFormat: "jpg/png/jpeg/pdf 小于10MB",
+    selectFileFormatWarning: "上传的文件只能是jpeg，png，jpg, pdf格式！",
+    selectFileSizeWarning: "上传文件大小不能超过10MB！",
     createCertSuccess: "恭喜你! 证书已创建成功。",
     createCertFail: "证书创建失败，请稍后再试，或与管理员联系！！！"
   },

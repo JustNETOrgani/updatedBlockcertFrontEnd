@@ -134,13 +134,13 @@
     </el-dialog>
 
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import { getSchCertificates } from "@/network/schools";
 import { viewCertDetails } from "@/network/schools"; 
 import { createCertInterface } from "@/network/schools"; 
@@ -206,7 +206,7 @@ export default {
   },
   components: {
     Head,
-    Footer
+    // Footer
   },
   created() {
     this.loading = true;
@@ -252,8 +252,10 @@ export default {
         type: "info"
       })
         .then(() => {
-          sessionStorage.removeItem("STUDENT-INFO");
+          // sessionStorage.removeItem("STUDENT-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
+          sessionStorage.removeItem('USER-TYPE');
+          sessionStorage.clear()
           this.$router.push("/home");
           this.$message({
             type: "info",

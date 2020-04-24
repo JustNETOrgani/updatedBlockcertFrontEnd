@@ -63,10 +63,11 @@
             </template>
             <el-table-column :label="$t('common.operation')">
               <template slot-scope="scope">
-                <el-button
+                <button
                   size="mini"
-                  type="primary"
-                  @click="VerifyCert($event, scope.$index, scope.row)">{{$t('home.index.verify')}}</el-button>
+                  type="button"
+                  class="el-button el-button--primary el-button--mini"
+                  v-on:click.self="VerifyCert($event, scope.$index, scope.row)">{{$t('home.index.verify')}}</button>
                 <el-dialog
                   :title="$t('home.index.dialogTitleVerify')"
                   :visible.sync="dialog2Visible">
@@ -147,11 +148,11 @@ export default {
       prevRoute: null
     };
   },
-  beforeRouteEnter(to, from, next) {
-  next(vm => {
-    vm.prevRoute = from.fullPath
-  })
-},
+  // beforeRouteEnter(to, from, next) {
+  // next(vm => {
+  //   vm.prevRoute = from.fullPath
+  // })
+// },
   components: {
     Head,
     Footer
@@ -170,12 +171,12 @@ export default {
     },
     menuList: function() {
       if (!this.needLogin) {
-        if(sessionStorage.getItem('SCHOOL-INFO')){
+        if(sessionStorage.getItem('USER-TYPE')==="school"){
           return [
             { name: this.$t('common.home'), path: "/home" },
             { name: this.$t('common.issueList'), path: "/schools/issueList"}
           ]
-        }else if(sessionStorage.getItem('STUDENT-INFO')){
+        }else if(sessionStorage.getItem('USER-TYPE')==="student"){
           return [
             { name: this.$t('common.home'), path: "/home" },
             { name: this.$t('common.certificates'), path: "/students/certificates"}
@@ -271,7 +272,9 @@ export default {
           }
           if(isPassed){
             // 验证通过, 更改按钮样式
-            event.srcElement.parentNode.style.backgroundColor = "#67c23a"
+            // event.srcElement.parentNode.style.backgroundColor = "#67c23a"
+            // event.srcElement.style.backgroundColor = "#67c23a"
+            event.srcElement.className = "el-button el-button--success el-button--mini"
             event.srcElement.innerText = this.$t('home.index.verifyPass')
           }
           else{
@@ -284,7 +287,9 @@ export default {
           this.dialogLoading = false;
           this.VerifyResult = [{step:this.$t('home.index.requestVerifyFail.step'), status: "error", name:this.$i18n.t('home.index.requestVerifyFail.name')}]
           this.step = 0;
-          event.srcElement.parentNode.style.backgroundColor = "#f56c6c"
+          // event.srcElement.parentNode.style.backgroundColor = "#f56c6c"
+          // event.srcElement.style.backgroundColor = "#f56c6c"
+          event.srcElement.className = "el-button el-button--danger el-button--mini"
           event.srcElement.innerText = this.$t('home.index.verifyFail')
         });
     },
@@ -295,8 +300,10 @@ export default {
           type: 'info'
         }).then(() => {
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
-          sessionStorage.removeItem("SCHOOL-INFO");
-          sessionStorage.removeItem("STUDENT-INFO");
+          // sessionStorage.removeItem("SCHOOL-INFO");
+          // sessionStorage.removeItem("STUDENT-INFO");
+          sessionStorage.removeItem('USER-TYPE');
+          sessionStorage.clear()
           location.reload();
           this.$message({
             type: "info",

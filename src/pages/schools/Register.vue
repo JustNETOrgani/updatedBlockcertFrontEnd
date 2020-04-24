@@ -1,18 +1,18 @@
 <template>
   <div class="pageContainer">
     <Head :menuList="menuList">
-      <el-button class="menu-item" type="primary" @click="LoginURL" round
-        >{{$t('common.login')}}</el-button
-      >
+      <el-button class="menu-item" type="primary" @click="LoginURL" round>{{
+        $t("common.login")
+      }}</el-button>
     </Head>
     <div class="body">
       <div id="middlePage">
         <div id="msgArea">
-          <p id="welcomeMsg">{{$t('schoolRegister.welcomeMsg')}}</p>
+          <p id="welcomeMsg">{{ $t("schoolRegister.welcomeMsg") }}</p>
         </div>
         <div id="formArea">
           <p id="instruction">
-            {{$t('schoolRegister.instruction')}}
+            {{ $t("schoolRegister.instruction") }}
           </p>
           <!--Form to be filled-->
           <el-row>
@@ -26,21 +26,30 @@
                   label-width="160px"
                   class="demo-ruleForm"
                 >
-                  <el-form-item :label="$t('schoolRegister.snameLabel')" prop="sname">
+                  <el-form-item
+                    :label="$t('schoolRegister.snameLabel')"
+                    prop="sname"
+                  >
                     <el-input
                       v-model="ruleForm.sname"
                       :placeholder="$t('schoolRegister.snamePlaceholder')"
                     ></el-input>
                   </el-form-item>
 
-                  <el-form-item :label="$t('schoolRegister.schoolemailLabel')" prop="schoolemail">
+                  <el-form-item
+                    :label="$t('schoolRegister.schoolemailLabel')"
+                    prop="schoolemail"
+                  >
                     <el-input
                       v-model="ruleForm.schoolemail"
                       :placeholder="$t('schoolRegister.schoolemailPlaceholder')"
                     ></el-input>
                   </el-form-item>
 
-                  <el-form-item :label="$t('schoolRegister.passwordLabel')" prop="password">
+                  <el-form-item
+                    :label="$t('schoolRegister.passwordLabel')"
+                    prop="password"
+                  >
                     <el-input
                       v-model="ruleForm.password"
                       type="password"
@@ -48,7 +57,10 @@
                     ></el-input>
                   </el-form-item>
 
-                  <el-form-item :label="$t('schoolRegister.school_URLLabel')" prop="school_URL">
+                  <el-form-item
+                    :label="$t('schoolRegister.school_URLLabel')"
+                    prop="school_URL"
+                  >
                     <el-input
                       v-model="ruleForm.school_URL"
                       type="website"
@@ -56,7 +68,10 @@
                     ></el-input>
                   </el-form-item>
 
-                  <el-form-item :label="$t('schoolRegister.bAddressLabel')" prop="bAddress">
+                  <el-form-item
+                    :label="$t('schoolRegister.bAddressLabel')"
+                    prop="bAddress"
+                  >
                     <el-input
                       v-model="ruleForm.bAddress"
                       :placeholder="$t('schoolRegister.bAddressPlaceholder')"
@@ -64,32 +79,43 @@
                   </el-form-item>
                   <div id="blockchainType">
                     <p id="blockchainAddressTypeLink">
-                      *{{$t('schoolRegister.blockchainTypeBitcoin')}}
+                      *{{ $t("schoolRegister.blockchainTypeBitcoin") }}
                       <a href="https://www.bitaddress.org/" target="_blank"
-                        >{{$t('schoolRegister.here')}}. </a
-                      >{{$t('schoolRegister.blockchainTypeEthereum')}}<a
+                        >{{ $t("schoolRegister.here") }}. </a
+                      >{{ $t("schoolRegister.blockchainTypeEthereum")
+                      }}<a
                         href="https://www.myetherwallet.com/"
                         target="_blank"
                       >
-                        {{$t('schoolRegister.here')}}</a
+                        {{ $t("schoolRegister.here") }}</a
                       >*
                     </p>
                     <fieldset>
-                      <legend>{{$t('schoolRegister.SignatureLines')}}</legend>
+                      <legend>{{ $t("schoolRegister.SignatureLines") }}</legend>
 
-                      <el-form-item :label="$t('schoolRegister.jobTitleLabel')" prop="jobTitle">
+                      <el-form-item
+                        :label="$t('schoolRegister.jobTitleLabel')"
+                        prop="jobTitle"
+                      >
                         <el-input
                           v-model="ruleForm.jobTitle"
                           type="text"
-                          :placeholder="$t('schoolRegister.jobTitlePlaceholder')"
+                          :placeholder="
+                            $t('schoolRegister.jobTitlePlaceholder')
+                          "
                         ></el-input>
                       </el-form-item>
 
-                      <el-form-item :label="$t('schoolRegister.signatureNameLabel')" prop="signatureName">
+                      <el-form-item
+                        :label="$t('schoolRegister.signatureNameLabel')"
+                        prop="signatureName"
+                      >
                         <el-input
                           v-model="ruleForm.signatureName"
                           type="text"
-                          :placeholder="$t('schoolRegister.signatureNamePlaceholder')"
+                          :placeholder="
+                            $t('schoolRegister.signatureNamePlaceholder')
+                          "
                         ></el-input>
                       </el-form-item>
 
@@ -97,7 +123,7 @@
                         :label="$t('schoolRegister.signatureImageLabel')"
                         prop="signatureImage"
                       >
-                        <input
+                        <!-- <input
                           type="file"
                           v-on:change="onSigImgFileSelect()"
                           class="uploadBtns"
@@ -105,10 +131,25 @@
                           id="sigImg"
                           name="sigImg"
                           accept=".jpeg,.png,.jpg"
-                        />
+                        /> -->
+                        <el-upload
+                          class="upload-demo"
+                          action="doUpload"
+                          :http-request="beforeUploadsigImg"
+                        >
+                          <el-button slot="trigger" size="small" type="primary"
+                            >{{$t('schoolRegister.selectFile')}}</el-button
+                          >
+                          <div class="el-upload__tip" slot="tip">
+                            {{$t('schoolRegister.selectFileFormat')}}
+                          </div>
+                        </el-upload>
                       </el-form-item>
-                      <el-form-item :label="$t('schoolRegister.school_logoLabel')" prop="school_logo">
-                        <input
+                      <el-form-item
+                        :label="$t('schoolRegister.school_logoLabel')"
+                        prop="school_logo"
+                      >
+                        <!-- <input
                           type="file"
                           v-on:change="onSchLogoFileSelect()"
                           class="uploadBtns"
@@ -116,7 +157,19 @@
                           id="schLogo"
                           name="schLogo"
                           accept=".jpeg,.png,.jpg"
-                        />
+                        /> -->
+                        <el-upload
+                          class="upload-demo"
+                          action="doUpload"
+                          :http-request="beforeUploadschLogo"
+                        >
+                          <el-button slot="trigger" size="small" type="primary"
+                            >{{$t('schoolRegister.selectFile')}}</el-button
+                          >
+                          <div class="el-upload__tip" slot="tip">
+                            {{$t('schoolRegister.selectFileFormat')}}
+                          </div>
+                        </el-upload>
                       </el-form-item>
                     </fieldset>
                   </div>
@@ -126,14 +179,14 @@
                       type="primary"
                       :loading="registBtnLoadState"
                       @click="submitForm('ruleForm')"
-                      >{{$t('common.register')}}</el-button
+                      >{{ $t("common.register") }}</el-button
                     >
                     <!-- id="myBtnRight" 之前有的按钮-->
                     <el-button
                       class="myBtn"
                       type="danger"
                       @click="resetForm('ruleForm')"
-                      >{{$t('common.reset')}}</el-button
+                      >{{ $t("common.reset") }}</el-button
                     >
                   </el-form-item>
                 </el-form>
@@ -179,12 +232,12 @@ export default {
         sname: [
           {
             required: true,
-            message: this.$t('schoolRegister.snameFormat1'),
+            message: this.$t("schoolRegister.snameFormat1"),
             trigger: "blur"
           },
           {
             min: 2,
-            message: this.$t('schoolRegister.snameFormat2'),
+            message: this.$t("schoolRegister.snameFormat2"),
             trigger: ["blur", "change"]
           }
         ],
@@ -192,24 +245,24 @@ export default {
         jobTitle: [
           {
             required: true,
-            message: this.$t('schoolRegister.jobTitleFormat1'),
+            message: this.$t("schoolRegister.jobTitleFormat1"),
             trigger: "blur"
           },
           {
             min: 2,
-            message: this.$t('schoolRegister.jobTitleFormat2'),
+            message: this.$t("schoolRegister.jobTitleFormat2"),
             trigger: ["blur", "change"]
           }
         ],
         signatureName: [
           {
             required: true,
-            message: this.$t('schoolRegister.signatureNameFormat1'),
+            message: this.$t("schoolRegister.signatureNameFormat1"),
             trigger: "blur"
           },
           {
             min: 2,
-            message: this.$t('schoolRegister.signatureNameFormat2'),
+            message: this.$t("schoolRegister.signatureNameFormat2"),
             trigger: ["blur", "change"]
           }
         ],
@@ -217,54 +270,54 @@ export default {
         schoolemail: [
           {
             required: true,
-            message: this.$t('schoolRegister.schoolemailFormat1'),
+            message: this.$t("schoolRegister.schoolemailFormat1"),
             trigger: "blur"
           },
           {
             type: "email",
-            message: this.$t('schoolRegister.schoolemailFormat2'),
+            message: this.$t("schoolRegister.schoolemailFormat2"),
             trigger: ["blur", "change"]
           }
         ],
         password: [
           {
             required: true,
-            message: this.$t('schoolRegister.schoolemailFormat1'),
+            message: this.$t("schoolRegister.schoolemailFormat1"),
             trigger: "blur"
           },
           {
             min: 6,
-            message: this.$t('schoolRegister.schoolemailFormat2'),
+            message: this.$t("schoolRegister.schoolemailFormat2"),
             trigger: ["blur", "change"]
           }
         ],
         bAddress: [
           {
             required: true,
-            message: this.$t('schoolRegister.bAddressFormat1'),
+            message: this.$t("schoolRegister.bAddressFormat1"),
             trigger: "blur"
           },
           {
             min: 20,
-            message: this.$t('schoolRegister.bAddressFormat2'),
+            message: this.$t("schoolRegister.bAddressFormat2"),
             trigger: ["blur", "change"]
           }
         ],
         school_URL: [
           {
             required: true,
-            message: this.$t('schoolRegister.school_URLFormat1'),
+            message: this.$t("schoolRegister.school_URLFormat1"),
             trigger: "blur"
           },
           {
             min: 5,
-            message: this.$t('schoolRegister.school_URLFormat2'),
+            message: this.$t("schoolRegister.school_URLFormat2"),
             trigger: ["blur", "change"]
           }
         ]
       },
       show: true,
-      menuList: [{ name:  this.$t('common.home'), path: "/home" }]
+      menuList: [{ name: this.$t("common.home"), path: "/home" }]
     };
   },
   components: {
@@ -274,7 +327,7 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-        this.registBtnLoadState = true
+        this.registBtnLoadState = true;
         if (valid) {
           var data = {
             name: this.ruleForm.sname,
@@ -322,20 +375,18 @@ export default {
                     res
                   );
                   this.$message({
-                    message:
-                      this.$t('schoolRegister.registrationSuccess'),
+                    message: this.$t("schoolRegister.registrationSuccess"),
                     type: "success"
                   });
                   this.$router.replace("/login");
-                  this.registBtnLoadState = false
+                  this.registBtnLoadState = false;
                 })
                 .catch(function(error) {
                   console.log(error);
-                  this.registBtnLoadState = false
+                  this.registBtnLoadState = false;
                   this.$message.error({
                     title: "error",
-                    message:
-                      this.$t('schoolRegister.registrationFail'),
+                    message: this.$t("schoolRegister.registrationFail")
                   });
                 });
             });
@@ -346,23 +397,65 @@ export default {
         }
       });
     },
-    onSigImgFileSelect() {
-      this.sigImg = this.$refs.sigImg.files[0];
-      console.log("School signature file: ", this.sigImg);
-      this.sigformData = new FormData();
-      this.sigformData.append("file", this.sigImg);
-    },
-    onSchLogoFileSelect() {
-      this.schLogo = this.$refs.schLogo.files[0];
-      console.log("School logo file: ", this.schLogo);
-      this.logoformData = new FormData();
-      this.logoformData.append("file", this.schLogo);
-    },
+    // onSigImgFileSelect() {
+    //   this.sigImg = this.$refs.sigImg.files[0];
+    //   console.log("School signature file: ", this.sigImg);
+    //   this.sigformData = new FormData();
+    //   this.sigformData.append("file", this.sigImg);
+    // },
+    // onSchLogoFileSelect() {
+    //   this.schLogo = this.$refs.schLogo.files[0];
+    //   console.log("School logo file: ", this.schLogo);
+    //   this.logoformData = new FormData();
+    //   this.logoformData.append("file", this.schLogo);
+    // },
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
     LoginURL() {
       this.$router.push("/login");
+    },
+    beforeUploadschLogo(item) {
+      let file = item.file
+      console.log(file, "文件");
+      // this.files = file;
+      const extension = file.name.split(".")[1] === "jpeg";
+      const extension2 = file.name.split(".")[1] === "png";
+      const extension3 = file.name.split(".")[1] === "jpg";
+      const isLt2M = file.size / 1024 / 1024 < 5;
+      if (!extension && !extension2 && !extension3) {
+        this.$message.warning(this.$t('schoolRegister.selectFileFormatWarning'));
+        return;
+      }
+      if (!isLt2M) {
+        this.$message.warning(this.$t('schoolRegister.selectFileSizeWarning'));
+        return;
+      }
+      // this.fileName = file.name;
+      this.logoformData = new FormData();
+      this.logoformData.append("file", file);
+      return false; // 返回false不会自动上传
+    },
+    beforeUploadsigImg(item) {
+      let file = item.file
+      console.log(file, "文件");
+      // this.files = file;
+      const extension = file.name.split(".")[1] === "jpeg";
+      const extension2 = file.name.split(".")[1] === "png";
+      const extension3 = file.name.split(".")[1] === "jpg";
+      const isLt2M = file.size / 1024 / 1024 < 5;
+      if (!extension && !extension2 && !extension3) {
+        this.$message.warning(this.$t('schoolRegister.selectFileFormatWarning'));
+        return;
+      }
+      if (!isLt2M) {
+        this.$message.warning(this.$t('schoolRegister.selectFileSizeWarning'));
+        return;
+      }
+      // this.fileName = file.name;
+      this.sigformData = new FormData();
+      this.sigformData.append("file", file);
+      return false; // 返回false不会自动上传
     }
   }
 };

@@ -45,7 +45,8 @@ const router = new Router({
       name: "studentRegister",
       component: StudentRegister,
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        userType: "student"
       }
     },
     {
@@ -53,7 +54,8 @@ const router = new Router({
       name: "schoolRegister",
       component: SchoolRegister,
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        userType: "school"
       }
     },
     {
@@ -61,7 +63,8 @@ const router = new Router({
       name: "certificates",
       component: certificate,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        userType: "student"
       }
     },
     {
@@ -69,7 +72,8 @@ const router = new Router({
       name: "IssueList",
       component: IssueList,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        userType: "school"
       }
     },
     {
@@ -77,7 +81,8 @@ const router = new Router({
       name: "cert_upload",
       component: cert_upload,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        userType: "student"
       }
     },
     {
@@ -85,7 +90,8 @@ const router = new Router({
       name: "certDetails",
       component: certDetails,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        userType: "student"
       }
     },
     {
@@ -93,7 +99,8 @@ const router = new Router({
       name: "schoolCertDetails",
       component: schoolCertDetails,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        userType: "school"
       }
     },
     {
@@ -101,7 +108,8 @@ const router = new Router({
       name: "schoolCertCreate",
       component: schoolCertCreate,
       meta: {
-        requireAuth: true
+        requireAuth: true,
+        userType: "school"
       }
     }
   ],
@@ -112,8 +120,9 @@ const router = new Router({
 // 配置路由权限
 router.beforeEach((to, from, next) => {
   let auth_token = sessionStorage.getItem("API-HTTP-AUTHORIZATION");
+  let user_type = sessionStorage.getItem("USER-TYPE");
 
-  if (to.fullPath === "/login") {
+  if (to.fullPath === "/login" || to.fullPath === "/students/Register" || to.fullPath === "/schools/Register") {
     if (auth_token) {
       next({
         path: from.fullPath
@@ -127,7 +136,12 @@ else {
       // 判断该路由是否需要登录权限
       if (auth_token) {
         // 判断本地是否存在access_token
-        next();
+        if (to.meta.userType===user_type){
+          next();
+        }
+        else {
+          next("/login");
+        }
       } else {
         // 未登录,跳转到登陆页面，并且带上 将要去的地址，方便登陆后跳转。
         next("/login");

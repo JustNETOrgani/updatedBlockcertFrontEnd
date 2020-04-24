@@ -79,13 +79,13 @@
         </div>
       </div>
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 import { getCertFileDetails } from "@/network/students"; 
 import { studentCertCreateRequest } from "@/network/students";
 
@@ -178,7 +178,7 @@ export default {
     },
   components: {
     Head,
-    Footer
+    // Footer
   },
   methods: {
     submitForm(formName) {
@@ -263,8 +263,10 @@ export default {
           cancelButtonText: this.$t('common.cancel'),
           type: 'info'
         }).then(() => {
-          sessionStorage.removeItem("STUDENT-INFO");
+          // sessionStorage.removeItem("STUDENT-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
+          sessionStorage.removeItem('USER-TYPE');
+          sessionStorage.clear()
           this.$router.push("/login");
           this.$message({
             type: "info",

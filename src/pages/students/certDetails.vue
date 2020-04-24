@@ -37,13 +37,13 @@
         </el-row>
       </div>
     </div>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
 <script>
 import Head from "@/components/header";
-import Footer from "@/components/Footer";
+// import Footer from "@/components/Footer";
 
 export default {
   name: "certificate",
@@ -83,7 +83,7 @@ export default {
     
   components: {
     Head,
-    Footer
+    // Footer
   },
   methods: {
     LoginOut() {
@@ -92,10 +92,12 @@ export default {
           cancelButtonText: this.$t('common.cancel'),
           type: 'info'
         }).then(() => {
-          sessionStorage.removeItem("STUDENT-INFO");
+          // sessionStorage.removeItem("STUDENT-INFO");
           sessionStorage.removeItem("API-HTTP-AUTHORIZATION");
           sessionStorage.removeItem("Cert_Details");
           sessionStorage.removeItem("Cert_Status");
+          sessionStorage.removeItem('USER-TYPE');
+          sessionStorage.clear()
           this.$router.push("/home");
           this.$message({
             type: "info",
