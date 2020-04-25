@@ -128,8 +128,25 @@
           </el-form-item>
         </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">{{$t('common.cancel')}}</el-button>
+        <el-button :loading="issueCertBtnLoadState" @click="dialogFormVisible = false">{{$t('common.cancel')}}</el-button>
         <el-button type="primary" @click="submitForm('ruleForm')">{{$t('common.confirm')}}</el-button>
+      </span>
+    </el-dialog>
+
+    <!--Dialog for certificate revocation-->
+    <el-dialog title="Revocation reason" :visible.sync="revokeDialogBoxVisibility" width="40%">
+      <el-form 
+      :model="revokeForm"
+      class="demo-ruleForm" 
+      :rules="rules" 
+      ref="revokeForm">
+        <el-form-item label="Reason for revocation" label-width="170px" prop="revokeReason">
+          <el-input v-model="revokeForm.revokeReason" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="revokeDialogBoxVisibility = false">Cancel</el-button>
+        <el-button :loading="revokeCertBtnLoadState" type="primary" @click="certRevoke('revokeForm')">Confirm</el-button>
       </span>
     </el-dialog>
 
@@ -160,6 +177,9 @@ export default {
       dialogFormVisible: false,
       formLabelWidth: '160px',
       loading: false,
+      issueCertBtnLoadState: false,
+      revokeDialogBoxVisibility: false,
+      revokeCertBtnLoadState: false,
       total: 0,
       currentPage: 1,
       limit: 10,
@@ -172,7 +192,11 @@ export default {
         issuing_address: "",
         secret_key: "",
       },
+      revokeForm:{
+        revokeReason:"",
+      },
       requiredCertDataForIssue: null,
+      requiredDataForCertRevoke: [],
        rules: {
         blockType: [
             { required: true, message: this.$t('schoolCertificates.blockTypeFormat1'), trigger: 'change' }
@@ -200,6 +224,18 @@ export default {
             message: this.$t('schoolCertificates.secret_keyFormat2'),
             trigger: ["blur", "change"]
           }
+        ],
+        revokeReason: [
+          {
+            required: true,
+            message: 'Please, enter revocation reason',
+            trigger: "blur"
+          },
+          {
+            min: 1,
+            message: 'Field cannot be empty!',
+            trigger: ["blur", "change"]
+          }
         ]
        },
     };
@@ -217,11 +253,27 @@ export default {
       for(let i=0; i < this.total; i++){
         let tbObj = {}
         // Build needed fields for table display. Only five(5) for now. More can be added anytime.
-        tbObj.certTitle = res.data.results[i]["certificate_title"]
+        // From here, these can be deleted and the props for language tranlation changed for the Table.. 
+        tbObj.certTitle = res.data.results[i]["certificate_title"] 
         tbObj.critNarrative = res.data.results[i]["criteria_narrative"]    
         tbObj.stdName = res.data.results[i]["student_name"]
         tbObj.stdEmail = res.data.results[i]["email"]
         tbObj.certStatus = res.data.results[i]["status"]
+        // Deletion ends here. 
+        tbObj.id = res.data.results[i]["id"];
+        tbObj.certWSID = res.data.results[i]["cert_id"];
+        tbObj.cert_image_wsid = res.data.results[i]["cert_image_wsid"];
+        tbObj.certificate_description = res.data.results[i]["certificate_description"];
+        tbObj.certificate_title = res.data.results[i]["certificate_title"];
+        tbObj.criteria_narrative = res.data.results[i]["criteria_narrative"];
+        tbObj.student_name = res.data.results[i]["student_name"];
+        tbObj.student_pubkey = res.data.results[i]["student_pubkey"];
+        tbObj.email = res.data.results[i]["email"];
+        tbObj.school_pubkey = res.data.results[i]["school_pubkey"];
+        tbObj.school_name = res.data.results[i]["school_name"];
+        tbObj.status = res.data.results[i]["status"];
+        tbObj.txid = res.data.results[i]["txid"];
+        tbObj.create_time = res.data.results[i]["create_time"];
         // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
         if(tbObj['certStatus']==0){
           tbObj['certStatus']='Created'
@@ -284,19 +336,36 @@ export default {
       this.loading = true
       getSchCertificates().then(res=>{
         console.log("Certificates for this School: ", res.data)
-        //this.certDataResponse = res.data.results
+        this.certDataResponse = res.data.results
         this.total = res.data.count;
         console.log("Total certs: ", this.total)
-        
+        // Empty filteredData and TableData Array.
+        this.filteredData = []
+        this.schTableData = []
         for(let i=0; i < this.total; i++){
           let tbObj = {}
           // Build needed fields for table display. Only five(5) for now. More can be added anytime.
+          // From here, these can be deleted and the props for language tranlation changed for the Table.
           tbObj.certTitle = res.data.results[i]["certificate_title"]
           tbObj.critNarrative = res.data.results[i]["criteria_narrative"]    
           tbObj.stdName = res.data.results[i]["student_name"]
           tbObj.stdEmail = res.data.results[i]["email"]
           tbObj.certStatus = res.data.results[i]["status"]
-          this.certImageWSID.push(res.data.results[i]["cert_id"])
+          // Deletion ends here. 
+          tbObj.id = res.data.results[i]["id"];
+          tbObj.certWSID = res.data.results[i]["cert_id"]; 
+          tbObj.cert_image_wsid = res.data.results[i]["cert_image_wsid"];
+          tbObj.certificate_description = res.data.results[i]["certificate_description"];
+          tbObj.certificate_title = res.data.results[i]["certificate_title"];
+          tbObj.criteria_narrative = res.data.results[i]["criteria_narrative"];
+          tbObj.student_name = res.data.results[i]["student_name"];
+          tbObj.student_pubkey = res.data.results[i]["student_pubkey"];
+          tbObj.email = res.data.results[i]["email"];
+          tbObj.school_pubkey = res.data.results[i]["school_pubkey"];
+          tbObj.school_name = res.data.results[i]["school_name"];
+          tbObj.status = res.data.results[i]["status"];
+          tbObj.txid = res.data.results[i]["txid"];
+          tbObj.create_time = res.data.results[i]["create_time"];
           // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
           if(tbObj['certStatus']==0){
             tbObj['certStatus']='Created'
@@ -319,15 +388,14 @@ export default {
         if(this.radio=='all'){
         console.log("Retrieving all certificates.")
         // Get all certificates.
-        this.total = res.data.count;
-        this.loading = false
         this.schTableData = this.filteredData
+        this.loading = false
         return
         }
         if(this.radio=='chkPending'){
           console.log("Retrieving check pending certificates.")
           // Get check pending certificates.
-          this.filteredData = this.filteredData.filter(function(el) { 
+          this.schTableData = this.filteredData.filter(function(el) { 
             return (
               el.certStatus != "Failed Issue" && 
               el.certStatus != "Revoked" && 
@@ -335,15 +403,14 @@ export default {
               el.certStatus != "Issuing"
             ) 
           });
-          this.total = this.filteredData.length
+          this.total = this.schTableData.length
           this.loading = false
-          this.schTableData = this.filteredData
           return
         }
         if(this.radio=='Issued'){
           console.log("Retrieving issued certificates.")
           // Get Issued certificates.
-          this.filteredData = this.filteredData.filter(function(el) { 
+          this.schTableData = this.filteredData.filter(function(el) { 
             return (
               el.certStatus != "Failed Issue" && 
               el.certStatus != "Revoked" && 
@@ -351,15 +418,14 @@ export default {
               el.certStatus != "Issuing"
             ) 
           }); 
-          this.total = this.filteredData.length
+          this.total = this.schTableData.length
           this.loading = false
-          this.schTableData = this.filteredData
           return
         }
         else{
           console.log("Retrieving revoked certificates.")
           // Get revoked certificates.
-          this.filteredData = this.filteredData.filter(function(el) { 
+          this.schTableData = this.filteredData.filter(function(el) { 
             return (
               el.certStatus != "Issued" && 
               el.certStatus != "Created" && 
@@ -367,9 +433,9 @@ export default {
               el.certStatus != "Failed Issue"
             ) 
           }); 
-          this.total = this.filteredData.length
+          this.total = this.schTableData.length
           this.loading = false
-          this.schTableData = this.filteredData
+          return
       }
       })
     },
@@ -386,17 +452,19 @@ export default {
       else{
         console.log("School Certificate search initiated using: ", itemToSearch)
         // Continue to perform certificate search.
-        //let filteredCertData = null
-        this.filteredData = this.filteredData.filter(function(el) { 
+        let filteredCertData = null
+        filteredCertData = this.filteredData.filter(function(el) { 
             return (el.certTitle == itemToSearch || el.stdName == itemToSearch || el.stdEmail == itemToSearch) });
-        this.schTableData = this.filteredData
+        this.schTableData = filteredCertData
         return
       }
     },
     getSchCertDetails(index, row) {
         console.log("Getting details for index: ",index, row);
         console.log("Cert status is: ", row['certStatus'])
-        let certIDtoGetDetails = this.certImageWSID[index]
+        console.log("certIDs: ", this.schTableData)
+        let certIDtoGetDetails = this.schTableData[index]['certWSID'];
+        console.log("CertID to use: ", certIDtoGetDetails)
         let certStatusToDisplay = row['certStatus']
         viewCertDetails(certIDtoGetDetails).then(res=>{
         console.log("View details of school cert.: ", res)
@@ -406,45 +474,45 @@ export default {
         this.$message(this.$t('schoolCertificates.ShowingDetail')); 
         })
     },
-    revokeCert(index, row){
-      console.log("Getting details for index: ",index, row);
-      console.log("Current cert status is: ", row['certStatus'])
-      if(row['certStatus']=='Issued'){
-        let reasonForRevocation = ''
-        console.log("Initiating certificate revocation.")
-        this.$prompt(this.$t('schoolCertificates.revocationReasonMsg'), this.$t('schoolCertificates.revocationReason'), {
-          confirmButtonText: this.$t('common.confirm'),
-          cancelButtonText: this.$t('common.cancel'), 
-          inputPattern: /[A-Za-z]/,
-          inputErrorMessage: this.$t('schoolCertificates.inputErrorMessage')
-        }).then(({ value }) => {
-          reasonForRevocation = value
-          console.log("Revocation reason entered: ", reasonForRevocation)
+
+    certRevoke(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.revokeCertBtnLoadState = true
+          console.log("Initiating certificate revocation.")
+          let reasonForRevocation = this.revokeForm.revokeReason
           let certRevokeData = {} 
-          let certWSID = this.certImageWSID[index]
-          let schoolInfoFromRes = this.certDataResponse[0]
-          console.log("Public key for this school:", schoolInfoFromRes['school_pubkey'])
-          let schoolPubKey = (schoolInfoFromRes['school_pubkey']).substring(21)
-          console.log("Schol's Public key: ", schoolPubKey)
-          //console.log("CertData: ", this.certData)
-          //let schoolPubKey = this.certData
-          console.log("CertWSID: ", certWSID)
-          certRevokeData['cert_id'] = certWSID
+          certRevokeData['cert_id'] = this.requiredDataForCertRevoke[0]
           certRevokeData['revocationReason'] = reasonForRevocation
-          revokeCertificate(certRevokeData,schoolPubKey).then(res=>{
-            console.log("Response data from cert revocation interface: ", res.data)
+          revokeCertificate(certRevokeData,this.requiredDataForCertRevoke[1]).then(res=>{
+            console.log("Response data from cert revocation interface: ", res)
+            this.revokeCertBtnLoadState = false
+            this.revokeDialogBoxVisibility = false 
             this.$message({
               message: this.$t('schoolCertificates.revocationSuccess'),
                 type: "success"
               });
           }).catch(function(error) {
+              this.revokeCertBtnLoadState = false
+              this.revokeDialogBoxVisibility = false 
               console.log(error);
               this.$message.error({
                 title: this.$t('schoolCertificates.revocationErrorTitle'),
                 message:this.$t('schoolCertificates.revocationError')
               });
-            }); 
-        })       
+            });
+        }
+      })
+     },
+    revokeCert(index, row){
+      if(row['certStatus']=='Issued'){
+        console.log("Cert revocation for index: ",index, row);
+        let certWSID = this.schTableData[index]['certWSID']
+        console.log("CertWSID: ", certWSID)
+        let schoolPubKey = (this.schTableData[index]['school_pubkey']).substring(21)
+        console.log("School's Public key: ", schoolPubKey)
+        this.requiredDataForCertRevoke.push(certWSID,schoolPubKey)
+        this.revokeDialogBoxVisibility = true 
       }
       else{
             this.$message.error(this.$t('schoolCertificates.CanBeRevoked'));
@@ -460,7 +528,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           // Clear the page overlay and continue with processing. 
-          this.dialogFormVisible = false
+          this.issueCertBtnLoadState = true
           // Create issuer config.
           //Include blockchain details as config before sending to cert issue interface begin.  
           let api_token = null
@@ -500,10 +568,12 @@ export default {
           // Include config in certData Object to be sent to cert issue interface ends. 
           let certDatObj = Object.assign({},this.requiredCertDataForIssue) // Convert to object.
           console.log("Cert data Obj to be used: ", certDatObj)
-          let CertWSID = this.requiredCertDataForIssue['cert_id']
+          let CertWSID = this.requiredCertDataForIssue['certWSID']
           console.log("Retrieved CertWSID: ", CertWSID)
           createCertInterface(certDatObj,CertWSID).then(res=>{
             console.log("Response from Cert create interface: ", res)
+            this.issueCertBtnLoadState = false
+            this.dialogFormVisible = false
             this.$message({
               message: this.$t('schoolCertificates.CertificateCreationSuccess'),
               type: "success",
@@ -512,6 +582,8 @@ export default {
           }) // ends here
           .catch(function(error) {
               console.log(error);
+              this.issueCertBtnLoadState = false
+              this.dialogFormVisible = false
               this.$message.error({
                 title: this.$t('schoolCertificates.CertificateCreationErrorTitle'),
                 message:
@@ -531,9 +603,8 @@ export default {
         this.dialogFormVisible = true
         console.log("Cert issuance initiated.")
         console.log("Cert issuance for index: ",index, row);
-        console.log("CertWSID: ", this.certImageWSID[index])
-        let certDataToUse = this.certDataResponse[index]
-        this.requiredCertDataForIssue = certDataToUse
+        console.log("CertWSID: ", this.schTableData[index]['certWSID'])
+        this.requiredCertDataForIssue = this.schTableData[index]
       }
       else{
             this.$message.error(this.$t('schoolCertificates.CertificateAlreadyIssue'));

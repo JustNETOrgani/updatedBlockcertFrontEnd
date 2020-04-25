@@ -82,6 +82,7 @@
               <el-col :span="18" :offset="1" >
       
                     <el-button
+                      :loading="createCertBtnLoadState"
                       class="myBtn"
                       type="primary"
                       @click="submitForm('ruleForm')"
@@ -123,6 +124,7 @@ export default {
        
       },
       certFileformData:null,
+      createCertBtnLoadState: false,
       rules: {
         certTitle: [
           {
@@ -200,6 +202,7 @@ export default {
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
+        this.createCertBtnLoadState = true
         if (valid) {
           var data = {
               certificate_title: this.ruleForm.certTitle,
@@ -247,6 +250,7 @@ export default {
                 message:this.$t('CertUpload.createCertSuccess'),
                 type: "success"
               });
+              this.createCertBtnLoadState = false
               this.$router.back(); // Redirect user back to previous page (certificate list page.)
             }).catch(function(error) {
               console.log(error);
