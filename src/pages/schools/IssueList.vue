@@ -128,8 +128,8 @@
           </el-form-item>
         </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button :loading="issueCertBtnLoadState" @click="dialogFormVisible = false">{{$t('common.cancel')}}</el-button>
-        <el-button type="primary" @click="submitForm('ruleForm')">{{$t('common.confirm')}}</el-button>
+        <el-button  @click="dialogFormVisible = false">{{$t('common.cancel')}}</el-button>
+        <el-button :loading="issueCertBtnLoadState" type="primary" @click="submitForm('ruleForm')">{{$t('common.confirm')}}</el-button>
       </span>
     </el-dialog>
 
