@@ -49,7 +49,8 @@
         <el-table
           v-loading="loading"
           :data="tableData"
-          style="width: 100%; height:92%"
+          style="width: 100%"
+          max-height="450"
         >
           <!--Building table body-->
           <el-table-column prop="certTitle" :label="$t('common.certTitle')">

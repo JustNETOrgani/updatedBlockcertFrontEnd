@@ -44,7 +44,8 @@
         <el-table
           v-loading="loading"
           :data="schTableData"
-          style="width: 100%; height:92%">
+          style="width: 100%"
+          max-height="450">
           <!--Building table body-->
           <el-table-column
             prop="certTitle"
@@ -92,7 +93,8 @@
         </el-table-column>
         </el-table>
         <!--Create pagination-->
-        <el-pagination
+      </div>
+      <el-pagination
           background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -103,7 +105,6 @@
           :total="total"
         >
         </el-pagination>
-      </div>
 
       <el-dialog :title="$t('schoolCertificates.issuerDialog')" :visible.sync="dialogFormVisible" width="35%">
         <el-form 
