@@ -15,8 +15,8 @@
                 <h3>{{$t('CertDetail.h3')}}</h3>
                 <img :src="schLogo" id="logoForSchool" alt="School Logo"/>
                 <br>
-                <br>
-                <i><b>{{certDescription}}</b></i>
+                <p><b>{{certDescription}}</b></p>
+                <i><b>{{certCriteria}}</b></i>
                 <u><p>{{$t('CertDetail.awardedto')}}</p></u>
                 <i>{{stdName}}</i>
                 <br>
@@ -56,6 +56,7 @@ export default {
       issuerName: '',
       schLogo: null,
       certDescription:'',
+      certCriteria:'',
       stdName:'',
       issuedDate: '',
       certStatus:'',
@@ -70,7 +71,8 @@ export default {
             //console.log("All cert Info: ", this.certViewInfo)
             this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
             this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
-            this.certDescription = this.certViewInfo.unsign_cert.badge.criteria['narrative']
+            this.certDescription = this.certViewInfo.unsign_cert.badge['description']
+            this.certCriteria = this.certViewInfo.unsign_cert.badge.criteria['narrative']
             this.stdName = this.certViewInfo.unsign_cert.recipientProfile['name']
             this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn']) 
             this.certStatus = this.certState
@@ -84,7 +86,7 @@ export default {
     // Footer
   },
   methods: {
-    LoginOut() {
+    logUserOut() {
       this.$confirm(this.$t('common.logOutDialogMessage'), this.$t('common.logout'), {
           confirmButtonText: this.$t('common.confirm'),
           cancelButtonText: this.$t('common.cancel'),
