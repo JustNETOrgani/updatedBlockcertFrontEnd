@@ -5,8 +5,10 @@
         >{{$t('common.logout')}}</el-button
       >
     </Head>
-    <div class="body">
-      <h1 class="title">{{$t('CertDetail.title')}}</h1>
+    <div class="body" v-loading="loadingCertData">
+      <div id="titleArea">
+        <h1 class="title">{{$t('CertDetail.title')}}</h1>
+      </div>
       <!--Certificate display area-->
       <div  id="certDisplayArea" style="overflow-y:auto">
         <el-row>
@@ -36,6 +38,10 @@
             </el-col>
         </el-row>
       </div>
+      <div id="divForCertFileUploaded">
+        <p id="stdCertImageInfo">Certificate file uploaded by student</p>
+        <img :src="uploadedCertFileURL" id="uploadedCertImage" alt="Uploaded Student Certificate"/>
+      </div>
     </div>
     <!-- <Footer></Footer> -->
   </div>
@@ -52,9 +58,11 @@ export default {
       menuList: [
         { name: this.$t('common.home'), path: "/home" },
       ],
+      loadingCertData: false,
       // Data to appear on certificate.
       issuerName: '',
       schLogo: null,
+      uploadedCertFileURL: '',
       certDescription:'',
       certCriteria:'',
       stdName:'',
@@ -68,7 +76,9 @@ export default {
     };
   },
     created() {
-            //console.log("All cert Info: ", this.certViewInfo)
+            console.log("All cert Info: ", this.certViewInfo)
+            this.loadingCertData = true
+            this.uploadedCertFileURL = this.certViewInfo.unsign_cert.badge['image']
             this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
             this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
             this.certDescription = this.certViewInfo.unsign_cert.badge['description']
@@ -79,6 +89,7 @@ export default {
             this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']  
             this.stdCertID = (this.certViewInfo['wsid']).substring(10) // cert_wsid_ --- First ten characters.
             this.schPubKey = (this.certViewInfo.unsign_cert.verification['publicKey']).substring(21) // Remove first 21 characters.
+            this.loadingCertData = false
     },
     
   components: {
@@ -119,16 +130,21 @@ export default {
 
 .body {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /*display: flex;*/
+  /*flex-direction: column;*/
+  /*align-items: center;*/
   padding: 2rem;
+}
+
+#titleArea{
+  width: 100%;
 }
 
 .title {
   color: #477ea3;
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 0.3rem;
   margin-top: -1rem;
 }
 .menu-item {
@@ -138,14 +154,36 @@ export default {
 }
 
 #certDisplayArea{
+float: left;  
 width: 54%;
+margin-top: 0.3rem;
 background-color: #ffffff;
 align-items: left;
+}
+
+#stdCertImageInfo{
+  color: #477ea3;
+  font-size: 1.3rem;
+  text-align: center;
+  margin-bottom: 0.7rem;
+  margin-top: 1.3rem;
+}
+
+#divForCertFileUploaded{
+  float: right;
+  width: 45%;
+  margin-top: 0.3rem;
+  background-color: #ffffff;
 }
 
 #logoForSchool{
   width: 144px;
   height: 148px;
+}
+
+#uploadedCertImage{
+  width: 98%;
+  height: 98%;
 }
 
 #statusOfCert{
