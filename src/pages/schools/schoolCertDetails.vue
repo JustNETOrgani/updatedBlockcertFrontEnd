@@ -182,8 +182,8 @@ align-items: left;
 }
 
 #uploadedCertImage{
-  width: 98%;
-  height: 98%;
+  max-width: 100%;
+  max-height: 555px;
 }
 
 #statusOfCert{
