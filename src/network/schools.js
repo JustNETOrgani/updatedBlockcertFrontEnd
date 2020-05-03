@@ -53,12 +53,12 @@ export async function viewCertDetails(certID) {
   });
 }
 
-export async function createCertInterface(data,certID) {
-  console.log("Creating cert using interface: ", 'http://127.0.0.1:8000/v1/api/school_certificates/'+certID+'/issue/') 
+export async function certRefusalInterface(certID, refusalReason) {
+  console.log("Refusing cert using interface: ", 'http://127.0.0.1:8000/v1/api/school_certificates/'+certID+'/refuse/') 
   return certRequest({
-    url: '/v1/api/school_certificates/'+certID+'/issue/',
+    url: '/v1/api/school_certificates/'+certID+'/refuse/',
     method: 'post',
-    data: data 
+    data: refusalReason 
   });
 }
 
