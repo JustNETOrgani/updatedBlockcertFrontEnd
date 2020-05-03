@@ -240,7 +240,9 @@ const en = {
       CertificateRefusalSuccess: "Certificate refusal successful.",
       CertificateRefusalError: "Certificate refusal failed, please try again later, or contact the administrator!!!",
       CertificateRefusalErrorTitle: "error",
-      CertificateCannotBeRefused: "Sorry! Only created certificates can be refused."
+      CertificateCannotBeRefused: "Sorry! Only created certificates can be refused.",
+      RefuseReasonTitle: "Refusal reason",
+      RefuseReasonLable: "Reason for refusal",
     },
     ...enLocale
 }

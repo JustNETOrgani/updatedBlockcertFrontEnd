@@ -419,9 +419,9 @@ export default {
       let file = item.file
       console.log(file, "文件");
       // this.files = file;
-      const extension = file.name.split(".")[1] === "jpeg";
-      const extension2 = file.name.split(".")[1] === "png";
-      const extension3 = file.name.split(".")[1] === "jpg";
+      const extension = file.name.split(".").pop() === "jpeg";
+      const extension2 = file.name.split(".").pop() === "png";
+      const extension3 = file.name.split(".").pop() === "jpg";
       const isLt2M = file.size / 1024 / 1024 < 5;
       if (!extension && !extension2 && !extension3) {
         this.$message.warning(this.$t('schoolRegister.selectFileFormatWarning'));

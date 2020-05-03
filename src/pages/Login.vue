@@ -199,6 +199,7 @@ export default {
               })
               .catch(error => {
                 console.log(error);
+                this.LoginButtonLoading = false;
                 this.$message.error({
                   title: "error",
                   message: this.$t('login.loginFail')
