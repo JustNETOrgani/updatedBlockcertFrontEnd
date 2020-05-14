@@ -246,14 +246,22 @@ export default {
             console.log("Cert. File wsid is: ", data.cert_image_wsid)
           studentCertCreateRequest(data).then(res => {
               console.log("Response from student certificate upload interface",res);
+              if(res){
               this.$message({
                 message:this.$t('CertUpload.createCertSuccess'),
                 type: "success"
               });
+              }
+              else{
+                this.$message.error({
+                title: "error",
+                message:this.$t('CertUpload.createCertFail')
+              });
+              }
               this.createCertBtnLoadState = false
               this.$router.back(); // Redirect user back to previous page (certificate list page.)
-            }).catch(function(error) {
-              console.log(error);
+            }).catch(err => {
+              console.log(err);
               this.$message.error({
                 title: "error",
                 message:this.$t('CertUpload.createCertFail')
@@ -282,10 +290,10 @@ export default {
       let file = item.file
       console.log(file, "文件");
       // this.files = file;
-      const extension = file.name.split(".")[1] === "jpeg";
-      const extension2 = file.name.split(".")[1] === "png";
-      const extension3 = file.name.split(".")[1] === "jpg";
-      const extension4 = file.name.split(".")[1] === "pdf";
+      const extension = file.name.split(".").pop() === "jpeg";
+      const extension2 = file.name.split(".").pop() === "png";
+      const extension3 = file.name.split(".").pop() === "jpg";
+      const extension4 = file.name.split(".").pop() === "pdf";
       const isLt2M = file.size / 1024 / 1024 < 10;
       if (!extension && !extension2 && !extension3 && !extension4) {
         this.$message.warning(this.$t('CertUpload.selectFileFormatWarning'));

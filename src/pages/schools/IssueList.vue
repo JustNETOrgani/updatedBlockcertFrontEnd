@@ -119,19 +119,19 @@
         </el-pagination>
 
     <!--Dialog for certificate revocation-->
-    <el-dialog title="Refusal reason" :visible.sync="refuseDialogBoxVisibility" width="40%">
+    <el-dialog :title="$t('schoolCertificates.RefuseReasonTitle')" :visible.sync="refuseDialogBoxVisibility" width="40%">
       <el-form 
       :model="refuseForm"
       class="demo-ruleForm" 
       :rules="rules" 
       ref="refuseForm">
-        <el-form-item label="Reason for refusal" label-width="170px" prop="refuseReason">
+        <el-form-item :label="$t('schoolCertificates.RefuseReasonLable')" label-width="170px" prop="refuseReason">
           <el-input v-model="refuseForm.refuseReason" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="refuseDialogBoxVisibility = false">Cancel</el-button>
-        <el-button :loading="refuseCertBtnLoadState" type="primary" @click="refuseCert('refuseForm')">Confirm</el-button>
+        <el-button @click="refuseDialogBoxVisibility = false">{{$t('common.cancel')}}</el-button>
+        <el-button :loading="refuseCertBtnLoadState" type="primary" @click="refuseCert('refuseForm')">{{$t('common.confirm')}}</el-button>
       </span>
     </el-dialog>
 

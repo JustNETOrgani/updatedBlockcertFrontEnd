@@ -26,6 +26,7 @@ const zh = {
     chkPending: "检查中",
     Issued: "已颁发",
     revoked: "已撤销",
+    Refused: "已拒绝",
     certTitle: "标题",
     certIssuer: "颁发者",
     certStatus: "状态",
@@ -34,6 +35,7 @@ const zh = {
     stdEmail: "邮箱",
     certDetail: "详情",
     Issue: "颁发",
+    Refuse: "拒绝",
     Revoke: "撤销"
   },
   certstatus: {
@@ -238,7 +240,9 @@ const zh = {
     CertificateCreationSuccess: "证书创建成功",
     CertificateCreationError: "证书创建失败, 请稍后再试, 或与管理员联系！！！",
     CertificateCreationErrorTitle: "创建错误",
-    CertificateAlreadyIssue: "抱歉！证书已经颁发"
+    CertificateAlreadyIssue: "抱歉！证书已经颁发",
+    RefuseReasonTitle: "拒绝原因",
+    RefuseReasonLable: "拒绝原因",
   },
   ...zhLocale
 };
