@@ -28,6 +28,31 @@
             >
           </span>
         </el-dialog>
+        <el-button
+          class="menu-item"
+          type="primary text"
+          round
+          @click="aboutDialogVisible = true"
+          >About</el-button
+        >
+        <el-dialog
+          title="Blockcerts Signit Project"
+          :visible.sync="aboutDialogVisible"
+          width="42%"
+          center>
+          <h3> Welcome to Blockcerts Signit</h3>
+          <p>The existing academic certificate creation, issuance and subsequent verification processes by prospective 
+            employers of students are centralized and bedeviled with a lot of challenges. Schools have become Trusted Third Parties (TTPs)
+            hence must be trusted by employers. Moreover, current certificates can easily be tampered with.
+          </p>
+          <p>It is to solve these and other challenges that Blockerts Signit comes in by leveraging the power of
+            <b>Blockchain technology</b>. Currently, for backward compactibility, we allow students to upload their existing
+            certificates and subsequently permit their respective schools to authenticate and upon satisfaction issue it
+            on the blockchain making it <b>immutable</b> and at the same time <b>globally verifiable.</b>
+          </p>
+          <p>It must however be noted that schools reserve the right to <i>revoke</i> an issued certificate at any point in time.</p>
+          <p>We hope to continue adding more features to this platform.</p> 
+        </el-dialog>
       </div>
       <div v-else>
         <el-button class="menu-item" type="primary" round @click="logUserOut">{{$t('common.logout')}}</el-button>
@@ -121,6 +146,7 @@ export default {
       RegisterType: "student",
       // 注册对话框是否可见
       dialogVisible: false,
+      aboutDialogVisible: false,
       // 验证对话框是否可见
       dialog2Visible: false,
       // 验证对话框验证结果是否加载
