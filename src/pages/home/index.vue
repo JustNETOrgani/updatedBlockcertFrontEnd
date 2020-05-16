@@ -33,25 +33,20 @@
           type="primary text"
           round
           @click="aboutDialogVisible = true"
-          >About</el-button
+          >{{$t('home.about.about')}}</el-button
         >
         <el-dialog
           title="Blockcerts Signit Project"
           :visible.sync="aboutDialogVisible"
           width="42%"
           center>
-          <h3> Welcome to Blockcerts Signit</h3>
-          <p>The existing academic certificate creation, issuance and subsequent verification processes by prospective 
-            employers of students are centralized and bedeviled with a lot of challenges. Schools have become Trusted Third Parties (TTPs)
-            hence must be trusted by employers. Moreover, current certificates can easily be tampered with.
+          <h3>{{$t('home.about.h3')}}</h3>
+          <p>{{$t('home.about.p1')}}</p>
+          <p>{{$t('home.about.p2_1')}}
+            <b>{{$t('home.about.b1')}}</b>{{$t('home.about.p2_2')}}<b>{{$t('home.about.b2')}}</b>{{$t('home.about.p2_3')}}<b>{{$t('home.about.b3')}}</b>
           </p>
-          <p>It is to solve these and other challenges that Blockerts Signit comes in by leveraging the power of
-            <b>Blockchain technology</b>. Currently, for backward compactibility, we allow students to upload their existing
-            certificates and subsequently permit their respective schools to authenticate and upon satisfaction issue it
-            on the blockchain making it <b>immutable</b> and at the same time <b>globally verifiable.</b>
-          </p>
-          <p>It must however be noted that schools reserve the right to <i>revoke</i> an issued certificate at any point in time.</p>
-          <p>We hope to continue adding more features to this platform.</p> 
+          <p>{{$t('home.about.p3_1')}}<i>{{$t('home.about.i')}}</i>{{$t('home.about.p3_2')}}</p>
+          <p>{{$t('home.about.p4')}}</p> 
         </el-dialog>
       </div>
       <div v-else>

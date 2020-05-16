@@ -66,6 +66,21 @@ const en = {
             step: "step 1",
             name: "Validation"
           }
+        },
+        about:{
+          about: "About",
+          h3: "Welcome to Blockcerts Signit",
+          p1: "The existing academic certificate creation, issuance and subsequent verification processes by prospective employers of students are centralized and bedeviled with a lot of challenges. Schools have become Trusted Third Parties (TTPs) hence must be trusted by employers. Moreover, current certificates can easily be tampered with.",
+          p2_1: "It is to solve these and other challenges that Blockerts Signit comes in by leveraging the power of",
+          p2_2: ". Currently, for backward compactibility, we allow students to upload their existing certificates and subsequently permit their respective schools to authenticate and upon satisfaction issue it on the blockchain making it ",
+          p2_3: " and at the same time ",
+          b1: "Blockchain technology",
+          b2: "immutable",
+          b3: "globally verifiable.",
+          p3_1: "It must however be noted that schools reserve the right to ",
+          p3_2: " an issued certificate at any point in time.",
+          i: "revoke",
+          p4: "We hope to continue adding more features to this platform.",
         }
       },
     login: {
