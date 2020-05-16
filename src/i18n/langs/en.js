@@ -174,7 +174,8 @@ const en = {
       StatusofCertificate: "Status of Certificate",
       Signedby: "Signed by",
       CertificateID: "Certificate's ID",
-      SchoolPublicKey: "School's Public Key"
+      SchoolPublicKey: "School's Public Key",
+      stdCertImageInfo: "Certificate file uploaded by student"
     },
     CertUpload: {
       welcomeMsg: "Welcome to Certificate upload",

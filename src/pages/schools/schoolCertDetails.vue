@@ -39,7 +39,7 @@
         </el-row>
       </div>
       <div id="divForCertFileUploaded">
-        <p id="stdCertImageInfo">Certificate file uploaded by student</p>
+        <p id="stdCertImageInfo">{{$t('CertDetail.stdCertImageInfo')}}</p>
         <img :src="uploadedCertFileURL" id="uploadedCertImage" alt="Uploaded Student Certificate"/>
       </div>
     </div>

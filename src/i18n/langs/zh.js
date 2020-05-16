@@ -174,7 +174,8 @@ const zh = {
     StatusofCertificate: "证书状态",
     Signedby: "签名者",
     CertificateID: "证书ID",
-    SchoolPublicKey: "学校公钥"
+    SchoolPublicKey: "学校公钥",
+    stdCertImageInfo: "学生上传的证书信息"
   },
   CertUpload: {
     welcomeMsg: "欢迎使用证书上传",
