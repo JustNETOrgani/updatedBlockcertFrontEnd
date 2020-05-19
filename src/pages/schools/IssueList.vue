@@ -395,7 +395,7 @@ export default {
       })
      },
     revokeCert(index, row){
-      if(row['status']==='Issued'){
+      if(row['status']===1){
         console.log("Cert revocation for index: ",index, row);
         let certWSID = "cert_wsid_"+this.schTableData[index]['cert_id']
         console.log("CertWSID: ", certWSID)
@@ -453,7 +453,7 @@ export default {
     },
     certRefuse(index, row){
       console.log(row)
-      if(row['status']==='Created'){
+      if(row['status']===0){
         console.log("Cert refusal initiated.")
         console.log("Cert refusal for index: ",index, row);
         console.log("CertWSID: ", this.schTableData[index]['cert_id'])
