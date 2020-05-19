@@ -1,17 +1,18 @@
 <template>
   <div class="certificate">
-    <Head :menuList="menuList">
+    <!-- <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" round @click="LoginOut"
         >{{$t('common.logout')}}</el-button
       >
-    </Head>
-    <div class="body">
-      <h1 class="title">{{$t('CertDetail.title')}}</h1>
+    </Head> -->
+    <el-link icon="el-icon-arrow-left" style="width: 100px;margin:10px;font-size:20px" @click.native="toCertList()">{{$t('CertDetail.back')}}</el-link>
+    <div class="body" v-loading="loadingCertData">
+      <!-- <h1 class="title">{{$t('CertDetail.title')}}</h1> -->
       <!--Certificate display area-->
       <div  id="certDisplayArea" style="overflow-y:auto">
         <el-row>
             <el-col :span="18" :offset="2">
-                <h2>{{issuerName}}</h2>
+                <h2 style="margin-top:0.83rem">{{issuerName}}</h2>
                 <h3>{{$t('CertDetail.h3')}}</h3>
                 <img :src="schLogo" id="logoForSchool" alt="School Logo"/>
                 <br>
@@ -25,6 +26,7 @@
                 <p><b>{{$t('CertDetail.Signedby')}}: {{jobTible}}</b></p>
             </el-col>
         </el-row>
+        <img :src="uploadedCertFileURL" alt="Uploaded Student Certificate"/>
         <el-row>
             <el-col :span="8" :offset="1">
                 <p><b>{{$t('CertDetail.CertificateID')}}: </b></p> 
@@ -42,8 +44,9 @@
 </template>
 
 <script>
-import Head from "@/components/header";
+// import Head from "@/components/header";
 // import Footer from "@/components/Footer";
+import { viewCertDetails } from "@/network/students";
 
 export default {
   name: "certificate",
@@ -52,6 +55,7 @@ export default {
       menuList: [
         { name: this.$t('common.home'), path: "/home" },
       ],
+      loadingCertData: false,
       // Data to appear on certificate.
       issuerName: '',
       schLogo: null,
@@ -62,27 +66,44 @@ export default {
       jobTible: '',
       stdCertID: '',
       certStatus:'',
+      uploadedCertFileURL:'',
       schPubKey: '',
       certViewInfo: JSON.parse(sessionStorage.getItem('Cert_Details')),
       certState: sessionStorage.getItem('Cert_Status')
     };
   },
     created() {
-            //console.log("All cert Info: ", this.certViewInfo)
-            this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
-            this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
-            this.certDescription = this.certViewInfo.unsign_cert.badge['description']
-            this.certCriteria = this.certViewInfo.unsign_cert.badge.criteria['narrative']
-            this.stdName = this.certViewInfo.unsign_cert.recipientProfile['name']
-            this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn'])
-            this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']
-            this.certStatus = this.certState
-            this.stdCertID = (this.certViewInfo['wsid']).substring(10) // cert_wsid_ --- First ten characters.
-            this.schPubKey = (this.certViewInfo.unsign_cert.verification['publicKey']).substring(21) // Remove first 21 characters.
+      this.loadingCertData = true
+      const certId = this.$route.params.certId;
+        viewCertDetails(certId).then(res=>{
+          console.log("View details of school cert.: ", res)
+          // this.$store.commit("certViewData", res.data);
+          // this.$store.commit("set_certDispStatus", certStatusToDisplay);
+          // this.$router.push("/schools/certIDtoGetDetails/CertDetails");
+          this.$message(this.$t('schoolCertificates.ShowingDetail')); 
+          this.certViewInfo = res.data
+          //console.log("All cert Info: ", this.certViewInfo)
+          this.uploadedCertFileURL = this.certViewInfo.unsign_cert.badge['image']
+          this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
+          this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
+          this.certDescription = this.certViewInfo.unsign_cert.badge['description']
+          this.certCriteria = this.certViewInfo.unsign_cert.badge.criteria['narrative']
+          this.stdName = this.certViewInfo.unsign_cert.recipientProfile['name']
+          this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn'])
+          this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']
+          this.certStatus = this.certState
+          this.stdCertID = (this.certViewInfo['wsid']).substring(10) // cert_wsid_ --- First ten characters.
+          this.schPubKey = (this.certViewInfo.unsign_cert.verification['publicKey']).substring(21)
+          this.loadingCertData = false
+    }).catch(error => {
+      console.log(error);
+      this.$message.error(this.$t('CertDetail.certDetailFail'));
+      this.loadingCertData = false
+    }) // Remove first 21 characters.
     },
     
   components: {
-    Head,
+    // Head,
     // Footer
   },
   methods: {
@@ -106,6 +127,9 @@ export default {
         }).catch(() => {       
         });
     }, 
+    toCertList(){
+      this.$router.push("/students/certificates");
+    }
   }
 };
 </script>
@@ -122,7 +146,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  /* padding: 2rem; */
 }
 
 .title {
@@ -141,6 +165,7 @@ export default {
 width: 54%;
 background-color: #ffffff;
 align-items: left;
+margin-top: 0.3rem;
 }
 
 #logoForSchool{

@@ -194,7 +194,7 @@ const en = {
       SchoolPublicKey: "School's Public Key",
       stdCertImageInfo: "Certificate file uploaded by student",
       certDetailFail: "Obtain certificate details failed",
-      back: "go back"
+      back: "Back"
     },
     CertUpload: {
       welcomeMsg: "Welcome to Certificate upload",

@@ -52,18 +52,17 @@
           >
           <!--Building table body--> 
           <template v-for="(item, index) in tableLabel">
-              <el-table-column
-                :key="index"
-                :prop="item.prop"
-                :label="item.label" :width="item.width">
-              </el-table-column>
-            </template>
+            <el-table-column
+              :key="index"
+              :prop="item.prop"
+              :label="item.label" :width="item.width">
+            </el-table-column>
+          </template>
           <el-table-column
           :label="$t('common.operation')" width="300px">
           <template slot-scope="scope">
             <el-button
               size="mini"
-              type="info"
               @click="getSchCertDetails(scope.$index, scope.row)">{{$t('common.certDetail')}}</el-button>
               <el-button
               size="mini"
@@ -351,14 +350,15 @@ export default {
         console.log("Getting details for index: ",index, row);
         // console.log("Cert status is: ", row['certStatus'])
         // console.log("certIDs: ", this.schTableData)
+        let certStatusToDisplay = row.statusLab;
+        this.$store.commit("set_certDispStatus", certStatusToDisplay);
         let certIDtoGetDetails = "cert_wsid_"+row.cert_id;
         console.log("CertID to use: ", certIDtoGetDetails)
         this.$router.push(`/schools/${certIDtoGetDetails}/CertDetails`);
-        // let certStatusToDisplay = row['certStatus']
+        
         // viewCertDetails(certIDtoGetDetails).then(res=>{
         // console.log("View details of school cert.: ", res)
         // this.$store.commit("certViewData", res.data);
-        // this.$store.commit("set_certDispStatus", certStatusToDisplay);
         // this.$router.push("/schools/certIDtoGetDetails/CertDetails");
         // this.$message(this.$t('schoolCertificates.ShowingDetail')); 
         // })

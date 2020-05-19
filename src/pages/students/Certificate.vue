@@ -14,7 +14,8 @@
           <label>{{$t('studentCertificates.listOption')}}:</label>
           <el-radio-group v-model="radio" @input="onSelect">
             <el-radio label="all">{{$t('common.all')}}</el-radio>
-            <el-radio label="chkPending">{{$t('common.chkPending')}}</el-radio>
+            <!-- <el-radio label="chkPending">{{$t('common.chkPending')}}</el-radio> -->
+            <el-radio label="Created">{{$t('common.Created')}}</el-radio>
             <el-radio label="Issued">{{$t('common.Issued')}}</el-radio>
             <el-radio label="revoked">{{$t('common.revoked')}}</el-radio>
           </el-radio-group>
@@ -44,22 +45,22 @@
         </div>
       </div>
       <!--Certificate display area-->
-      <div id="certDisplayArea" style="overflow-y:auto">
+      <div id="certDisplayArea">
         <!--Building table-->
         <el-table
           v-loading="loading"
           :data="tableData"
           style="width: 100%"
-          max-height="450"
-        >
+          max-height="450">
           <!--Building table body-->
-          <el-table-column prop="certTitle" :label="$t('common.certTitle')">
-          </el-table-column>
-          <el-table-column prop="certIssuer" :label="$t('common.school')">
-          </el-table-column>
-          <el-table-column prop="certStatus" :label="$t('common.certStatus')">
-          </el-table-column>
-          <el-table-column align="right">
+          <template v-for="(item, index) in tableLabel">
+            <el-table-column
+              :key="index"
+              :prop="item.prop"
+              :label="item.label">
+            </el-table-column>
+          </template>
+          <el-table-column :label="$t('common.operation')">
             <template slot-scope="scope">
               <el-button
                 size="mini"
@@ -91,7 +92,6 @@
 import Head from "@/components/header";
 // import Footer from "@/components/Footer";
 import { getCertificates } from "@/network/students";
-import { viewCertDetails } from "@/network/students";
 
 export default {
   name: "certificate",
@@ -104,11 +104,18 @@ export default {
       radio: 'all',
       searchInput: '',
       tableData: [],
-      loading: false,
+      loading: true,
       total: 0,
       currentPage: 1,
       limit: 10,
-      filteredData: []
+      filteredData: [],
+      tableLabel: [
+        { label: this.$t('common.certTitle'), prop: "certificate_title"},
+        { label: this.$t('common.school'), prop: "school_name"},
+        { label: this.$t('common.stdName'), prop: "student_name"},
+        { label: this.$t('common.stdEmail'), prop: "email"},
+        { label: this.$t('common.certStatus'), prop: "statusLab"},
+      ]
     };
   },
   components: {
@@ -116,37 +123,12 @@ export default {
     // Footer
   },
   created() {
-    this.loading = true;
-    getCertificates().then(res => {
-      console.log("Certificates for this student on page load: ", res.data);
-      this.total = res.data.count;
-      for (let i = 0; i < this.total; i++) {
-        let tbObj = {};
-        tbObj.certTitle = res.data.results[i]["certificate_title"];
-        tbObj.certIssuer = res.data.results[i]["school_name"]; //
-        tbObj.certStatus = res.data.results[i]["status"];
-        tbObj.certWSID = res.data.results[i]["cert_id"];
-        // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
-        if (tbObj["certStatus"] == 0) {
-          tbObj["certStatus"] = "Created";
-        }
-        if (tbObj["certStatus"] == 1) {
-          tbObj["certStatus"] = "Issued";
-        }
-        if (tbObj["certStatus"] == 2) {
-          tbObj["certStatus"] = "Issuing";
-        }
-        if (tbObj["certStatus"] == 3) {
-          tbObj["certStatus"] = "Failed Issue";
-        }
-        if (tbObj["certStatus"] == 4) {
-          tbObj["certStatus"] = "Revoked";
-        }
-        this.filteredData[i] = tbObj;
-        }
-      this.loading = false;
-      this.tableData = this.filteredData
-     })
+    this.params = {
+        offset: (this.currentPage-1)*this.limit,
+        limit: this.limit,
+        ordering: "-create_time"
+    }
+    this.getCerts(this.params);
   },
   methods: {
     LoginOut() {
@@ -168,6 +150,41 @@ export default {
         })
         .catch(() => {});
     },
+    getCerts(params){
+      this.loading = true;
+      getCertificates(params).then(res => {
+        this.total = res.data.count;
+        console.log("Total certs: ", this.total);
+        this.tableData = res.data.results;
+        for(let i=0; i < this.tableData.length; i++){
+          // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
+          if(this.tableData[i].status==0){
+            this.tableData[i].statusLab=this.$t('certstatus.Created')
+          }
+          if(this.tableData[i].status==1){
+            this.tableData[i].statusLab=this.$t('certstatus.Issued')
+          }
+          if(this.tableData[i].status==2){
+            this.tableData[i].statusLab=this.$t('certstatus.Issuing')
+          }
+          if(this.tableData[i].status==3){
+            this.tableData[i].statusLab=this.$t('certstatus.FailedIssue')
+          }
+          if(this.tableData[i].status==4){
+            this.tableData[i].statusLab=this.$t('certstatus.Revoked')
+          }
+          if(this.tableData[i].status==5){
+            this.tableData[i].statusLab=this.$t('certstatus.Refused')
+          }
+        }
+        this.loading = false
+        }
+        ).catch(error => {
+        console.log(error)
+        this.$message.error(this.$t('home.index.getVerifyListFail'));
+        this.loading = false
+    })
+    },
     toCertUploadPage() {
       this.$router.push("/students/cert_upload");
     },
@@ -178,135 +195,91 @@ export default {
           type: "warning",
           message: this.$t('common.stdSearchItemFormat')
         });
-      } else {
-        console.log("Certificate search initiated using: ", this.searchInput);
-        // Continue to perform certificate search.
-        let searchCriteria = this.searchInput
-        let filteredCertData = null;
-        filteredCertData = this.filteredData.filter(function(el) {
-          console.log("Inside filter, using: ", searchCriteria)
-          return el.certTitle == searchCriteria|| el.certIssuer == searchCriteria;
-        });
-        this.tableData = filteredCertData;
+      }else{
+        this.params.certificate_title = decodeURI(this.searchInput)
+        this.getCerts(this.params);
+        return
       }
     },
     handleSizeChange(size) {
       console.log(`${size} items per page`);
-      this.limit = size;
-      this.currentCertData();
+      this.params.limit = size
+      this.getCerts(this.params);
     },
     handleCurrentChange(current) {
       console.log(`current page: ${current}`);
       this.currentPage = current;
-      this.currentCertData();
+      this.params.offset = (this.currentPage-1)*this.limit;
+      this.getCerts(this.params);
     },
-    currentCertData(){
-     this.tableData = this.filteredData
-    },
+    // currentCertData(){
+    //  this.tableData = this.filteredData
+    // },
 
     onSelect(data) {
       this.radio = data;
       console.log("User has selected:", this.radio);
-      this.loading = true;
-      // Perform action based on student's selection.
-      getCertificates().then(res => {
-        console.log("Certificates for this student: ", res.data);
-        this.total = res.data.count;
-        console.log("Total certs: ", this.total);
-        // Empty filteredData and TableData Array.
-        this.filteredData = []
-        this.tableData = []
-        for (let i = 0; i < this.total; i++) {
-          let tbObj = {};
-          tbObj.certTitle = res.data.results[i]["certificate_title"];
-          tbObj.certIssuer = res.data.results[i]["school_name"]; //
-          tbObj.certStatus = res.data.results[i]["status"];
-          tbObj.certWSID = res.data.results[i]["cert_id"];
-          // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
-          if (tbObj["certStatus"] == 0) {
-            tbObj["certStatus"] = "Created";
-          }
-          if (tbObj["certStatus"] == 1) {
-            tbObj["certStatus"] = "Issued";
-          }
-          if (tbObj["certStatus"] == 2) {
-            tbObj["certStatus"] = "Issuing";
-          }
-          if (tbObj["certStatus"] == 3) {
-            tbObj["certStatus"] = "Failed Issue";
-          }
-          if (tbObj["certStatus"] == 4) {
-            tbObj["certStatus"] = "Revoked";
-          }
-          this.filteredData[i] = tbObj;
+      if(this.radio=='all'){
+      this.params = {
+        offset: (this.currentPage-1)*this.limit,
+        limit: this.limit,
+        ordering: "-create_time"
         }
-
-        if (this.radio == "all") {
-          console.log("Retrieving all certificates.");
-          // Get all certificates.
-          this.tableData = this.filteredData;
-          this.loading = false;
-          return;
+      }
+      else if(this.radio=='Created'){
+      this.params = {
+        offset: (this.currentPage-1)*this.limit,
+        limit: this.limit,
+        ordering: "-create_time",
+        status: 0
         }
-        if (this.radio == "chkPending") {
-          console.log("Retrieving check pending certificates.");
-          // Get check pending certificates.
-          this.tableData = this.filteredData.filter(function(el) {
-            return (
-              el.certStatus != "Failed Issue" &&
-              el.certStatus != "Revoked" &&
-              el.certStatus != "Issued" &&
-              el.certStatus != "Issuing"
-            );
-          });
-          this.total = this.tableData.length;
-          this.loading = false;
-          return;
+      }
+      else if(this.radio=='Issued'){
+      this.params = {
+        offset: (this.currentPage-1)*this.limit,
+        limit: this.limit,
+        ordering: "-create_time",
+        status: 1
         }
-        if (this.radio == "Issued") {
-          console.log("Retrieving issued certificates.");
-          // Get Issued certificates.
-          this.tableData = this.filteredData.filter(function(el) {
-            return (
-              el.certStatus != "Failed Issue" &&
-              el.certStatus != "Revoked" &&
-              el.certStatus != "Created" &&
-              el.certStatus != "Issuing"
-            );
-          });
-          this.total = this.tableData.length;
-          this.loading = false;
-          return;
-        } else {
-          console.log("Retrieving revoked certificates.");
-          // Get revoked certificates.
-          this.tableData = this.filteredData.filter(function(el) {
-            return (
-              el.certStatus != "Issued" &&
-              el.certStatus != "Created" &&
-              el.certStatus != "Issuing" &&
-              el.certStatus != "Failed Issue"
-            );
-          });
-          this.total = this.tableData.length;
-          this.loading = false;
-        }
-      });
+      }
+      else if(this.radio=='Refused'){
+        this.params = {
+          offset: (this.currentPage-1)*this.limit,
+          limit: this.limit,
+          ordering: "-create_time",
+          status: 5
+          }
+      }
+      else{
+        // revoked
+        this.params = {
+          offset: (this.currentPage-1)*this.limit,
+          limit: this.limit,
+          ordering: "-create_time",
+          status: 4
+          }
+      }
+      this.getCerts(this.params);
     },
     getCertDetails(index, row) {
       console.log("Getting details for index: ", index, row);
-      console.log("Cert status is: ", row["certStatus"]);
-      console.log("certIDs: ", this.tableData)
-      let certIDtoGetDetails = this.tableData[index]['certWSID'];
+      let certStatusToDisplay = row.statusLab;
+      this.$store.commit("set_certDispStatus", certStatusToDisplay);
+      let certIDtoGetDetails = row.cert_id;
       console.log("CertID to use: ", certIDtoGetDetails)
-      let certStatusToDisplay = row["certStatus"];
-      viewCertDetails(certIDtoGetDetails).then(res => {
-        console.log("View details of cert.: ", res);
-        this.$store.commit("certViewData", res.data);
-        this.$store.commit("set_certDispStatus", certStatusToDisplay);
-        this.$router.push("/students/certDetails");
-        this.$message(this.$t('studentCertificates.certificateDetailInfo'));
-      });
+      this.$router.push(`/students/${certIDtoGetDetails}/CertDetails`);
+      // console.log("Cert status is: ", row["certStatus"]);
+      // console.log("certIDs: ", this.tableData)
+      // let certIDtoGetDetails = this.tableData[index]['certWSID'];
+      // console.log("CertID to use: ", certIDtoGetDetails)
+      // let certStatusToDisplay = row["certStatus"];
+      // viewCertDetails(certIDtoGetDetails).then(res => {
+      //   console.log("View details of cert.: ", res);
+      //   this.$store.commit("certViewData", res.data);
+      //   this.$store.commit("set_certDispStatus", certStatusToDisplay);
+      //   this.$router.push("/students/certDetails");
+      //   this.$message(this.$t('studentCertificates.certificateDetailInfo'));
+      // });
     }
   }
 };
@@ -371,7 +344,7 @@ label {
   width: 97%;
   height: 85%;
   background-color: #ffffff;
-  margin-top: -1.8rem;
+  margin-top: 0.5rem;
   align-items: left;
 }
 #certTitleDiv {

@@ -1,8 +1,9 @@
 <template>
   <div class="pageContainer">
-    <Head :menuList="menuList">
+    <!-- <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" @click="logout" round>{{$t('common.logout')}}</el-button>
-    </Head>
+    </Head> -->
+    <el-link icon="el-icon-arrow-left" style="width: 100px;margin:10px;font-size:20px;float:left;" @click.native="toCertList()">{{$t('CertDetail.back')}}</el-link>
     <div class="body">
       <div id="middlePage">
         <div id="msgArea">
@@ -19,9 +20,7 @@
                   :rules="rules"
                   ref="ruleForm"
                   label-width="180px"
-                  class="demo-ruleForm"
-                >
-
+                  class="demo-ruleForm">
                 <el-form-item :label="$t('CertUpload.certTitleLabel')" prop="certTitle">
                       <el-input
                         v-model="ruleForm.certTitle"
@@ -106,7 +105,7 @@
 </template>
 
 <script>
-import Head from "@/components/header";
+// import Head from "@/components/header";
 // import Footer from "@/components/Footer";
 import { getCertFileDetails } from "@/network/students"; 
 import { studentCertCreateRequest } from "@/network/students";
@@ -196,7 +195,7 @@ export default {
     };
   },
   components: {
-    Head,
+    // Head,
     // Footer
   },
   methods: {
@@ -325,6 +324,9 @@ export default {
           });
         }).catch(() => {       
         });
+    },
+    toCertList(){
+      this.$router.push("/students/certificates");
     }
   }
 };
@@ -350,12 +352,13 @@ export default {
 #msgArea {
   width: 98%;
   margin-bottom: 1rem;
-  margin-top: -5%;
+  /* margin-top: -5%; */
 }
 #welcomeMsg {
   color: #477ea3;
   font-size: 1.5rem;
   padding-top: 1rem;
+  margin-top:0.83rem
 }
 
 #instruction {
@@ -368,7 +371,8 @@ export default {
 
 #middlePage {
   width: 50%;
-   background-color: #ffffff;
+  background-color: #ffffff;
+  margin-top: 2rem;
 }
 
 #blockchainType {

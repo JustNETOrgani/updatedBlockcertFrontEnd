@@ -5,7 +5,7 @@
         >{{$t('common.logout')}}</el-button
       >
     </Head> -->
-    <el-link icon="el-icon-arrow-left" style="width: 250px;margin:10px;font-size:20px" @click.native="toIssueList()">{{$t('CertDetail.back')}}</el-link>
+    <el-link icon="el-icon-arrow-left" style="width: 100px;margin:10px;font-size:20px" @click.native="toIssueList()">{{$t('CertDetail.back')}}</el-link>
     <!-- <el-button type="primary" icon="el-icon-arrow-left" style="width: 100px; margin:10px">返回</el-button> -->
     <div class="body" v-loading="loadingCertData">
       <div id="titleArea">
@@ -75,7 +75,7 @@ export default {
       stdCertID: '',
       schPubKey: '',
       // certViewInfo: JSON.parse(sessionStorage.getItem('Cert_Details')), 
-      // certState: sessionStorage.getItem('Cert_Status')
+      certState: sessionStorage.getItem('Cert_Status'),
       certViewInfo: ''
     };
   },
@@ -90,18 +90,18 @@ export default {
           // this.$router.push("/schools/certIDtoGetDetails/CertDetails");
           this.$message(this.$t('schoolCertificates.ShowingDetail')); 
           this.certViewInfo = res.data
-        this.uploadedCertFileURL = this.certViewInfo.unsign_cert.badge['image']
-        this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
-        this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
-        this.certDescription = this.certViewInfo.unsign_cert.badge['description']
-        this.certCriteria = this.certViewInfo.unsign_cert.badge.criteria['narrative']
-        this.stdName = this.certViewInfo.unsign_cert.recipientProfile['name']
-        this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn']) 
-        // this.certStatus = this.certState
-        this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']  
-        this.stdCertID = (this.certViewInfo['wsid']).substring(10) // cert_wsid_ --- First ten characters.
-        this.schPubKey = (this.certViewInfo.unsign_cert.verification['publicKey']).substring(21) // Remove first 21 characters.
-        this.loadingCertData = false
+          this.uploadedCertFileURL = this.certViewInfo.unsign_cert.badge['image']
+          this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
+          this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
+          this.certDescription = this.certViewInfo.unsign_cert.badge['description']
+          this.certCriteria = this.certViewInfo.unsign_cert.badge.criteria['narrative']
+          this.stdName = this.certViewInfo.unsign_cert.recipientProfile['name']
+          this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn']) 
+          this.certStatus = this.certState
+          this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']  
+          this.stdCertID = (this.certViewInfo['wsid']).substring(10) // cert_wsid_ --- First ten characters.
+          this.schPubKey = (this.certViewInfo.unsign_cert.verification['publicKey']).substring(21) // Remove first 21 characters.
+          this.loadingCertData = false
     }).catch(error => {
       console.log(error);
       this.$message.error(this.$t('CertDetail.certDetailFail'));
