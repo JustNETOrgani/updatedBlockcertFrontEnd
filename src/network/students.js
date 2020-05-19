@@ -26,10 +26,11 @@ export async function getCertFileDetails(data) {
   });
 }
 
-export function getCertificates() {
+export function getCertificates(params) {
   return certRequest({
     url:'/v1/api/certificates/',
-    method: 'get'
+    method: 'get',
+    params: params
   });
 }
 

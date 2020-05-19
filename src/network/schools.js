@@ -37,18 +37,19 @@ export function register(data) {
   });
 }
 
-export function getSchCertificates() {
+export function getSchCertificates(params) {
   console.log("Getting school certificates. Please wait...")
   return certRequest({
-    url:'/v1/api/school_certificates',
-    method: 'get'
+    url:'/v1/api/school_certificates/',
+    method: 'get',
+    params: params
   });
 }
 
 export async function viewCertDetails(certID) {
   console.log("Getting cert details from: ", 'http://127.0.0.1:8000/v1/api/school_certificates/'+certID+'/detail') 
   return certRequest({
-    url: '/v1/api/school_certificates/'+certID+'/detail',
+    url: '/v1/api/school_certificates/'+certID+'/detail/',
     method: 'get', 
   });
 }

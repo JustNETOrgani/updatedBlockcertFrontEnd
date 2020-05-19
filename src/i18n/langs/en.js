@@ -24,6 +24,7 @@ const en = {
         issueList: "Issue certificate",
         all: "All",
         chkPending: "Check Pending",
+        Created: "Created",
         Issued: "Issued",
         revoked: "Revoked",
         Refused: "Refused",
@@ -43,7 +44,8 @@ const en = {
       Issued: "Issued",
       Issuing: "Issuing",
       FailedIssue: "Failed Issue",
-      Revoked: "Revoked"
+      Revoked: "Revoked",
+      Refused: "Refused"
     },
     home: {
         index: {
@@ -176,7 +178,7 @@ const en = {
     studentCertificates: {
       title: "Certificates' List",
       listOption: "Listing options",
-      stdSearchItemPlaceholder: "Please input certificate name or issuer",
+      stdSearchItemPlaceholder: "Please input certificate name",
       stdSearchItemFormat: "Search criteria cannot be empty.",
       certificateDetailInfo: "Now viewing a certificate detail.",
       UploadCert: "Upload Cert."
@@ -190,7 +192,9 @@ const en = {
       Signedby: "Signed by",
       CertificateID: "Certificate's ID",
       SchoolPublicKey: "School's Public Key",
-      stdCertImageInfo: "Certificate file uploaded by student"
+      stdCertImageInfo: "Certificate file uploaded by student",
+      certDetailFail: "Obtain certificate details failed",
+      back: "go back"
     },
     CertUpload: {
       welcomeMsg: "Welcome to Certificate upload",

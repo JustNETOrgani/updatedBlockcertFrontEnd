@@ -238,6 +238,7 @@ export default {
         offset: this.currentPage - 1,
         limit: this.limit,
         email: this.input,
+        ordering: "-create_time",
         status: 1
       };
       // 数据在请求前, 表格可见, 并且处于加载状态

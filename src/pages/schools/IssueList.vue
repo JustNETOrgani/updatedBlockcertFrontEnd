@@ -15,7 +15,8 @@
           <label>{{$t('schoolCertificates.listOption')}}:</label>
           <el-radio-group v-model="radio" @input="onSelectRadio">
             <el-radio label="all">{{$t('common.all')}}</el-radio>
-            <el-radio label="chkPending">{{$t('common.chkPending')}}</el-radio>
+            <!-- <el-radio label="chkPending">{{$t('common.chkPending')}}</el-radio> -->
+            <el-radio label="Created">{{$t('common.Created')}}</el-radio>
             <el-radio label="Issued">{{$t('common.Issued')}}</el-radio>
             <el-radio label="revoked">{{$t('common.revoked')}}</el-radio>
             <el-radio label="Refused">{{$t('common.Refused')}}</el-radio>
@@ -46,48 +47,19 @@
           v-loading="loading"
           :data="schTableData"
           style="width: 100%"
-          max-height="450">
+          fit
+          max-height="450"
+          >
           <!--Building table body--> 
+          <template v-for="(item, index) in tableLabel">
+              <el-table-column
+                :key="index"
+                :prop="item.prop"
+                :label="item.label" :width="item.width">
+              </el-table-column>
+            </template>
           <el-table-column
-            prop="certWSID"
-            :label="$t('common.certWSID')"
-            width="310"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="certTitle"
-            :label="$t('common.certTitle')"
-            width="115"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="critNarrative"
-            :label="$t('common.critNarrative')"
-            width="145"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="stdName"
-            :label="$t('common.stdName')"
-            width="170"
-            >
-          </el-table-column>
-          <el-table-column
-            prop="stdEmail"
-            :label="$t('common.stdEmail')"
-            width="170"
-           >
-          </el-table-column>
-          <el-table-column
-            prop="certStatus"
-            :label="$t('common.certStatus')"
-            width="75"
-           >
-          </el-table-column>
-          <el-table-column
-          width="350"
-          align="right"
-          :label="$t('common.operation')">
+          :label="$t('common.operation')" width="300px">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -161,7 +133,7 @@
 import Head from "@/components/header";
 // import Footer from "@/components/Footer";
 import { getSchCertificates } from "@/network/schools";
-import { viewCertDetails } from "@/network/schools"; 
+// import { viewCertDetails } from "@/network/schools"; 
 import { certRefusalInterface } from "@/network/schools"; 
 import { revokeCertificate } from "@/network/schools";
 
@@ -185,6 +157,7 @@ export default {
       total: 0,
       currentPage: 1,
       limit: 10,
+      params: {},
       certImageWSID: [], // To be used to view details about the certificate.
       filteredData: [],
       certDataResponse: [],
@@ -223,6 +196,14 @@ export default {
           }
         ]
        },
+      tableLabel: [
+        { label: this.$t('common.certWSID'), prop: "cert_id", width: "320px"},
+        { label: this.$t('common.certTitle'), prop: "certificate_title"},
+        { label: this.$t('common.critNarrative'), prop: "criteria_narrative"},
+        { label: this.$t('common.stdName'), prop: "student_name"},
+        { label: this.$t('common.stdEmail'), prop: "email"},
+        { label: this.$t('common.certStatus'), prop: "statusLab"},
+      ]
     };
   },
   components: {
@@ -230,59 +211,12 @@ export default {
     // Footer
   },
   created() {
-    this.loading = true;
-    getSchCertificates().then(res=>{
-      console.log("Certificates for this School: ", res.data)
-      this.total = res.data.count;
-      console.log("Total certs: ", this.total)
-      for(let i=0; i < this.total; i++){
-        let tbObj = {}
-        // Build needed fields for table display. Only five(5) for now. More can be added anytime.
-        // From here, these can be deleted and the props for language tranlation changed for the Table.. 
-        tbObj.certTitle = res.data.results[i]["certificate_title"] 
-        tbObj.critNarrative = res.data.results[i]["criteria_narrative"]    
-        tbObj.stdName = res.data.results[i]["student_name"]
-        tbObj.stdEmail = res.data.results[i]["email"]
-        tbObj.certStatus = res.data.results[i]["status"]
-        // Deletion ends here. 
-        tbObj.id = res.data.results[i]["id"];
-        tbObj.certWSID = (res.data.results[i]["cert_id"]).substring(10); // Remove first ten characters (cert_wsid_)
-        tbObj.cert_image_wsid = res.data.results[i]["cert_image_wsid"];
-        tbObj.certificate_description = res.data.results[i]["certificate_description"];
-        tbObj.certificate_title = res.data.results[i]["certificate_title"];
-        tbObj.criteria_narrative = res.data.results[i]["criteria_narrative"];
-        tbObj.student_name = res.data.results[i]["student_name"];
-        tbObj.student_pubkey = res.data.results[i]["student_pubkey"];
-        tbObj.email = res.data.results[i]["email"];
-        tbObj.school_pubkey = res.data.results[i]["school_pubkey"];
-        tbObj.school_name = res.data.results[i]["school_name"];
-        tbObj.status = res.data.results[i]["status"];
-        tbObj.txid = res.data.results[i]["txid"];
-        tbObj.create_time = res.data.results[i]["create_time"];
-        // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
-        if(tbObj['certStatus']==0){
-          tbObj['certStatus']='Created'
-        }
-        if(tbObj['certStatus']==1){
-          tbObj['certStatus']='Issued'
-        }
-        if(tbObj['certStatus']==2){
-          tbObj['certStatus']='Issuing'
-        }
-        if(tbObj['certStatus']==3){
-          tbObj['certStatus']='Failed Issue'
-        }
-        if(tbObj['certStatus']==4){
-          tbObj['certStatus']='Revoked'
-        }
-        if(tbObj['certStatus']==5){
-          tbObj['certStatus']='Refused'
-        }
-        this.filteredData[i] = tbObj
-      }
-      this.loading = false
-      this.schTableData = this.filteredData
-    })
+    this.params = {
+        offset: (this.currentPage-1)*this.limit,
+        limit: this.limit,
+        ordering: "-create_time"
+    }
+    this.getCerts(this.params);
   },
   methods: {
     LoginOut() {
@@ -304,150 +238,98 @@ export default {
         })
         .catch(() => {});
     },
+    getCerts(params){
+      this.loading = true;
+      getSchCertificates(params).then(res=>{
+        console.log("Certificates for this School: ", res.data)
+        this.total = res.data.count;
+        console.log("Total certs: ", this.total);
+        this.schTableData = res.data.results;
+        for(let i=0; i < this.schTableData.length; i++){
+          this.schTableData[i].cert_id = this.schTableData[i].cert_id.replace('cert_wsid_', '')
+          // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
+          if(this.schTableData[i].status==0){
+            this.schTableData[i].statusLab=this.$t('certstatus.Created')
+          }
+          if(this.schTableData[i].status==1){
+            this.schTableData[i].statusLab=this.$t('certstatus.Issued')
+          }
+          if(this.schTableData[i].status==2){
+            this.schTableData[i].statusLab=this.$t('certstatus.Issuing')
+          }
+          if(this.schTableData[i].status==3){
+            this.schTableData[i].statusLab=this.$t('certstatus.FailedIssue')
+          }
+          if(this.schTableData[i].status==4){
+            this.schTableData[i].statusLab=this.$t('certstatus.Revoked')
+          }
+          if(this.schTableData[i].status==5){
+            this.schTableData[i].statusLab=this.$t('certstatus.Refused')
+          }
+        }
+        this.loading = false
+    }).catch(error => {
+        console.log(error)
+        this.$message.error(this.$t('home.index.getVerifyListFail'));
+        this.loading = false
+    })},
     handleSizeChange(size) {
       console.log(`${size} items per page`);
-      this.limit = size;
-      this.currentCertData()
+      this.params.limit = size
+      this.getCerts(this.params);
     },
     handleCurrentChange(current) {
       console.log(`current page: ${current}`);
       this.currentPage = current;
-      this.currentCertData()
-    },
-    currentCertData(){
-     this.schTableData = this.filteredData
+      this.params.offset = (this.currentPage-1)*this.limit;
+      console.log("this.params.offset", this.params.offset)
+      this.getCerts(this.params);
     },
     onSelectRadio(data){
       this.radio = data
       console.log("User has selected:", this.radio);
       // Perform action based on student's selection.
-      this.loading = true
-      getSchCertificates().then(res=>{
-        console.log("Certificates for this School: ", res.data)
-        this.certDataResponse = res.data.results
-        this.total = res.data.count;
-        console.log("Total certs: ", this.total)
-        // Empty filteredData and TableData Array.
-        this.filteredData = []
-        this.schTableData = []
-        for(let i=0; i < this.total; i++){
-          let tbObj = {}
-          // Build needed fields for table display. Only five(5) for now. More can be added anytime.
-          // From here, these can be deleted and the props for language tranlation changed for the Table.
-          tbObj.certTitle = res.data.results[i]["certificate_title"]
-          tbObj.critNarrative = res.data.results[i]["criteria_narrative"]    
-          tbObj.stdName = res.data.results[i]["student_name"]
-          tbObj.stdEmail = res.data.results[i]["email"]
-          tbObj.certStatus = res.data.results[i]["status"]
-          // Deletion ends here. 
-          tbObj.id = res.data.results[i]["id"];
-          tbObj.certWSID = (res.data.results[i]["cert_id"]).substring(10); // Remove first ten characters (cert_wsid_)
-          tbObj.cert_image_wsid = res.data.results[i]["cert_image_wsid"];
-          tbObj.certificate_description = res.data.results[i]["certificate_description"];
-          tbObj.certificate_title = res.data.results[i]["certificate_title"];
-          tbObj.criteria_narrative = res.data.results[i]["criteria_narrative"];
-          tbObj.student_name = res.data.results[i]["student_name"];
-          tbObj.student_pubkey = res.data.results[i]["student_pubkey"];
-          tbObj.email = res.data.results[i]["email"];
-          tbObj.school_pubkey = res.data.results[i]["school_pubkey"];
-          tbObj.school_name = res.data.results[i]["school_name"];
-          tbObj.status = res.data.results[i]["status"];
-          tbObj.txid = res.data.results[i]["txid"];
-          tbObj.create_time = res.data.results[i]["create_time"];
-          // Use 0 for Created, 1 for Issued,  2 for Issuing(Pending) and 3 for Failed Issue
-          if(tbObj['certStatus']==0){
-            tbObj['certStatus']='Created'
-          }
-          if(tbObj['certStatus']==1){
-            tbObj['certStatus']='Issued'
-          }
-          if(tbObj['certStatus']==2){
-            tbObj['certStatus']='Issuing'
-          }
-          if(tbObj['certStatus']==3){
-            tbObj['certStatus']='Failed Issue'
-          }
-          if(tbObj['certStatus']==4){
-            tbObj['certStatus']='Revoked'
-          }
-          if(tbObj['certStatus']==5){
-            tbObj['certStatus']='Refused'
+      if(this.radio=='all'){
+      this.params = {
+        offset: (this.currentPage-1)*this.limit,
+        limit: this.limit,
+        ordering: "-create_time"
         }
-          this.filteredData[i] = tbObj
-        }
-
-        if(this.radio=='all'){
-        console.log("Retrieving all certificates.")
-        // Get all certificates.
-        this.schTableData = this.filteredData
-        this.loading = false
-        return
-        }
-        if(this.radio=='chkPending'){
-          console.log("Retrieving check pending certificates.")
-          // Get check pending certificates.
-          this.schTableData = this.filteredData.filter(function(el) { 
-            return (
-              el.certStatus != "Failed Issue" && 
-              el.certStatus != "Revoked" && 
-              el.certStatus != "Issued" && 
-              el.certStatus != "Issuing" &&
-              el.certStatus != "Refused"
-            ) 
-          });
-          this.total = this.schTableData.length
-          this.loading = false
-          return
-        }
-        if(this.radio=='Issued'){
-          console.log("Retrieving issued certificates.")
-          // Get Issued certificates.
-          this.schTableData = this.filteredData.filter(function(el) { 
-            return (
-              el.certStatus != "Failed Issue" && 
-              el.certStatus != "Revoked" && 
-              el.certStatus != "Created" && 
-              el.certStatus != "Issuing" &&
-              el.certStatus != "Refused"
-            ) 
-          }); 
-          this.total = this.schTableData.length
-          this.loading = false
-          return
-        }
-        if(this.radio=='Refused'){
-          console.log("Retrieving refused certificates.")
-          // Get Issued certificates.
-          this.schTableData = this.filteredData.filter(function(el) { 
-            return (
-              el.certStatus != "Failed Issue" && 
-              el.certStatus != "Revoked" && 
-              el.certStatus != "Created" && 
-              el.certStatus != "Issuing" &&
-              el.certStatus != "Issued"
-            ) 
-          }); 
-          this.total = this.schTableData.length
-          this.loading = false
-          return
-        }
-        else{
-          console.log("Retrieving revoked certificates.")
-          // Get revoked certificates.
-          this.schTableData = this.filteredData.filter(function(el) { 
-            return (
-              el.certStatus != "Issued" && 
-              el.certStatus != "Created" && 
-              el.certStatus != "Issuing" && 
-              el.certStatus != "Failed Issue" &&
-              el.certStatus != "Refused"
-            ) 
-          }); 
-          this.total = this.schTableData.length
-          this.loading = false
-          return
       }
-      })
+      else if(this.radio=='Created'){
+      this.params = {
+        offset: (this.currentPage-1)*this.limit,
+        limit: this.limit,
+        ordering: "-create_time",
+        status: 0
+        }
+      }
+      else if(this.radio=='Issued'){
+      this.params = {
+        offset: (this.currentPage-1)*this.limit,
+        limit: this.limit,
+        ordering: "-create_time",
+        status: 1
+        }
+      }
+      else if(this.radio=='Refused'){
+        this.params = {
+          offset: (this.currentPage-1)*this.limit,
+          limit: this.limit,
+          ordering: "-create_time",
+          status: 5
+          }
+      }
+      else{
+        // revoked
+        this.params = {
+          offset: (this.currentPage-1)*this.limit,
+          limit: this.limit,
+          ordering: "-create_time",
+          status: 4
+          }
+      }
+      this.getCerts(this.params);
     },
     getSchoolSearch(){
       let itemToSearch =  this.searchInput.schSearchItem
@@ -460,29 +342,26 @@ export default {
         return
       }
       else{
-        console.log("School Certificate search initiated using: ", itemToSearch)
-        // Continue to perform certificate search.
-        let filteredCertData = null
-        filteredCertData = this.filteredData.filter(function(el) { 
-            return (el.certTitle == itemToSearch || el.stdName == itemToSearch || el.stdEmail == itemToSearch) });
-        this.schTableData = filteredCertData
+        this.params.certificate_title = decodeURI(itemToSearch)
+        this.getCerts(this.params);
         return
       }
     },
     getSchCertDetails(index, row) {
         console.log("Getting details for index: ",index, row);
-        console.log("Cert status is: ", row['certStatus'])
-        console.log("certIDs: ", this.schTableData)
-        let certIDtoGetDetails = "cert_wsid_"+this.schTableData[index]['certWSID'];
+        // console.log("Cert status is: ", row['certStatus'])
+        // console.log("certIDs: ", this.schTableData)
+        let certIDtoGetDetails = "cert_wsid_"+row.cert_id;
         console.log("CertID to use: ", certIDtoGetDetails)
-        let certStatusToDisplay = row['certStatus']
-        viewCertDetails(certIDtoGetDetails).then(res=>{
-        console.log("View details of school cert.: ", res)
-        this.$store.commit("certViewData", res.data);
-        this.$store.commit("set_certDispStatus", certStatusToDisplay);
-        this.$router.push("/schools/schoolCertDetails");
-        this.$message(this.$t('schoolCertificates.ShowingDetail')); 
-        })
+        this.$router.push(`/schools/${certIDtoGetDetails}/CertDetails`);
+        // let certStatusToDisplay = row['certStatus']
+        // viewCertDetails(certIDtoGetDetails).then(res=>{
+        // console.log("View details of school cert.: ", res)
+        // this.$store.commit("certViewData", res.data);
+        // this.$store.commit("set_certDispStatus", certStatusToDisplay);
+        // this.$router.push("/schools/certIDtoGetDetails/CertDetails");
+        // this.$message(this.$t('schoolCertificates.ShowingDetail')); 
+        // })
     },
 
     certRevoke(formName) {
@@ -502,6 +381,7 @@ export default {
               message: this.$t('schoolCertificates.revocationSuccess'),
                 type: "success"
               });
+            this.getCerts(this.params);
           }).catch(function(error) {
               this.revokeCertBtnLoadState = false
               this.revokeDialogBoxVisibility = false 
@@ -515,14 +395,14 @@ export default {
       })
      },
     revokeCert(index, row){
-      if(row['certStatus']=='Issued'){
+      if(row['status']==='Issued'){
         console.log("Cert revocation for index: ",index, row);
-        let certWSID = "cert_wsid_"+this.schTableData[index]['certWSID']
+        let certWSID = "cert_wsid_"+this.schTableData[index]['cert_id']
         console.log("CertWSID: ", certWSID)
         let schoolPubKey = (this.schTableData[index]['school_pubkey']).substring(21)
         console.log("School's Public key: ", schoolPubKey)
         this.requiredDataForCertRevoke.push(certWSID,schoolPubKey)
-        this.revokeDialogBoxVisibility = true 
+        this.revokeDialogBoxVisibility = true
       }
       else{
             this.$message.error(this.$t('schoolCertificates.CanBeRevoked'));
@@ -552,6 +432,7 @@ export default {
               type: "success",
               center: true
             }); 
+            this.getCerts(this.params);
           }) // ends here
           .catch(function(error) {
               console.log(error);
@@ -571,11 +452,12 @@ export default {
       })
     },
     certRefuse(index, row){
-      if(row['certStatus']=='Created'){
+      console.log(row)
+      if(row['status']==='Created'){
         console.log("Cert refusal initiated.")
         console.log("Cert refusal for index: ",index, row);
-        console.log("CertWSID: ", this.schTableData[index]['certWSID'])
-        this.requiredCertIDToRefuse = "cert_wsid_"+this.schTableData[index]['certWSID']
+        console.log("CertWSID: ", this.schTableData[index]['cert_id'])
+        this.requiredCertIDToRefuse = "cert_wsid_"+this.schTableData[index]['cert_id']
         this.refuseDialogBoxVisibility = true
       }
       else{

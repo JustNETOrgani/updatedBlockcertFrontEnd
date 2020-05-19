@@ -1,10 +1,12 @@
 <template>
   <div class="certificate">
-    <Head :menuList="menuList">
+    <!-- <Head :menuList="menuList">
       <el-button class="menu-item" type="primary" round @click="logUserOut"
         >{{$t('common.logout')}}</el-button
       >
-    </Head>
+    </Head> -->
+    <el-link icon="el-icon-arrow-left" style="width: 250px;margin:10px;font-size:20px" @click.native="toIssueList()">{{$t('CertDetail.back')}}</el-link>
+    <!-- <el-button type="primary" icon="el-icon-arrow-left" style="width: 100px; margin:10px">返回</el-button> -->
     <div class="body" v-loading="loadingCertData">
       <div id="titleArea">
         <h1 class="title">{{$t('CertDetail.title')}}</h1>
@@ -48,8 +50,9 @@
 </template>
 
 <script>
-import Head from "@/components/header";
+// import Head from "@/components/header";
 // import Footer from "@/components/Footer";
+import { viewCertDetails } from "@/network/schools"; 
 
 export default {
   name: "certificate",
@@ -71,29 +74,43 @@ export default {
       jobTible: '',
       stdCertID: '',
       schPubKey: '',
-      certViewInfo: JSON.parse(sessionStorage.getItem('Cert_Details')), 
-      certState: sessionStorage.getItem('Cert_Status')
+      // certViewInfo: JSON.parse(sessionStorage.getItem('Cert_Details')), 
+      // certState: sessionStorage.getItem('Cert_Status')
+      certViewInfo: ''
     };
   },
     created() {
-            console.log("All cert Info: ", this.certViewInfo)
-            this.loadingCertData = true
-            this.uploadedCertFileURL = this.certViewInfo.unsign_cert.badge['image']
-            this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
-            this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
-            this.certDescription = this.certViewInfo.unsign_cert.badge['description']
-            this.certCriteria = this.certViewInfo.unsign_cert.badge.criteria['narrative']
-            this.stdName = this.certViewInfo.unsign_cert.recipientProfile['name']
-            this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn']) 
-            this.certStatus = this.certState
-            this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']  
-            this.stdCertID = (this.certViewInfo['wsid']).substring(10) // cert_wsid_ --- First ten characters.
-            this.schPubKey = (this.certViewInfo.unsign_cert.verification['publicKey']).substring(21) // Remove first 21 characters.
-            this.loadingCertData = false
+        // console.log("All cert Info: ", this.certViewInfo)
+        this.loadingCertData = true
+        const certId = this.$route.params.certId;
+        viewCertDetails(certId).then(res=>{
+          console.log("View details of school cert.: ", res)
+          // this.$store.commit("certViewData", res.data);
+          // this.$store.commit("set_certDispStatus", certStatusToDisplay);
+          // this.$router.push("/schools/certIDtoGetDetails/CertDetails");
+          this.$message(this.$t('schoolCertificates.ShowingDetail')); 
+          this.certViewInfo = res.data
+        this.uploadedCertFileURL = this.certViewInfo.unsign_cert.badge['image']
+        this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
+        this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
+        this.certDescription = this.certViewInfo.unsign_cert.badge['description']
+        this.certCriteria = this.certViewInfo.unsign_cert.badge.criteria['narrative']
+        this.stdName = this.certViewInfo.unsign_cert.recipientProfile['name']
+        this.issuedDate = new Date(this.certViewInfo.unsign_cert['issuedOn']) 
+        // this.certStatus = this.certState
+        this.jobTible = this.certViewInfo.unsign_cert.badge.signatureLines[0]['jobTitle']  
+        this.stdCertID = (this.certViewInfo['wsid']).substring(10) // cert_wsid_ --- First ten characters.
+        this.schPubKey = (this.certViewInfo.unsign_cert.verification['publicKey']).substring(21) // Remove first 21 characters.
+        this.loadingCertData = false
+    }).catch(error => {
+      console.log(error);
+      this.$message.error(this.$t('CertDetail.certDetailFail'));
+      this.loadingCertData = false
+    })
     },
     
   components: {
-    Head,
+    // Head,
     // Footer
   },
   methods: {
@@ -117,6 +134,9 @@ export default {
         }).catch(() => {       
         });
     }, 
+    toIssueList(){
+      this.$router.push("/schools/issueList");
+    }
   }
 };
 </script>

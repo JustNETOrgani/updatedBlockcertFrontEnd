@@ -24,9 +24,11 @@ const zh = {
     issueList: "证书颁发",
     all: "全部",
     chkPending: "检查中",
+    Created: "已创建",
     Issued: "已颁发",
     revoked: "已撤销",
     Refused: "已拒绝",
+    certWSID: "证书ID",
     certTitle: "标题",
     certIssuer: "颁发者",
     certStatus: "状态",
@@ -39,11 +41,12 @@ const zh = {
     Revoke: "撤销"
   },
   certstatus: {
-    Created: "Created",
-    Issued: "Issued",
-    Issuing: "Issuing",
-    FailedIssue: "Failed Issue",
-    Revoked: "Revoked"
+    Created: "已创建",
+    Issued: "已颁发",
+    Issuing: "颁发中",
+    FailedIssue: "颁发失败",
+    Revoked: "已撤销",
+    Refused: "已拒绝"
   },
   home: {
     index: {
@@ -176,7 +179,7 @@ const zh = {
   studentCertificates: {
     title: "证书列表",
     listOption: "筛选",
-    stdSearchItemPlaceholder: "请输入证书名称或者颁发者名称",
+    stdSearchItemPlaceholder: "请输入证书名称",
     stdSearchItemFormat: "搜索条件不能为空",
     certificateDetailInfo: "现在查看证书详细信息",
     UploadCert: "证书上传"
@@ -190,7 +193,9 @@ const zh = {
     Signedby: "签名者",
     CertificateID: "证书ID",
     SchoolPublicKey: "学校公钥",
-    stdCertImageInfo: "学生上传的证书信息"
+    stdCertImageInfo: "学生上传的证书图片",
+    certDetailFail: "获取证书详细信息失败",
+    back: "返回"
   },
   CertUpload: {
     welcomeMsg: "欢迎使用证书上传",
