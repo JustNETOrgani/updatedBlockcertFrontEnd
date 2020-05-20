@@ -262,6 +262,7 @@ const zh = {
     CertificateCreationError: "证书创建失败, 请稍后再试, 或与管理员联系！！！",
     CertificateCreationErrorTitle: "创建错误",
     CertificateAlreadyIssue: "抱歉！证书已经颁发",
+    CertificateCannotBeRefused: '抱歉！只能拒绝证书状态为已创建的证书',
     RefuseReasonTitle: "拒绝原因",
     RefuseReasonLable: "拒绝原因",
   },

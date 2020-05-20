@@ -40,15 +40,14 @@
         </div>
       </div>
       <!--Certificate display area-->
-      <div  id="certDisplayArea" style="overflow-y:auto">
+      <div  id="certDisplayArea">
         <!--Building table-->
                   <!-- element-loading-text="Loading Certificates..." -->
         <el-table
           v-loading="loading"
           :data="schTableData"
           style="width: 100%"
-          fit
-          max-height="450"
+          height="450px"
           >
           <!--Building table body--> 
           <template v-for="(item, index) in tableLabel">
@@ -59,7 +58,7 @@
             </el-table-column>
           </template>
           <el-table-column
-          :label="$t('common.operation')" width="300px">
+          :label="$t('common.operation')" width="260px">
           <template slot-scope="scope">
             <el-button
               size="mini"
@@ -290,14 +289,14 @@ export default {
       // Perform action based on student's selection.
       if(this.radio=='all'){
       this.params = {
-        offset: (this.currentPage-1)*this.limit,
+        offset: 0,
         limit: this.limit,
         ordering: "-create_time"
         }
       }
       else if(this.radio=='Created'){
       this.params = {
-        offset: (this.currentPage-1)*this.limit,
+        offset: 0,
         limit: this.limit,
         ordering: "-create_time",
         status: 0
@@ -305,7 +304,7 @@ export default {
       }
       else if(this.radio=='Issued'){
       this.params = {
-        offset: (this.currentPage-1)*this.limit,
+        offset: 0,
         limit: this.limit,
         ordering: "-create_time",
         status: 1
@@ -313,7 +312,7 @@ export default {
       }
       else if(this.radio=='Refused'){
         this.params = {
-          offset: (this.currentPage-1)*this.limit,
+          offset: 0,
           limit: this.limit,
           ordering: "-create_time",
           status: 5
@@ -322,7 +321,7 @@ export default {
       else{
         // revoked
         this.params = {
-          offset: (this.currentPage-1)*this.limit,
+          offset: 0,
           limit: this.limit,
           ordering: "-create_time",
           status: 4
@@ -528,9 +527,9 @@ label{
 }
 #certDisplayArea{
   width: 97%;
-  height: 85%;
+  height: 450px;
   background-color: #ffffff;
-  margin-top: -1.8rem;
+  /* margin-top: -1.8rem; */
   align-items: left;
 }
 #certTitleDiv{

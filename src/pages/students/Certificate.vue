@@ -51,7 +51,7 @@
           v-loading="loading"
           :data="tableData"
           style="width: 100%"
-          max-height="450">
+          height="450px">
           <!--Building table body-->
           <template v-for="(item, index) in tableLabel">
             <el-table-column
@@ -221,14 +221,14 @@ export default {
       console.log("User has selected:", this.radio);
       if(this.radio=='all'){
       this.params = {
-        offset: (this.currentPage-1)*this.limit,
+        offset: 0,
         limit: this.limit,
         ordering: "-create_time"
         }
       }
       else if(this.radio=='Created'){
       this.params = {
-        offset: (this.currentPage-1)*this.limit,
+        offset: 0,
         limit: this.limit,
         ordering: "-create_time",
         status: 0
@@ -236,7 +236,7 @@ export default {
       }
       else if(this.radio=='Issued'){
       this.params = {
-        offset: (this.currentPage-1)*this.limit,
+        offset: 0,
         limit: this.limit,
         ordering: "-create_time",
         status: 1
@@ -244,7 +244,7 @@ export default {
       }
       else if(this.radio=='Refused'){
         this.params = {
-          offset: (this.currentPage-1)*this.limit,
+          offset: 0,
           limit: this.limit,
           ordering: "-create_time",
           status: 5
@@ -253,7 +253,7 @@ export default {
       else{
         // revoked
         this.params = {
-          offset: (this.currentPage-1)*this.limit,
+          offset: 0,
           limit: this.limit,
           ordering: "-create_time",
           status: 4
@@ -342,7 +342,7 @@ label {
 }
 #certDisplayArea {
   width: 97%;
-  height: 85%;
+  height: 450px;
   background-color: #ffffff;
   margin-top: 0.5rem;
   align-items: left;
