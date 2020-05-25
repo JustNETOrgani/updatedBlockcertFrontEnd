@@ -4,7 +4,7 @@
       <el-button class="menu-item" type="primary" @click="logout" round>{{$t('common.logout')}}</el-button>
     </Head> -->
     <el-link icon="el-icon-arrow-left" style="width: 100px;margin:10px;font-size:20px;float:left;" @click.native="toCertList()">{{$t('CertDetail.back')}}</el-link>
-    <div class="body">
+    <div class="body" v-loading="loadingStdCertCreatePage">
       <div id="middlePage">
         <div id="msgArea">
           <p id="welcomeMsg">{{$t('CertUpload.welcomeMsg')}}</p>
@@ -44,11 +44,18 @@
 
 
                     <el-form-item :label="$t('CertUpload.issuerLabel')" prop="issuer">
-                      <el-input
+                      <el-select 
                         v-model="ruleForm.issuer"
-                        type="website"
-                        :placeholder="$t('CertUpload.issuerPlaceholder')"
-                      ></el-input>
+                        style="width:100%"
+                        :placeholder="$t('CertUpload.issuerPlaceholder')" 
+                        value-key="id">
+                          <el-option 
+                            v-for="issuer in issuers" 
+                            :key="issuer.id" 
+                            :label="issuer.name" 
+                            :value="issuer">
+                          </el-option>
+                      </el-select>
                     </el-form-item>
 
                     
@@ -109,6 +116,7 @@
 // import Footer from "@/components/Footer";
 import { getCertFileDetails } from "@/network/students"; 
 import { studentCertCreateRequest } from "@/network/students";
+import {getSchools} from "@/network/students";
 
 export default {
   name: "signup",
@@ -120,10 +128,11 @@ export default {
         criteria_Narrative: "",
         issuer:"",
         certFile:"",
-       
       },
+      loadingStdCertCreatePage: false,
       certFileformData:null,
       createCertBtnLoadState: false,
+      issuers: null,
       rules: {
         certTitle: [
           {
@@ -198,6 +207,14 @@ export default {
     // Head,
     // Footer
   },
+  created() {
+    this.loadingStdCertCreatePage = true
+    getSchools().then(res=>{
+          this.issuers = res.data
+          this.loadingStdCertCreatePage = false
+        }
+      )
+  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -207,7 +224,7 @@ export default {
               certificate_title: this.ruleForm.certTitle,
               certificate_description: this.ruleForm.certDescription,
               criteria_narrative: this.ruleForm.criteria_Narrative,
-              issuer_name: this.ruleForm.issuer,
+              issuer_name: this.ruleForm.issuer['name'],
               // To be gotten from file upload interface. 
               cert_image_wsid: '',
               // Global required fields.
@@ -405,5 +422,6 @@ export default {
   font-family: "Times New Roman", Times, serif;
   font-size: 100%;
 }
+
 </style>
        

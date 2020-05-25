@@ -49,3 +49,10 @@ export function studentCertCreateRequest(data) {
     data: data
   });
 }
+
+export function getSchools() {
+  return certRequest({
+    url:'/v1/api/schools/',
+    method: 'get',
+  });
+}

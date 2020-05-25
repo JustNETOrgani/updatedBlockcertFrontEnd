@@ -213,7 +213,7 @@ const en = {
       criteria_NarrativeFormat1: "Please enter criteria narrative here.",
       criteria_NarrativeFormat2: "Length should be at least two",
       issuerLabel: "Issuer Name",
-      issuerPlaceholder: "Please, enter your school name here .",
+      issuerPlaceholder: "Please, select your school.",
       issuerFormat1: "Please enter name of school.",
       issuerFormat2: "Length should be at least six.",
       certFileLabel: "Certificate File",
