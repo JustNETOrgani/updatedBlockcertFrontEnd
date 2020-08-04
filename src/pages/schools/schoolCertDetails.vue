@@ -42,7 +42,12 @@
       </div>
       <div id="divForCertFileUploaded">
         <p id="stdCertImageInfo">{{$t('CertDetail.stdCertImageInfo')}}</p>
-        <img :src="uploadedCertFileURL" id="uploadedCertImage" alt="Uploaded Student Certificate"/>
+        <div v-if="isImage">
+          <img :src="uploadedCertFileURL" id="uploadedCertImage" alt="Uploaded Student Certificate"/>
+        </div>
+        <div v-else>
+          <embed :src="uploadedCertFileURL" type="application/pdf" width="50%" height="400px"/>
+        </div>
       </div>
     </div>
     <!-- <Footer></Footer> -->
@@ -66,6 +71,7 @@ export default {
       issuerName: '',
       schLogo: null,
       uploadedCertFileURL: '',
+      isImage: true,
       certDescription:'',
       certCriteria:'',
       stdName:'',
@@ -91,6 +97,12 @@ export default {
           this.$message(this.$t('schoolCertificates.ShowingDetail')); 
           this.certViewInfo = res.data
           this.uploadedCertFileURL = this.certViewInfo.unsign_cert.badge['image']
+          // Check the file type by inspecting the last three characters of the filename.
+          let fileExt = (this.uploadedCertFileURL).slice(this.uploadedCertFileURL.length-3)
+          if (fileExt === 'pdf'){
+            this.isImage = false
+            this.uploadedCertFileURL = this.uploadedCertFileURL+'#toolbar=0&navpanes=0&scrollbar=1'
+          }
           this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
           this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
           this.certDescription = this.certViewInfo.unsign_cert.badge['description']
