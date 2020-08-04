@@ -26,7 +26,12 @@
                 <p><b>{{$t('CertDetail.Signedby')}}: {{jobTible}}</b></p>
             </el-col>
         </el-row>
-        <img :src="uploadedCertFileURL" alt="Uploaded Student Certificate"/>
+        <div v-if="isImage">
+          <img :src="uploadedCertFileURL" alt="Uploaded Student Certificate"/>
+        </div>
+        <div v-else>
+          <embed :src="uploadedCertFileURL" type="application/pdf" width="50%" height="400px"/>
+        </div>
         <el-row>
             <el-col :span="8" :offset="1">
                 <p><b>{{$t('CertDetail.CertificateID')}}: </b></p> 
@@ -67,6 +72,7 @@ export default {
       stdCertID: '',
       certStatus:'',
       uploadedCertFileURL:'',
+      isImage: true,
       schPubKey: '',
       certViewInfo: JSON.parse(sessionStorage.getItem('Cert_Details')),
       certState: sessionStorage.getItem('Cert_Status')
@@ -84,6 +90,12 @@ export default {
           this.certViewInfo = res.data
           //console.log("All cert Info: ", this.certViewInfo)
           this.uploadedCertFileURL = this.certViewInfo.unsign_cert.badge['image']
+          // Check the file type by inspecting the last three characters of the filename.
+          let fileExt = (this.uploadedCertFileURL).slice(this.uploadedCertFileURL.length-3)
+          if (fileExt === 'pdf'){
+            this.isImage = false
+            this.uploadedCertFileURL = this.uploadedCertFileURL+'#toolbar=0&navpanes=0&scrollbar=1'
+          }
           this.issuerName = this.certViewInfo.unsign_cert.badge.issuer['name']
           this.schLogo = this.certViewInfo.unsign_cert.badge.issuer['image']
           this.certDescription = this.certViewInfo.unsign_cert.badge['description']
