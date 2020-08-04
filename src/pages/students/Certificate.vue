@@ -110,10 +110,9 @@ export default {
       limit: 10,
       filteredData: [],
       tableLabel: [
+        { label: this.$t('common.certWSID'), prop: "cert_id", width: "320px"},
         { label: this.$t('common.certTitle'), prop: "certificate_title"},
         { label: this.$t('common.school'), prop: "school_name"},
-        { label: this.$t('common.stdName'), prop: "student_name"},
-        { label: this.$t('common.stdEmail'), prop: "email"},
         { label: this.$t('common.certStatus'), prop: "statusLab"},
       ]
     };

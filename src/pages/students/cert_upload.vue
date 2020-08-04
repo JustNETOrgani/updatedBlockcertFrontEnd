@@ -57,7 +57,7 @@
                           </el-option>
                       </el-select>
                     </el-form-item>
-
+                    <el-button type="text" @click="mailDialog = true">{{$t('CertUpload.schMailNotify')}}</el-button>
                     
                      <el-form-item :label="$t('CertUpload.certFileLabel')" prop="certFile">
                        <!-- <input 
@@ -79,6 +79,20 @@
                   </el-form-item>
                   
                 </el-form>
+                <el-dialog title="Mail Information" :visible.sync="mailDialog" width="35%">
+                  <el-form :model="mailInfoform" :rules="rules">
+                    <el-form-item label="School's Email" label-width="140px" prop="schEmailAddress">
+                      <el-input v-model="mailInfoform.schEmailAddress" clearable></el-input>
+                    </el-form-item>
+                    <el-form-item label="Subject" label-width="120px" prop="subjectOfMail">
+                      <el-input v-model="mailInfoform.subjectOfMail" clearable></el-input>
+                    </el-form-item>
+                  </el-form>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="mailDialog = false">Cancel</el-button>
+                    <el-button type="primary" @click="getURlforSchMailNotify()">Confirm</el-button>
+                  </span>
+                </el-dialog>
               </div>
             </el-col>
            
@@ -129,10 +143,15 @@ export default {
         issuer:"",
         certFile:"",
       },
+      mailInfoform: {
+        schEmailAddress: "",
+        subjectOfMail: ""
+      },
       loadingStdCertCreatePage: false,
       certFileformData:null,
       createCertBtnLoadState: false,
       issuers: null,
+      mailDialog: false,
       rules: {
         certTitle: [
           {
@@ -195,6 +214,30 @@ export default {
           {
             min: 5,
             message: "Length should be at least five(5)",
+            trigger: ["blur", "change"]
+          }
+        ],
+        schEmailAddress: [
+          {
+            required: true,
+            pattern: /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+            message: this.$t('CertUpload.schEmailAddressFormat1'),
+            trigger: "blur"
+          },
+          {
+            message: this.$t('CertUpload.schEmailAddressFormat2'),
+            trigger: ["blur", "change"]
+          }
+        ],
+        subjectOfMail: [
+          {
+            required: true,
+            message: this.$t('CertUpload.subjectOfMailFormat1'),
+            trigger: "blur"
+          },
+          {
+            min: 2,
+            message: this.$t('CertUpload.subjectOfMailFormat2'),
             trigger: ["blur", "change"]
           }
         ]
@@ -344,7 +387,20 @@ export default {
     },
     toCertList(){
       this.$router.push("/students/certificates");
-    }
+    },
+    getURlforSchMailNotify() {
+      var args = [];
+      if (typeof this.mailInfoform.subjectOfMail !== 'undefined') {
+          args.push('subject=' + encodeURIComponent(this.mailInfoform.subjectOfMail));
+      }
+      var url = 'mailto:' + encodeURIComponent(this.mailInfoform.schEmailAddress);
+      if (args.length > 0) {
+          url += '?' + args.join('&');
+      }
+      this.mailDialog = false
+      window.location.href = url
+      return true;
+}
   }
 };
 </script>

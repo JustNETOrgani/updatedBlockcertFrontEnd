@@ -36,6 +36,7 @@ const en = {
         stdName: "Student's Name",
         stdEmail: "E-mail",
         certDetail: "Details",
+        certApprove: "Approve",
         Refuse: "Refuse",
         Revoke: "Revoke"
       },
@@ -178,7 +179,7 @@ const en = {
     studentCertificates: {
       title: "Certificates' List",
       listOption: "Listing options",
-      stdSearchItemPlaceholder: "Please input certificate name",
+      stdSearchItemPlaceholder: "Please input certificate name or ID",
       stdSearchItemFormat: "Search criteria cannot be empty.",
       certificateDetailInfo: "Now viewing a certificate detail.",
       UploadCert: "Upload Cert."
@@ -216,18 +217,23 @@ const en = {
       issuerPlaceholder: "Please, select your school.",
       issuerFormat1: "Please enter name of school.",
       issuerFormat2: "Length should be at least six.",
+      schMailNotify: "Is your School not listed? Click here to notify them about this project.",
       certFileLabel: "Certificate File",
       selectFile: "select file",
       selectFileFormat: "jpg/png/jpeg/pdf files with a size less than 10MB",
       selectFileFormatWarning: "The uploaded file can only be in jpeg, png, jpg, pdf format!",
       selectFileSizeWarning: "The upload file size cannot exceed 10MB!",
       createCertSuccess: "Congratulations. Certificate uploaded and creation successful.",
-      createCertFail: "Upload and certificate creation failed, please try again later, or contact the administrator!!!"
+      createCertFail: "Upload and certificate creation failed, please try again later, or contact the administrator!!!",
+      schEmailAddressFormat1: "Please enter school's email address",
+      schEmailAddressFormat2: "Invalid email format.",
+      subjectOfMailFormat1: "Please, enter subject of the mail",
+      subjectOfMailFormat2: "Length should be at least two"
     },
     schoolCertificates: {
       title: "School certificate's list",
       listOption: "Listing options",
-      stdSearchItemPlaceholder: "Please input certificate name or issuer",
+      stdSearchItemPlaceholder: "Please input certificate name or ID",
       stdSearchItemFormat: "Search criteria cannot be empty.",
       createNewCert: "Create new Cert",
       // issuerDialog: "Issuer information",

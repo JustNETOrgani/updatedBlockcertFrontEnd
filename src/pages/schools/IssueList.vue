@@ -65,6 +65,10 @@
               @click="getSchCertDetails(scope.$index, scope.row)">{{$t('common.certDetail')}}</el-button>
               <el-button
               size="mini"
+              type="success" plain
+              @click="approveStdCert(scope.$index, scope.row)">{{$t('common.certApprove')}}</el-button>
+              <el-button
+              size="mini"
               type="primary"
               @click="certRefuse(scope.$index, scope.row)">{{$t('common.Refuse')}}</el-button>
               <el-button
@@ -362,7 +366,10 @@ export default {
         // this.$message(this.$t('schoolCertificates.ShowingDetail')); 
         // })
     },
-
+    approveStdCert(index, row) {
+      // TODO when API is done. This will make the cert appear on the left side of school client app ready for issue.
+      console.log('Approving cert for index: ', index, row)
+    },
     certRevoke(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
