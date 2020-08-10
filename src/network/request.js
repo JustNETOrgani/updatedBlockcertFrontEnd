@@ -2,10 +2,11 @@ import axios from "axios";
 // axios 使用文档 https://github.com/axios/axios
 // import store from "@/store/index"
 
+const requestURL = "http://127.0.0.1:8000"
 
 export function request(config) {
   const instance = new axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: requestURL,
     timeout: 60000
   });
 
@@ -39,7 +40,7 @@ export function request(config) {
 
 export function fileRequest(config){
   const axiosInstance = new axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: requestURL,
     timeout: 30000,
     headers: {'Content-Type': 'multipart/form-data'}
   });
@@ -74,7 +75,7 @@ export function fileRequest(config){
 
 export function certRequest(config){
   const axiosCertReqInstance = new axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: requestURL,
     timeout: 600000,
   });
 
@@ -107,7 +108,7 @@ export function certRequest(config){
 
 export function certRevokeRequest(config){
   const axiosCertRevokeReqInstance = new axios.create({
-    baseURL: "http://127.0.0.1:8000",
+    baseURL: requestURL,
     timeout: 600000,
     headers: {'Content-Type': 'application/json'}
   });
